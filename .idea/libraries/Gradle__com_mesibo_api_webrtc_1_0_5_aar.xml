@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.mesibo.api:webrtc:1.0.5@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/a2c27273f2c57b9f09da4905b7af21d9/transformed/jetified-webrtc-1.0.5/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a2c27273f2c57b9f09da4905b7af21d9/transformed/jetified-webrtc-1.0.5/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a2c27273f2c57b9f09da4905b7af21d9/transformed/jetified-webrtc-1.0.5/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mesibo.api/webrtc/1.0.5/2e33afa64737c78fdc6f821db861c3f4275f88cd/webrtc-1.0.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

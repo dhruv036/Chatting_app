@@ -1,0 +1,45 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+  <style name="Theme.Hello" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/bt_red</item>  <!-- Toolbar-->
+        <item name="colorPrimaryVariant">@color/colorGradientStart</item> <!-- notificatoin-->
+        <item name="colorOnPrimary">#2E7D32</item>  <!-- tEXT -->
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/light_grey</item>  <!-- fab bg , nav , item -->
+        <item name="colorSecondaryVariant">#558B2F</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+<!--        <item name="floatingActionButtonStyle">@style/FloatingActionOverlay</item>-->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+    <style name="roundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">30dp</item>
+        <item name="color">@color/fui_transparent</item>
+    </style>
+    <style name="Theme.Hello.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/bt_red</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+<!--        #203130-->
+        <!-- Customize your theme here. -->
+
+    </style>
+
+    <style name="FloatingActionOverlay" parent="Widget.Design.FloatingActionButton">
+        <item name="shapeAppearanceOverlay">@style/fabshapestyle</item>
+    </style>
+    <style name="fabshapestyle" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerSize">30%</item>
+
+    </style>
+</resources>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <View
+        android:id="@+id/user_img"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="@drawable/grey_round"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+    <View
+        android:id="@+id/user_name"
+        android:layout_width="match_parent"
+        android:layout_height="18dp"
+        android:layout_margin="5dp"
+        android:layout_marginTop="10dp"
+        android:background="#979595"
+        app:layout_constraintStart_toEndOf="@+id/user_img"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/lastmsg"
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        android:layout_margin="5dp"
+        android:layout_marginTop="5dp"
+        android:background="#979595"
+        app:layout_constraintStart_toEndOf="@+id/user_img"
+        app:layout_constraintTop_toBottomOf="@+id/user_name" />
+    </LinearLayout>
+
+
+</LinearLayout>
