@@ -166,9 +166,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     viewHolder.binding.date.setText(Constants.givedate(String.valueOf(arrayList.get(position).getTimestamp())));
                     viewHolder.binding.date.setVisibility(View.VISIBLE);
                 }
-
             }
-
 
             viewHolder.binding.sender.setText(arrayList.get(position).getMessage());
 

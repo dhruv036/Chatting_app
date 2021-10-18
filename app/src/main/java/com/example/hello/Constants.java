@@ -116,7 +116,7 @@ public class Constants {
         int now = Integer.parseInt(dd);
         int pre = Integer.parseInt(d);
         if (now == pre) {
-            simpleDateFormat = new SimpleDateFormat("HH:mm");
+            //simpleDateFormat = new SimpleDateFormat("HH:mm");
             Log.i("one", "1");
             return "Today";
         } else {
@@ -129,7 +129,6 @@ public class Constants {
                 // simpleDateFormat = new SimpleDateFormat("HH:mm");
                 Log.i("one", "3");
                 return "Yesterday";
-
             }
         }
     }
@@ -170,27 +169,24 @@ public class Constants {
         if (m1.equals(m2)) {
             simpleDateFormat = new SimpleDateFormat("MM");
             calendar1.setTimeInMillis(Long.parseLong(mili));
-             m1 = simpleDateFormat.format(calendar1.getTime());
+            m1 = simpleDateFormat.format(calendar1.getTime());
             calendar1.setTimeInMillis(Long.parseLong(mili2));
-             m2 = simpleDateFormat.format(calendar1.getTime());
-            if(m1.equals(m2))
-            {
+            m2 = simpleDateFormat.format(calendar1.getTime());
+            if (m1.equals(m2)) {
                 simpleDateFormat = new SimpleDateFormat("dd");
                 calendar1.setTimeInMillis(Long.parseLong(mili));
                 m1 = simpleDateFormat.format(calendar1.getTime());
                 calendar1.setTimeInMillis(Long.parseLong(mili2));
                 m2 = simpleDateFormat.format(calendar1.getTime());
-                if(m1.equals(m2))
-                {
+                if (m1.equals(m2)) {
                     Log.i("three", "1");
                     return "same";
-                }else {
+                } else {
                     simpleDateFormat = new SimpleDateFormat("dd:MM:yy");
                     calendar1.setTimeInMillis(Long.parseLong(mili));
                     return "" + simpleDateFormat.format(calendar1.getTime());
                 }
-            }else {
-
+            } else {
                 simpleDateFormat = new SimpleDateFormat("dd:MM:yy");
                 calendar1.setTimeInMillis(Long.parseLong(mili));
                 return "" + simpleDateFormat.format(calendar1.getTime());
