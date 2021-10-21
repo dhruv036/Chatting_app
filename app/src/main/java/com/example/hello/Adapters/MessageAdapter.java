@@ -320,18 +320,22 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 viewHolder.binding.date.setVisibility(View.VISIBLE);
                 viewHolder.binding.date.setText(Constants.givedate(String.valueOf(arrayList.get(position).getTimestamp())));
             }
-            if ((position + 1) != arrayList.size()) {
-                if (Constants.checktwodate(String.valueOf(arrayList.get(position).getTimestamp()), String.valueOf(arrayList.get(position + 1).getTimestamp())).equals("same")) {
-                    viewHolder.binding.date.setVisibility(View.GONE);
-                } else {
-                    viewHolder.binding.date.setVisibility(View.VISIBLE);
-                    viewHolder.binding.date.setText(Constants.militotimess(String.valueOf(arrayList.get(position).getTimestamp())));
-                }
-            } else {
 
-            }
 
             viewHolder.binding.receiver.setText(arrayList.get(position).getMessage());
+            if (position == 0) {
+                viewHolder.binding.date.setVisibility(View.VISIBLE);
+                viewHolder.binding.date.setText(Constants.givedate(String.valueOf(arrayList.get(position).getTimestamp())));
+            }else{
+                if(Constants.checktwodate(String.valueOf(arrayList.get(position-1).getTimestamp()), String.valueOf(arrayList.get(position).getTimestamp())).equals("same"))
+                {
+                    viewHolder.binding.date.setVisibility(View.GONE);
+                    viewHolder.binding.date.setText("");
+                }else {
+                    viewHolder.binding.date.setText(Constants.givedate(String.valueOf(arrayList.get(position).getTimestamp())));
+                    viewHolder.binding.date.setVisibility(View.VISIBLE);
+                }
+            }
 
             if (m.getFeeling() >= 0) {
                 viewHolder.binding.imageView2.setImageResource(reactions[m.getFeeling()]);

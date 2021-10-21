@@ -326,11 +326,11 @@ pimg = FeatureController.getInstance().getUser().getProfileImg();
 
 
                                             database.getReference().child("Stories")
-                                                    .child(FirebaseAuth.getInstance().getUid())
+                                                    .child(currid)
                                                     .updateChildren(story);
 
                                             database.getReference().child("Stories")
-                                                    .child(FirebaseAuth.getInstance().getUid())
+                                                    .child(currid)
                                                     .child("statuses")
                                                     .push()
                                                     .setValue(status1);

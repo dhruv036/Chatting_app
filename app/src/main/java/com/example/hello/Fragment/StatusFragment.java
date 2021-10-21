@@ -142,9 +142,6 @@ public class StatusFragment extends Fragment {
             }
         });
 
-
-
-
         statues();
 
         //  F R I E N D S  S T A T U S
