@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.hello.Fragment.ChatFragment;
+import com.example.hello.Fragment.GroupChatFragment;
 import com.example.hello.Fragment.StatusFragment;
 import com.example.hello.Modal_Class.Friends;
 import com.example.hello.Modal_Class.Status;
@@ -41,6 +43,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.Gson;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 import com.mesibo.api.Mesibo;
 import com.mesibo.api.MesiboProfile;
@@ -63,7 +66,7 @@ import static com.example.hello.R.drawable.ic_baseline_person_add_24;
 public class MainDashboard extends AppCompatActivity implements MesiboCall.IncomingListener, Mesibo.ConnectionListener, Mesibo.MessageListener {
     ActivityMainDashboardBinding binding;
 
-    String token = "36nwc4ltd71hkgr418oruoviy3c20lbtt46kzsc257ulusbt1ubl53i7yadsihvk";
+    String token = "hh3ef9cu5npwhvvo9b8rsse5n60wcn4rsrjp9b6xm54wqh16amxgdzplfe8fgoyu";
     String op = "useradd";
     Animation aniup;
     FirebaseDatabase database;
@@ -283,7 +286,8 @@ pimg = FeatureController.getInstance().getUser().getProfileImg();
                         binding.addPerson.setImageDrawable(getResources().getDrawable(ic_baseline_camera_alt_24));
                         break;
                     case R.id.callitems:
-                        go();
+                        fvbttype = 2;
+                        fragment = new GroupChatFragment();
                         break;
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout2, fragment).commit();
@@ -345,9 +349,9 @@ pimg = FeatureController.getInstance().getUser().getProfileImg();
     }
 
     public void setuser() {
-        String add = FirebaseAuth.getInstance().getUid();
         Api api = ApiClient.getClient().create(Api.class);
         Call<Result> call = api.getUser(token, op, "com.example.hello", FeatureController.getInstance().getCurr_user_phone());
+
         call.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
@@ -483,7 +487,7 @@ pimg = FeatureController.getInstance().getUser().getProfileImg();
         MesiboCall.CallProperties cp = MesiboCall.getInstance().createCallProperties(true);
         cp.ui.title = "";
         MesiboCall.getInstance().setDefaultUiProperties(cp.ui);
-        Toast.makeText(getApplicationContext(), "ds", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "ds", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -539,7 +543,7 @@ pimg = FeatureController.getInstance().getUser().getProfileImg();
         MesiboCall.CallProperties cc;
         cc = MesiboCall.getInstance().createCallProperties(b);
         String name = mesiboProfile.address.toString();
-        mesiboProfile.setName("dsd");
+
         //  mesiboProfile.setImageUrl("");
         database.getReference()
                 .child("Friends")
@@ -550,7 +554,9 @@ pimg = FeatureController.getInstance().getUser().getProfileImg();
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
                             Friends name = snapshot.getValue(Friends.class);
-                            //      Callername =  name.getName();
+                             String Callername =  name.getName();
+                            mesiboProfile.setName(Callername);
+                            mesiboProfile.setImageUrl(name.getProfileImg());
                         }
 //                        for (DataSnapshot snapshot1 : snapshot.getChildren()) {
 //                            Messages messages1 = snapshot1.getValue(Messages.class);
@@ -565,6 +571,7 @@ pimg = FeatureController.getInstance().getUser().getProfileImg();
                     public void onCancelled(@NonNull DatabaseError error) {
                     }
                 });
+
         toast(name);
         if (cc.video.enabled) {
             cc.video.bitrate = 3000; // Set Maximum video bitrate

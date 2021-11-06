@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
 //                            Toast.makeText(MainActivity.this, ""+s, Toast.LENGTH_SHORT).show();
 //                        }
 //                    });
-            FeatureController.getInstance().setUid(phone);
             Thread thread = new Thread();
             thread.start();
             Toast.makeText(MainActivity.this, ""+preferences.getString("phone",""), Toast.LENGTH_SHORT).show();
@@ -110,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                     {
                         User user = snapshot.getValue(User.class);
                         FeatureController.getInstance().setUser(user);
+                        FeatureController.getInstance().setCurr_user_phone(user.getPhoneNo());
                         FeatureController.getInstance().setUid(user.getUid());
                         FeatureController.getInstance().setName(user.getName());
 

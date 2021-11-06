@@ -90,7 +90,7 @@ public class SetupProfile extends AppCompatActivity {
                                                       binding.progressBar.setVisibility(View.GONE);
                                                       FeatureController.getInstance().setUser(user);
                                                       FeatureController.getInstance().setName(FeatureController.getInstance().getNew_user().getName());
-                                                              FeatureController.getInstance().setUserimg(imgUrl);
+                                                      FeatureController.getInstance().setUserimg(imgUrl);
                                                       editor.putString("name",user.getName());
                                                       editor.putString("phone",user.getPhoneNo());
                                                       editor.putString("userimg",imgUrl);

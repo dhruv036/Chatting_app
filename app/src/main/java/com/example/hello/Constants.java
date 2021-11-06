@@ -10,27 +10,58 @@ import java.util.Date;
 
 public class Constants {
 
+
+
     // For Dashboard
     public static String militohhmm(Long mili) {
 //        mili = 1627923085000L;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy");
         Calendar calendar1 = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
         calendar1.setTimeInMillis(mili);
         String d = simpleDateFormat.format(calendar1.getTime());
-        Date date = new Date(); // now
-        String dd = String.valueOf(date.getDate());//take current day date
+        String dd = String.valueOf(calendar2.get(Calendar.YEAR));  //take current day YEAR
+             dd= dd.substring(2,dd.length());
         int now = Integer.parseInt(dd);
         int pre = Integer.parseInt(d);
-        if (now == pre) {
-            simpleDateFormat = new SimpleDateFormat("HH:mm");
-            return simpleDateFormat.format(calendar1.getTime());
-        } else {
-            if (now > (pre + 1)) {
+//        Log.e("TAG1"," "+now);
+//        Log.e("TAG2"," "+pre);
+        if (now == pre) { // CHECKING YEAR
+            simpleDateFormat = new SimpleDateFormat("MM");
+            dd = String.valueOf(calendar2.get(Calendar.MONTH));
+            d = simpleDateFormat.format(calendar1.getTime());
+            pre = Integer.parseInt(d);
+            now = Integer.parseInt(dd);
+//            Log.e("TAG1"," "+now);
+//            Log.e("TAG2"," "+pre);
+            if ((now+1) == pre) { // CHECKING MONTH
+                simpleDateFormat = new SimpleDateFormat("dd");
+                dd = String.valueOf(calendar2.get(Calendar.DATE));
+                d = simpleDateFormat.format(calendar1.getTime());
+
+                pre = Integer.parseInt(d);
+                now = Integer.parseInt(dd);
+                Log.e("TAG1"," "+now);
+                Log.e("TAG2"," "+pre);
+                if (now == pre) {  // CHECKING DATE
+                    simpleDateFormat = new SimpleDateFormat("HH:mm");
+                    return simpleDateFormat.format(calendar1.getTime());
+                } else {
+                    if (now == (pre + 1)) {
+                        return "Yesterday";
+                    }else {
+                        simpleDateFormat = new SimpleDateFormat("dd/MM/yy");
+                        return simpleDateFormat.format(calendar1.getTime());
+                    }
+                }
+
+            } else {
                 simpleDateFormat = new SimpleDateFormat("dd/MM/yy");
                 return simpleDateFormat.format(calendar1.getTime());
-            } else {
-                return "Yesterday";
             }
+        }else {
+            simpleDateFormat = new SimpleDateFormat("dd/MM/yy");
+            return simpleDateFormat.format(calendar1.getTime());
         }
     }
 
@@ -134,28 +165,49 @@ public class Constants {
     }
 
     public static String givedate(String mili) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy");
         Calendar calendar1 = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
         calendar1.setTimeInMillis(Long.parseLong(mili));
         String d = simpleDateFormat.format(calendar1.getTime());
-        Date date = new Date(); // now
-        String dd = String.valueOf(date.getDate());  //take current day date
+        String dd = String.valueOf(calendar2.get(Calendar.YEAR));  //take current day YEAR
+        dd= dd.substring(2,dd.length());
         int now = Integer.parseInt(dd);
         int pre = Integer.parseInt(d);
-        if (now == pre) {
-            Log.i("two", "1");
-            return "Today";
-        } else {
-            if (now > (pre + 1)) {
-                simpleDateFormat = new SimpleDateFormat("dd:MM:yy");
-                String day = String.valueOf(calendar1.get(Calendar.DAY_OF_WEEK));
-                Log.i("two", "2");
-                return "" + simpleDateFormat.format(calendar1.getTime());
+
+        if (now == pre) { // CHECKING YEAR
+            simpleDateFormat = new SimpleDateFormat("MM");
+            dd = String.valueOf(calendar2.get(Calendar.MONTH));
+            d = simpleDateFormat.format(calendar1.getTime());
+            pre = Integer.parseInt(d);
+            now = Integer.parseInt(dd);
+
+            if ((now+1) == pre) { // CHECKING MONTH
+                simpleDateFormat = new SimpleDateFormat("dd");
+                dd = String.valueOf(calendar2.get(Calendar.DATE));
+                d = simpleDateFormat.format(calendar1.getTime());
+                pre = Integer.parseInt(d);
+                now = Integer.parseInt(dd);
+                Log.e("TAG1"," "+now);
+                Log.e("TAG2"," "+pre);
+                if (now == pre) {  // CHECKING DATE
+                    return "Today";
+                } else {
+                    if (now == (pre + 1)) {
+                        return "Yesterday";
+                    }else {
+                        simpleDateFormat = new SimpleDateFormat("dd/MM/yy");
+                        return simpleDateFormat.format(calendar1.getTime());
+                    }
+                }
+
             } else {
-                // simpleDateFormat = new SimpleDateFormat("HH:mm");
-                Log.i("two", "3");
-                return "Yesterday";
+                simpleDateFormat = new SimpleDateFormat("dd/MM/yy");
+                return simpleDateFormat.format(calendar1.getTime());
             }
+        }else {
+            simpleDateFormat = new SimpleDateFormat("dd/MM/yy");
+            return simpleDateFormat.format(calendar1.getTime());
         }
     }
 
@@ -201,9 +253,6 @@ public class Constants {
     }
 
 
-    public void showToast(Context context, String message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-    }
 
 
 }

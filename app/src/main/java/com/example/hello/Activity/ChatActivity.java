@@ -70,6 +70,7 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
     String username ="";
     FirebaseStorage storage;
     String currid="";
+    String phone;
     String SenderRoom, ReceiverRoom;
 
     @Override
@@ -84,7 +85,7 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
         FeatureController.getInstance().setReceiveruid(receiveruid);
        username = getIntent().getStringExtra("username");
         String pimg = getIntent().getStringExtra("profileimg");
-        String phone = getIntent().getStringExtra("phoneno");
+         phone = getIntent().getStringExtra("phoneno");
         FeatureController.getInstance().setReceiverpho(phone);
         setSupportActionBar(binding.toolbar);
 
@@ -293,12 +294,12 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
             case R.id.voice:
                 //call to  user
                 Toast.makeText(ChatActivity.this, "Voice Calling", LENGTH_SHORT).show();
-                MesiboCall.getInstance().callUi(ChatActivity.this, FeatureController.getInstance().getReceiverpho(), false);
+                MesiboCall.getInstance().callUi(ChatActivity.this, phone, false);
                 break;
             case R.id.vvoice:
                 // Video call to user
                 Toast.makeText(ChatActivity.this, "Video Calling", LENGTH_SHORT).show();
-                MesiboCall.getInstance().callUi(ChatActivity.this, receiveruid, true);
+                MesiboCall.getInstance().callUi(ChatActivity.this, phone, true);
             default:
                 //
         }
@@ -312,7 +313,7 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
 //        messageDigest.digest(bytes);
 //        // this give bytearray from message digest
 //        byte[] bytes1 = messageDigest.digest();
-//        StringBuffer hexString = new StringBuffer();
+//        StringBuffer hexString = new StringBuffer(); y
 //
 //        for (int i = 0; i < bytes1.length; i++) {
 //            hexString.append(Integer.toHexString(0xFF & bytes1[i]));
