@@ -40,7 +40,7 @@ public class ChatFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        binding.chats.setAdapter(adapter);
+
         binding.chats.showShimmerAdapter();
         binding.chats.hideShimmerAdapter();
              //String i = java.text.DateFormat.getDateTimeInstance().format(new Date());
@@ -58,6 +58,7 @@ public class ChatFragment extends Fragment {
                 FeatureController.getInstance().setMyfriends(userss);
                 binding.chats.hideShimmerAdapter();
                 adapter.notifyDataSetChanged();
+                binding.chats.setAdapter(adapter);
             }
 
             @Override

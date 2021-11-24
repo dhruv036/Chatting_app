@@ -77,7 +77,7 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
     String add_name = "Bhaiya";
     int fvbttype = 0;
     String add_phone = "+918302827722";
-String pimg="";
+String pimg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +89,12 @@ String pimg="";
         aniup = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         binding.frameLayout.setAnimation(aniup);
         binding.bottomnav.setItemSelected(R.id.chatsitem, true);
-pimg = FeatureController.getInstance().getUser().getProfileImg();
+
+        if(!(FeatureController.getInstance().getUser() == null))
+        {
+            pimg = FeatureController.getInstance().getUser().getProfileImg();
+            Glide.with(this).load(pimg).placeholder(R.drawable.profile_dp).circleCrop().into(binding.mydp);
+        }
 
         if (!FeatureController.getInstance().getName().equals("")) {
             String myname = FeatureController.getInstance().getName();
@@ -116,7 +121,7 @@ pimg = FeatureController.getInstance().getUser().getProfileImg();
 
         Toast.makeText(this, sdf.format(c2.getTime()).toString(), Toast.LENGTH_SHORT).show();
 
-        Glide.with(this).load(pimg).placeholder(R.drawable.profile_dp).circleCrop().into(binding.mydp);
+
 
 
         //   A D D Contact

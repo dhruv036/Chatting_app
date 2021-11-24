@@ -47,28 +47,31 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewholder
         String senderid = FirebaseAuth.getInstance().getUid();
         String senderrom = senderid + arrayList.get(arrayList.size() - position - 1).getUid();
         holder.binding.lastmsg.setText(arrayList.get(arrayList.size() - position - 1).getLastMsg());
-        if(arrayList.get(arrayList.size() - position - 1).getLastMsg().equals(""))
-        {
-            holder.binding.time.setText("");
-        }else {
-            holder.binding.time.setText(Constants.militohhmm(arrayList.get(arrayList.size() - position - 1).getLastMsgTime()));
-        }
+       if(arrayList.size() > 0) {
 
 
-        Glide.with(context).load(arrayList.get(arrayList.size() - position - 1).getProfileImg()).into(holder.binding.userImg);
-        holder.binding.userName.setText(arrayList.get(arrayList.size() - position - 1).getName());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, ChatActivity.class);
-                intent.putExtra("Uid", arrayList.get(arrayList.size() - position - 1).getUid());
-                intent.putExtra("username", arrayList.get(arrayList.size() - position - 1).getName());
-                intent.putExtra("profileimg", arrayList.get(arrayList.size() - position - 1).getProfileImg());
-                intent.putExtra("phoneno", arrayList.get(arrayList.size() - position - 1).getPhoneNo());
+           if (!(arrayList.get(arrayList.size() - position - 1).getLastMsg() == null)) {
+               holder.binding.time.setText("");
+           } else {
+               holder.binding.time.setText(Constants.militohhmm(arrayList.get(arrayList.size() - position - 1).getLastMsgTime()));
+           }
 
-                context.startActivity(intent);
-            }
-        });
+
+           Glide.with(context).load(arrayList.get(arrayList.size() - position - 1).getProfileImg()).into(holder.binding.userImg);
+           holder.binding.userName.setText(arrayList.get(arrayList.size() - position - 1).getName());
+           holder.itemView.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   Intent intent = new Intent(context, ChatActivity.class);
+                   intent.putExtra("Uid", arrayList.get(arrayList.size() - position - 1).getUid());
+                   intent.putExtra("username", arrayList.get(arrayList.size() - position - 1).getName());
+                   intent.putExtra("profileimg", arrayList.get(arrayList.size() - position - 1).getProfileImg());
+                   intent.putExtra("phoneno", arrayList.get(arrayList.size() - position - 1).getPhoneNo());
+
+                   context.startActivity(intent);
+               }
+           });
+       }
     }
 
     @Override
@@ -78,6 +81,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewholder
 
     public class MyViewholder extends RecyclerView.ViewHolder {
         RowConversationBinding binding;
+
         public MyViewholder(@NonNull View itemView) {
             super(itemView);
             binding = RowConversationBinding.bind(itemView);

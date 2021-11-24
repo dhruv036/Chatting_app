@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 //                    });
             Thread thread = new Thread();
             thread.start();
-            Toast.makeText(MainActivity.this, ""+preferences.getString("phone",""), Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(MainActivity.this, ""+preferences.getString("phone",""), Toast.LENGTH_SHORT).show();
 
         }
 
