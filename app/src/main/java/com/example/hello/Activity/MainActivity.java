@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     ImageView image;
     FirebaseDatabase database;
     FrameLayout frameLayout;
+    String uid = "";
+    Intent intent;
     SharedPreferences preferences;
     String phone = "";
 
@@ -45,12 +48,11 @@ public class MainActivity extends AppCompatActivity {
         button = findViewById(R.id.splashbt);
         image = findViewById(R.id.imageView3);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-       database = FirebaseDatabase.getInstance();
+        database = FirebaseDatabase.getInstance();
 
         preferences = getApplicationContext().getSharedPreferences("Logincredentials", 0);
-        if(preferences.getString("phone","").length() > 0)
-        {
-            phone = preferences.getString("phone","");
+        if (preferences.getString("phone", "").length() > 0) {
+            phone = preferences.getString("phone", "");
 //            FirebaseMessaging.getInstance().getToken()
 //                    .addOnSuccessListener(new OnSuccessListener<String>() {
 //                        @Override
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 //                    });
             Thread thread = new Thread();
             thread.start();
-          //  Toast.makeText(MainActivity.this, ""+preferences.getString("phone",""), Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(MainActivity.this, ""+preferences.getString("phone",""), Toast.LENGTH_SHORT).show();
 
         }
 
@@ -78,16 +80,36 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        });
-
+        Log.e("Activity", "Mainactivity");
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(preferences.getString("phone","").length() > 0)
-                {
-                    Intent intent = new Intent(MainActivity.this,MainDashboard.class);
-                    startActivity(intent);
-                    finish();
-                }else {
+                if (preferences.getString("phone", "").length() > 0) {
+                    getdata();
+                    intent = new Intent(MainActivity.this, MainDashboard.class);
+                    database.getReference("Users").child(phone).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                User user = snapshot.getValue(User.class);
+                                FeatureController.getInstance().setUser(user);
+                                FeatureController.getInstance().setCurr_user_phone(user.getPhoneNo());
+                                FeatureController.getInstance().setUid(user.getUid());
+                                FeatureController.getInstance().setName(user.getName());
+                                intent.putExtra("uid",user.getUid());
+                                Log.e("uidd",user.getUid() );
+                                startActivity(intent);
+                                finish();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                } else {
                     Intent i = new Intent(MainActivity.this, PhoneActivity.class);
                     startActivity(i);
                 }
@@ -98,29 +120,32 @@ public class MainActivity extends AppCompatActivity {
         animfade = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
         image.setAnimation(animfade);
     }
-    class Thread extends java.lang.Thread{
+
+    class Thread extends java.lang.Thread {
 
         @Override
         public void run() {
-            database.getReference("Users").child(phone).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(snapshot.exists())
-                    {
-                        User user = snapshot.getValue(User.class);
-                        FeatureController.getInstance().setUser(user);
-                        FeatureController.getInstance().setCurr_user_phone(user.getPhoneNo());
-                        FeatureController.getInstance().setUid(user.getUid());
-                        FeatureController.getInstance().setName(user.getName());
-
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
+            getdata();
         }
+    }
+
+    public void getdata() {
+        database.getReference("Users").child(phone).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    User user = snapshot.getValue(User.class);
+                    FeatureController.getInstance().setUser(user);
+                    FeatureController.getInstance().setCurr_user_phone(user.getPhoneNo());
+                    FeatureController.getInstance().setUid(user.getUid());
+                    FeatureController.getInstance().setName(user.getName());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

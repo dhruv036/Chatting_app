@@ -1,6 +1,7 @@
 package com.example.hello.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,22 +30,43 @@ public class ChatFragment extends Fragment {
     ChatfragmentlayoutBinding binding;
     ArrayList<Friends> userss = new ArrayList<>();
     String uid="";
+    UsersAdapter adapter;
     FirebaseDatabase database;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
      binding = ChatfragmentlayoutBinding.inflate(inflater,container,false);
-     uid = FeatureController.getInstance().getUid();
-        UsersAdapter adapter = new UsersAdapter(getActivity(), userss);
+
+      uid = getActivity().getIntent().getStringExtra("uid");
+      if(( uid== null || uid.equals("")))
+      {
+          uid = FeatureController.getInstance().getUid();
+      }
+      Log.e("uid",uid);
+     adapter = new UsersAdapter(getActivity(), userss);
         database = FirebaseDatabase.getInstance();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
 
         binding.chats.showShimmerAdapter();
         binding.chats.hideShimmerAdapter();
+        Log.e("Activity","Chatfragment");
              //String i = java.text.DateFormat.getDateTimeInstance().format(new Date());
         //Toast.makeText(getActivity(),i,Toast.LENGTH_SHORT).show();
+        getchat();
+
+        return binding.getRoot();
+
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        binding.chats.setVisibility(View.VISIBLE);
+    }
+
+    public void getchat()
+    {
         database.getReference().child("Friends").child(uid).orderByChild("lastMsgTime").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -53,7 +75,6 @@ public class ChatFragment extends Fragment {
                     Friends users = dataSnapshot.getValue(Friends.class);
                     userss.add(users);
                 }
-
 
                 FeatureController.getInstance().setMyfriends(userss);
                 binding.chats.hideShimmerAdapter();
@@ -66,13 +87,5 @@ public class ChatFragment extends Fragment {
 
             }
         });
-
-        return binding.getRoot();
-
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        binding.chats.setVisibility(View.VISIBLE);
     }
 }

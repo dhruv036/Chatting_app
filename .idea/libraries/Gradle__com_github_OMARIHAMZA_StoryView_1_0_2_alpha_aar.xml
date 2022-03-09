@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.OMARIHAMZA:StoryView:1.0.2-alpha@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/961057a868fa9c970fa9086bfd3e2275/transformed/jetified-StoryView-1.0.2-alpha/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/961057a868fa9c970fa9086bfd3e2275/transformed/jetified-StoryView-1.0.2-alpha/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/961057a868fa9c970fa9086bfd3e2275/transformed/jetified-StoryView-1.0.2-alpha/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/4d9413fc3f5660cfbd0e728480048185/transformed/jetified-StoryView-1.0.2-alpha/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4d9413fc3f5660cfbd0e728480048185/transformed/jetified-StoryView-1.0.2-alpha/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4d9413fc3f5660cfbd0e728480048185/transformed/jetified-StoryView-1.0.2-alpha/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

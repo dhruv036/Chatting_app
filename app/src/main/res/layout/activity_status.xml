@@ -35,7 +35,7 @@
             android:layout_marginTop="10dp"
             android:layout_below="@id/textView2"
             android:padding="6dp"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/kik" />
 
         <com.devlomi.circularstatusview.CircularStatusView
             android:id="@+id/circular_status_view"

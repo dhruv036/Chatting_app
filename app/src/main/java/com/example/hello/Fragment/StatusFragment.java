@@ -1,5 +1,6 @@
 package com.example.hello.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -58,6 +59,7 @@ public class StatusFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = StatusfragmentlayoutBinding.inflate(inflater, container, false);
+        Context context = binding.getRoot().getContext();
         currid = FeatureController.getInstance().getUid();
         database = FirebaseDatabase.getInstance();
         userStatus = new UserStatus();
@@ -77,6 +79,7 @@ public class StatusFragment extends Fragment {
                         if (snapshot.exists()) {
                             userStatus.setName(snapshot.child("name").getValue(String.class));
                             userStatus.setProfileImg(snapshot.child("profileImg").getValue(String.class));
+                            FeatureController.getInstance().setUserimg(snapshot.child("profileImg").getValue(String.class));
                             userStatus.setLastupadted(snapshot.child("lastUpdated").getValue(Long.class));
                             ArrayList<Status> status = new ArrayList<>();
                             for (DataSnapshot snapshot1 : snapshot.child("statuses").getChildren()) {
@@ -86,10 +89,17 @@ public class StatusFragment extends Fragment {
                             userStatus.setStatuses(status);
 
                             binding.circularStatusView.setPortionsCount(status.size());
-                            if (userStatus.getStatuses().size() >= 1) {
+                            if (userStatus.getStatuses().size() > 1) {
                                 Status laststatus = userStatus.getStatuses().get(userStatus.getStatuses().size() - 1);
                                 binding.timeupdated.setText(Constants.militotime(userStatus.getLastupadted()));
                                 Glide.with(getActivity()).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
+                            }else if(userStatus.getStatuses().size() == 1)
+                            {
+                                Status laststatus = userStatus.getStatuses().get(0);
+                                binding.timeupdated.setText(Constants.militotime(userStatus.getLastupadted()));
+                                Glide.with(context).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
+                            }else {
+                                Glide.with(getActivity()).load( userStatus.getProfileImg()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
                             }
 
 
@@ -115,7 +125,7 @@ public class StatusFragment extends Fragment {
 
                         myStories.add(new MyStory(status.getImgurl()));
                         // to add comment in status
-                      //  myStories.add(new MyStory(status.getImgurl(),null,"Add Comment here"));
+                        //  myStories.add(new MyStory(status.getImgurl(),null,"Add Comment here"));
 
                     }
                     new StoryView.Builder((getActivity()).getSupportFragmentManager())
@@ -160,12 +170,12 @@ public class StatusFragment extends Fragment {
 //                picdialog();
 //            }
 //        });
-        binding.tabtoadd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                picdialog();
-            }
-        });
+//        binding.tabtoadd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                picdialog();
+//            }
+//        });
         return binding.getRoot();
 
 
@@ -177,20 +187,21 @@ public class StatusFragment extends Fragment {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, 1);
     }
+    public void show()
+    {
+
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (data != null) {
+        if (data != null && requestCode == 1) {
             if (data.getData() != null) {
                 FirebaseStorage storage = FirebaseStorage.getInstance();
-//                Date date = new Date();
-//                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-//                String time = sdf.format(new Date());
                 Calendar calendar = Calendar.getInstance();
                 StorageReference reference = storage.getReference().child("Status")
                         .child(calendar.getTimeInMillis() + "");
-                      reference.putFile(data.getData())
+                reference.putFile(data.getData())
                         .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -246,21 +257,21 @@ public class StatusFragment extends Fragment {
                             if (snapshot.exists()) {
                                 UserStatus s = new UserStatus();
 
-                                        s.setLastupadted(snapshot.child("lastUpdated").getValue(Long.class));
-                                        s.setProfileImg(snapshot.child("profileImg").getValue(String.class));
-                                        s.setName(myfriends.get(finalI).getName());
-                                        s.setUid(snapshot.child("uid").getValue(String.class));
-                                        ArrayList<Status> arrayList = new ArrayList<>();
-                                        for (DataSnapshot snapshot2 : snapshot.child("statuses").getChildren()) {
-                                            Status statuss = snapshot2.getValue(Status.class);
-                                            arrayList.add(statuss);
-                                        }
-                                        s.setStatuses(arrayList);
-                                        status.add(s);
-                                    statusAdapter.notifyDataSetChanged();
-                                    }
-
+                                s.setLastupadted(snapshot.child("lastUpdated").getValue(Long.class));
+                                s.setProfileImg(snapshot.child("profileImg").getValue(String.class));
+                                s.setName(myfriends.get(finalI).getName());
+                                s.setUid(snapshot.child("uid").getValue(String.class));
+                                ArrayList<Status> arrayList = new ArrayList<>();
+                                for (DataSnapshot snapshot2 : snapshot.child("statuses").getChildren()) {
+                                    Status statuss = snapshot2.getValue(Status.class);
+                                    arrayList.add(statuss);
                                 }
+                                s.setStatuses(arrayList);
+                                status.add(s);
+                                statusAdapter.notifyDataSetChanged();
+                            }
+
+                        }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {

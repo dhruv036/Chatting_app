@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Hello</string>
+    <string name="app_name">HelloBlast</string>
     <string name="termsconditions"><u>Terms &amp; Conditions</u></string>
     <string name="default_notification_channel_id">123456</string>
     <string name="title_activity_loginactivity1">Loginactivity1</string>

@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.mesibo.api:calls:1.5.2@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/e651a824f38d84bcd15cf33b73bc28a9/transformed/jetified-calls-1.5.2/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/e651a824f38d84bcd15cf33b73bc28a9/transformed/jetified-calls-1.5.2/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/e651a824f38d84bcd15cf33b73bc28a9/transformed/jetified-calls-1.5.2/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/b0ced0ddbb7026edea801472e4a7eb8b/transformed/jetified-calls-1.5.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b0ced0ddbb7026edea801472e4a7eb8b/transformed/jetified-calls-1.5.2/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b0ced0ddbb7026edea801472e4a7eb8b/transformed/jetified-calls-1.5.2/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mesibo.api/calls/1.5.2/ff0e85085b557255199bb03f0a840c78f5e3a7e/calls-1.5.2-javadoc.jar!/" />

@@ -2,6 +2,7 @@ package com.example.hello.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.hello.Activity.ChatActivity;
+import com.example.hello.Activity.FeatureController;
 import com.example.hello.Constants;
+import com.example.hello.Fragment.ChatFragment;
 import com.example.hello.Modal_Class.Friends;
+import com.example.hello.Modal_Class.User;
 import com.example.hello.R;
 import com.example.hello.databinding.RowConversationBinding;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,25 +47,23 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewholder
 
     @Override
     public void onBindViewHolder(@NonNull MyViewholder holder, int position) {
-
-        String senderid = FirebaseAuth.getInstance().getUid();
-        String senderrom = senderid + arrayList.get(arrayList.size() - position - 1).getUid();
+        Log.e("Activity","Chatadapter");
         holder.binding.lastmsg.setText(arrayList.get(arrayList.size() - position - 1).getLastMsg());
        if(arrayList.size() > 0) {
-
-
-           if (!(arrayList.get(arrayList.size() - position - 1).getLastMsg() == null)) {
+           if ((arrayList.get(arrayList.size() - position - 1).getLastMsg() == null)) {
+               ChatFragment fragment =new ChatFragment();
+               fragment.getchat();
                holder.binding.time.setText("");
            } else {
                holder.binding.time.setText(Constants.militohhmm(arrayList.get(arrayList.size() - position - 1).getLastMsgTime()));
            }
-
 
            Glide.with(context).load(arrayList.get(arrayList.size() - position - 1).getProfileImg()).into(holder.binding.userImg);
            holder.binding.userName.setText(arrayList.get(arrayList.size() - position - 1).getName());
            holder.itemView.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {
+
                    Intent intent = new Intent(context, ChatActivity.class);
                    intent.putExtra("Uid", arrayList.get(arrayList.size() - position - 1).getUid());
                    intent.putExtra("username", arrayList.get(arrayList.size() - position - 1).getName());

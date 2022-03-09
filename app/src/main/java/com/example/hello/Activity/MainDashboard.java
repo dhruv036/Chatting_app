@@ -99,7 +99,14 @@ String pimg;
         if (!FeatureController.getInstance().getName().equals("")) {
             String myname = FeatureController.getInstance().getName();
             int index = myname.indexOf(' ');
-            binding.myname.setText("Hello " + myname.substring(0, index));
+            if(!(index<0))
+            {
+                binding.myname.setText("Hello " + myname.substring(0, index));
+            }else {
+                binding.myname.setText("Hello " + myname);
+            }
+
+
         }
         setuser();
 
@@ -283,6 +290,7 @@ String pimg;
                     case R.id.chatsitem:
                         fvbttype = 0;
                         fragment = new ChatFragment();
+                        Log.e("Activity","callingchatfragment");
                         binding.addPerson.setImageDrawable(getResources().getDrawable(ic_baseline_person_add_24));
                         break;
                     case R.id.statusitem:

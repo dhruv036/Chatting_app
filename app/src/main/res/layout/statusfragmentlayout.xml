@@ -34,7 +34,7 @@
             android:layout_marginTop="10dp"
             android:layout_below="@id/textView2"
             android:padding="6dp"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/kik" />
 
         <com.devlomi.circularstatusview.CircularStatusView
             android:id="@+id/circular_status_view"
@@ -68,6 +68,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/mystatus"
+            android:visibility="invisible"
             android:fontFamily="@font/poppins"
             android:text="Tap to add status"
             android:textColor="@color/grey"
@@ -84,7 +85,7 @@
             android:layout_marginEnd="15dp"
             android:layout_marginRight="5dp"
             android:fontFamily="@font/poppins"
-            android:text="2:45"
+            android:text=""
             android:textSize="10sp"
             android:textStyle="bold" />
     </RelativeLayout>

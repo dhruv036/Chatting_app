@@ -91,7 +91,13 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
 
 
         //receiver name and image
-        binding.namee.setText(username);
+        if(username == null)
+        {
+            binding.namee.setText(phone);
+        }else {
+            binding.namee.setText(username);
+        }
+
         Glide.with(this).load(pimg).into(binding.profileimg);
 
         auth = FirebaseAuth.getInstance();
@@ -193,11 +199,14 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
                     HashMap<String, Object> lastmsg = new HashMap<>();
                     lastmsg.put("lastMsg", chat.getMessage());
                     lastmsg.put("lastMsgTime", calendar.getTimeInMillis());
+
+
                     database.getReference().child("Chats").child(SenderRoom).updateChildren(lastmsg);
                     database.getReference().child("Chats").child(ReceiverRoom).updateChildren(lastmsg);
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                     database.getReference().child("Friends").child(currid).child(phone).updateChildren(lastmsg);
+                    lastmsg.put("uid",senderuid);
+                    lastmsg.put("phoneNo",FeatureController.getInstance().getUser().getPhoneNo());
                     database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).updateChildren(lastmsg);
 
                     database.getReference().child("Chats")
@@ -492,6 +501,7 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
                         if(snapshot.exists())
                         {
                             Friends name = snapshot.getValue(Friends.class);
+
                             Callername =  name.getName();
                         }
 //                        for (DataSnapshot snapshot1 : snapshot.getChildren()) {
