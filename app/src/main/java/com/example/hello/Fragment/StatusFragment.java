@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.hello.Activity.FeatureController;
+import com.example.hello.Activity.MainDashboard;
 import com.example.hello.Constants;
 import com.example.hello.Modal_Class.Friends;
 import com.example.hello.Modal_Class.Status;
@@ -87,19 +88,22 @@ public class StatusFragment extends Fragment {
                                 status.add(status1);
                             }
                             userStatus.setStatuses(status);
-
+                            MainDashboard dashboard = new MainDashboard();
                             binding.circularStatusView.setPortionsCount(status.size());
                             if (userStatus.getStatuses().size() > 1) {
                                 Status laststatus = userStatus.getStatuses().get(userStatus.getStatuses().size() - 1);
                                 binding.timeupdated.setText(Constants.militotime(userStatus.getLastupadted()));
-                                Glide.with(getActivity()).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
+//                             dashboard.setfragment();
+                                Glide.with(getContext()).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
                             }else if(userStatus.getStatuses().size() == 1)
                             {
                                 Status laststatus = userStatus.getStatuses().get(0);
                                 binding.timeupdated.setText(Constants.militotime(userStatus.getLastupadted()));
+//                                dashboard.setfragment();
                                 Glide.with(context).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
                             }else {
-                                Glide.with(getActivity()).load( userStatus.getProfileImg()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
+//                                dashboard.setfragment();
+                                Glide.with(getContext()).load( userStatus.getProfileImg()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
                             }
 
 

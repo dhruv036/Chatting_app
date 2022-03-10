@@ -76,8 +76,9 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
     String currid = "";
     String add_name = "Bhaiya";
     int fvbttype = 0;
+    Fragment fragment = null;
     String add_phone = "+918302827722";
-String pimg;
+    String pimg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +91,7 @@ String pimg;
         binding.frameLayout.setAnimation(aniup);
         binding.bottomnav.setItemSelected(R.id.chatsitem, true);
 
-        if(!(FeatureController.getInstance().getUser() == null))
-        {
+        if (!(FeatureController.getInstance().getUser() == null)) {
             pimg = FeatureController.getInstance().getUser().getProfileImg();
             Glide.with(this).load(pimg).placeholder(R.drawable.profile_dp).circleCrop().into(binding.mydp);
         }
@@ -99,10 +99,9 @@ String pimg;
         if (!FeatureController.getInstance().getName().equals("")) {
             String myname = FeatureController.getInstance().getName();
             int index = myname.indexOf(' ');
-            if(!(index<0))
-            {
+            if (!(index < 0)) {
                 binding.myname.setText("Hello " + myname.substring(0, index));
-            }else {
+            } else {
                 binding.myname.setText("Hello " + myname);
             }
 
@@ -127,8 +126,6 @@ String pimg;
         c2.add(Calendar.DAY_OF_MONTH, -1);
 
         Toast.makeText(this, sdf.format(c2.getTime()).toString(), Toast.LENGTH_SHORT).show();
-
-
 
 
         //   A D D Contact
@@ -285,12 +282,12 @@ String pimg;
         binding.bottomnav.setOnItemSelectedListener(new ChipNavigationBar.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int i) {
-                Fragment fragment = null;
+                fragment = null;
                 switch (i) {
                     case R.id.chatsitem:
                         fvbttype = 0;
                         fragment = new ChatFragment();
-                        Log.e("Activity","callingchatfragment");
+                        Log.e("Activity", "callingchatfragment");
                         binding.addPerson.setImageDrawable(getResources().getDrawable(ic_baseline_person_add_24));
                         break;
                     case R.id.statusitem:
@@ -306,6 +303,12 @@ String pimg;
                 getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout2, fragment).commit();
             }
         });
+    }
+
+    public void setfragment() {
+        fvbttype = 1;
+        fragment = new StatusFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout2, fragment).commit();
     }
 
     @Override
@@ -567,7 +570,7 @@ String pimg;
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
                             Friends name = snapshot.getValue(Friends.class);
-                             String Callername =  name.getName();
+                            String Callername = name.getName();
                             mesiboProfile.setName(Callername);
                             mesiboProfile.setImageUrl(name.getProfileImg());
                         }
@@ -595,7 +598,8 @@ String pimg;
 
     @Override
     public void onBackPressed() {
-        finish();
+        finishAffinity();
+        System.exit(0);
     }
 
     void toast(String message) {

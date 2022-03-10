@@ -150,7 +150,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
                             }
                         })
                         .skipMemoryCache(true)
-                        .placeholder(R.drawable.placeholderr).apply(RequestOptions.centerInsideTransform()).into(viewHolder.binding.senderImg);
+                        .placeholder(R.drawable.place).apply(RequestOptions.centerInsideTransform()).into(viewHolder.binding.senderImg);
             } else {
                 viewHolder.binding.senderImg.setVisibility(View.GONE);
             }
@@ -312,7 +312,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
             if (m.getMessage().equals("Photos")) {
                 viewHolder.binding.receiverImg.setVisibility(View.VISIBLE);
                 viewHolder.binding.receiver.setVisibility(View.GONE);
-                Glide.with(context).load(m.getImage()).placeholder(R.drawable.placeholderr)
+                Glide.with(context).load(m.getImage()).placeholder(R.drawable.place)
                         .skipMemoryCache(true)
                         .into(viewHolder.binding.receiverImg);
             }

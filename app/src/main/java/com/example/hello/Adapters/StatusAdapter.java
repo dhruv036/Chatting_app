@@ -62,9 +62,9 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.Myviewhold
                 }
                 new StoryView.Builder(((MainDashboard) context).getSupportFragmentManager())
                         .setStoriesList(myStories) // Required
-                        .setStoryDuration(5000) // Default is 2000 Millis (2 Seconds)
+                        .setStoryDuration(6000) // Default is 2000 Millis (2 Seconds)
                         .setTitleText(userStatus.getName().toString()) // Default is Hidden
-                        .setSubtitleText("sfdf") // Default is Hidden
+                        .setSubtitleText("") // Default is Hidden
                         .setTitleLogoUrl(userStatus.getProfileImg()) // Default is Hidden
                         .setStoryClickListeners(new StoryClickListeners() {
                             @Override

@@ -97,6 +97,7 @@ public class SetupProfile extends AppCompatActivity {
                                                       editor.commit();
                                                 Intent intent = new Intent(SetupProfile.this,MainDashboard.class);
                                                 startActivity(intent);
+                                                finish();
                                                   }
                                               });
 
@@ -125,6 +126,7 @@ public class SetupProfile extends AppCompatActivity {
                                    editor.commit();
                                    Intent intent = new Intent(SetupProfile.this,MainDashboard.class);
                                    startActivity(intent);
+finish();
                                }
                            });
                }
