@@ -1,9 +1,15 @@
 package com.example.hello.Fragment;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.hello.Activity.FeatureController;
 import com.example.hello.Activity.MainDashboard;
+import com.example.hello.AlarmRecevier;
 import com.example.hello.Constants;
 import com.example.hello.Modal_Class.Friends;
 import com.example.hello.Modal_Class.Status;
@@ -53,17 +60,27 @@ public class StatusFragment extends Fragment {
     ArrayList<UserStatus> status = new ArrayList<>();
     StatusAdapter statusAdapter;
     UserStatus userStatus;
-    FirebaseDatabase database;
+    Context context ;
+            FirebaseDatabase database;
     String currid="";
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        context = binding.getRoot().getContext();
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = StatusfragmentlayoutBinding.inflate(inflater, container, false);
-        Context context = binding.getRoot().getContext();
+        context = binding.getRoot().getContext();
         currid = FeatureController.getInstance().getUid();
         database = FirebaseDatabase.getInstance();
         userStatus = new UserStatus();
+
+//show();
         statusAdapter = new StatusAdapter(getActivity(), status);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -81,6 +98,7 @@ public class StatusFragment extends Fragment {
                             userStatus.setName(snapshot.child("name").getValue(String.class));
                             userStatus.setProfileImg(snapshot.child("profileImg").getValue(String.class));
                             FeatureController.getInstance().setUserimg(snapshot.child("profileImg").getValue(String.class));
+
                             userStatus.setLastupadted(snapshot.child("lastUpdated").getValue(Long.class));
                             ArrayList<Status> status = new ArrayList<>();
                             for (DataSnapshot snapshot1 : snapshot.child("statuses").getChildren()) {
@@ -92,7 +110,13 @@ public class StatusFragment extends Fragment {
                             binding.circularStatusView.setPortionsCount(status.size());
                             if (userStatus.getStatuses().size() > 1) {
                                 Status laststatus = userStatus.getStatuses().get(userStatus.getStatuses().size() - 1);
+                            if(userStatus.getLastupadted()==101)
+                            {
                                 binding.timeupdated.setText(Constants.militotime(userStatus.getLastupadted()));
+                            }else {
+
+                            }
+
 //                             dashboard.setfragment();
                                 Glide.with(getContext()).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
                             }else if(userStatus.getStatuses().size() == 1)
@@ -121,7 +145,7 @@ public class StatusFragment extends Fragment {
         binding.circularStatusView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(userStatus.getStatuses() != null)
+                if(userStatus.getStatuses() != null && userStatus.getStatuses().size() >0)
                 {
                     ArrayList<MyStory> myStories = new ArrayList<>();
 
@@ -151,8 +175,10 @@ public class StatusFragment extends Fragment {
                             }) // Optional Listeners
                             .build() // Must be called before calling show method
                             .show();
+                }else
+                {
+                    Toast.makeText(context, "Add Status", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -171,19 +197,36 @@ public class StatusFragment extends Fragment {
 //        binding.addStatus.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                picdialog();
+//     ktnoihgg
+//
+//
+//     picdialog();
 //            }
 //        });
-//        binding.tabtoadd.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                picdialog();
-//            }
-//        });
+        binding.addPerson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                picdialog();
+            }
+        });
+        binding.tabtoadd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                picdialog();
+            }
+        });
         return binding.getRoot();
 
 
     }
+    public void show()
+    {
+        AlarmRecevier  recevier = new AlarmRecevier();
+//        recevier.createNotificationChannel(context);
+        recevier.show(context);
+        Log.e("calling","calling");
+    }
+
 
     public void picdialog() {
         Intent intent = new Intent();
@@ -191,10 +234,7 @@ public class StatusFragment extends Fragment {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, 1);
     }
-    public void show()
-    {
 
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -205,14 +245,19 @@ public class StatusFragment extends Fragment {
                 Calendar calendar = Calendar.getInstance();
                 StorageReference reference = storage.getReference().child("Status")
                         .child(calendar.getTimeInMillis() + "");
+
                 reference.putFile(data.getData())
                         .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                                 if (task.isSuccessful()) {
+
                                     reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                         @Override
                                         public void onSuccess(Uri uri) {
+
+                                            Toast.makeText(getActivity(), "Dhruv", Toast.LENGTH_SHORT).show();
+
                                             UserStatus status = new UserStatus();
                                             status.setName(FeatureController.getInstance().getName());
                                             status.setProfileImg(FeatureController.getInstance().getUserimg());
@@ -236,7 +281,7 @@ public class StatusFragment extends Fragment {
                                                     .child("statuses")
                                                     .push()
                                                     .setValue(status1);
-                                            Toast.makeText(getActivity(), "Successfull", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getActivity(), "Successfull posted", Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
@@ -285,4 +330,6 @@ public class StatusFragment extends Fragment {
 
         }
     }
+
+
 }

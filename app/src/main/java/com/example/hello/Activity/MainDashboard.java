@@ -1,12 +1,16 @@
 package com.example.hello.Activity;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -15,35 +19,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.hello.AlarmRecevier;
 import com.example.hello.Fragment.ChatFragment;
 import com.example.hello.Fragment.GroupChatFragment;
 import com.example.hello.Fragment.StatusFragment;
 import com.example.hello.Modal_Class.Friends;
-import com.example.hello.Modal_Class.Status;
 import com.example.hello.Modal_Class.UserStatus;
 import com.example.hello.R;
-import com.example.hello.Adapters.StatusAdapter;
 import com.example.hello.ViewDialog;
 import com.example.hello.VoiceCall.Api;
 import com.example.hello.VoiceCall.ApiClient;
 import com.example.hello.VoiceCall.Result;
 import com.example.hello.databinding.ActivityMainDashboardBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.google.gson.Gson;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 import com.mesibo.api.Mesibo;
 import com.mesibo.api.MesiboProfile;
@@ -53,7 +48,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,7 +59,7 @@ import static com.example.hello.R.drawable.ic_baseline_person_add_24;
 
 public class MainDashboard extends AppCompatActivity implements MesiboCall.IncomingListener, Mesibo.ConnectionListener, Mesibo.MessageListener {
     ActivityMainDashboardBinding binding;
-
+    AlarmManager manager;
     String token = "hh3ef9cu5npwhvvo9b8rsse5n60wcn4rsrjp9b6xm54wqh16amxgdzplfe8fgoyu";
     String op = "useradd";
     Animation aniup;
@@ -86,10 +80,15 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
         binding = ActivityMainDashboardBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         getSupportActionBar().hide();
-
+setalarm();
+//        Intent intent2 = new Intent(getApplicationContext(), FirebaseService.class);
+//        startService(intent2);
         aniup = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         binding.frameLayout.setAnimation(aniup);
         binding.bottomnav.setItemSelected(R.id.chatsitem, true);
+//        AlarmRecevier  recevier = new AlarmRecevier();
+//        recevier.createNotificationChannel(getApplicationContext());
+//        recevier.show(getApplicationContext());
 
         if (!(FeatureController.getInstance().getUser() == null)) {
             pimg = FeatureController.getInstance().getUser().getProfileImg();
@@ -110,7 +109,6 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
         setuser();
 
         database = FirebaseDatabase.getInstance();
-        //String currid = FirebaseAuth.getInstance().getUid();
         currid = FeatureController.getInstance().getUid();
         getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout2, new ChatFragment()).commit();
         database.getReference().child("Presence").child(currid).setValue("Online");
@@ -137,10 +135,9 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
                     ViewDialog alert = new ViewDialog();
                     alert.showDialog(MainDashboard.this);
                 } else {
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(intent, 1);
+
+//                    StatusFragment fragment = new StatusFragment();
+//                    fragment.picdialog();
                 }
 //                AlertDialog.Builder builder
 //                        = new AlertDialog.Builder(MainDashboard.this);
@@ -287,12 +284,15 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
                     case R.id.chatsitem:
                         fvbttype = 0;
                         fragment = new ChatFragment();
+                        binding.addPerson.setVisibility(View.VISIBLE);
                         Log.e("Activity", "callingchatfragment");
                         binding.addPerson.setImageDrawable(getResources().getDrawable(ic_baseline_person_add_24));
                         break;
                     case R.id.statusitem:
                         fvbttype = 1;
                         fragment = new StatusFragment();
+                        binding.addPerson.setVisibility(View.GONE);
+
                         binding.addPerson.setImageDrawable(getResources().getDrawable(ic_baseline_camera_alt_24));
                         break;
                     case R.id.callitems:
@@ -311,58 +311,58 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
         getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout2, fragment).commit();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (data != null) {
-            if (data.getData() != null) {
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-//                Date date = new Date();
-//                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-//                String time = sdf.format(new Date());
-                Calendar calendar = Calendar.getInstance();
-                StorageReference reference = storage.getReference().child("Status")
-                        .child(calendar.getTimeInMillis() + "");
-                reference.putFile(data.getData())
-                        .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            UserStatus status = new UserStatus();
-                                            status.setName(FeatureController.getInstance().getName());
-                                            status.setProfileImg(FeatureController.getInstance().getUserimg());
-                                            status.setLastupadted(calendar.getTimeInMillis());
-
-                                            String imgurl = uri.toString();
-                                            Status status1 = new Status(imgurl, status.getLastupadted());
-
-                                            HashMap<String, Object> story = new HashMap<>();
-                                            story.put("name", status.getName());
-                                            story.put("profileImg", status.getProfileImg());
-                                            story.put("lastUpdated", status.getLastupadted());
-
-
-                                            database.getReference().child("Stories")
-                                                    .child(currid)
-                                                    .updateChildren(story);
-
-                                            database.getReference().child("Stories")
-                                                    .child(currid)
-                                                    .child("statuses")
-                                                    .push()
-                                                    .setValue(status1);
-                                            Toast.makeText(MainDashboard.this, "Successfull", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            }
-                        });
-            }
-        }
-    }
+    //@Override
+//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (data != null) {
+//            if (data.getData() != null) {
+//                FirebaseStorage storage = FirebaseStorage.getInstance();
+////                Date date = new Date();
+////                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+////                String time = sdf.format(new Date());
+//                Calendar calendar = Calendar.getInstance();
+//                StorageReference reference = storage.getReference().child("Status")
+//                        .child(calendar.getTimeInMillis() + "");
+//                reference.putFile(data.getData())
+//                        .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+//                                if (task.isSuccessful()) {
+//                                    reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                                        @Override
+//                                        public void onSuccess(Uri uri) {
+//                                            UserStatus status = new UserStatus();
+//                                            status.setName(FeatureController.getInstance().getName());
+//                                            status.setProfileImg(FeatureController.getInstance().getUserimg());
+//                                            status.setLastupadted(calendar.getTimeInMillis());
+//
+//                                            String imgurl = uri.toString();
+//                                            Status status1 = new Status(imgurl, status.getLastupadted());
+//
+//                                            HashMap<String, Object> story = new HashMap<>();
+//                                            story.put("name", status.getName());
+//                                            story.put("profileImg", status.getProfileImg());
+//                                            story.put("lastUpdated", status.getLastupadted());
+//
+//
+//                                            database.getReference().child("Stories")
+//                                                    .child(currid)
+//                                                    .updateChildren(story);
+//
+//                                            database.getReference().child("Stories")
+//                                                    .child(currid)
+//                                                    .child("statuses")
+//                                                    .push()
+//                                                    .setValue(status1);
+//                                            Toast.makeText(MainDashboard.this, "Successfull postddddddd", Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    });
+//                                }
+//                            }
+//                        });
+//            }
+//        }
+//    }
 
     public void setuser() {
         Api api = ApiClient.getClient().create(Api.class);
@@ -606,5 +606,32 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
         Toast toast = Toast.makeText(getApplicationContext(), message, LENGTH_SHORT);
         //toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
         toast.show();
+    }
+
+    public void setalarm()
+    {  createNotificationChannel(this);
+        manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmRecevier.class);
+//        PendingIntent pendingIntent1 =  PendingIntent.getService(this,0,new Intent(this,FirebaseService.class),0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
+        manager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+(60*1000),pendingIntent);
+//        manager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+(60*1000),pendingIntent1);
+        Toast.makeText(this, "Alarm set", Toast.LENGTH_SHORT).show();
+    }
+    public void createNotificationChannel(Context context) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "foxandroidReminderChannel";
+            String description = "Channel For Alarm Manager";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel("foxandroid",name,importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = context.getApplicationContext().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+
+        }
+
+
     }
 }
