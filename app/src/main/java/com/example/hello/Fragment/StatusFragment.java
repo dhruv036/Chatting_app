@@ -127,7 +127,7 @@ public class StatusFragment extends Fragment {
                                 Glide.with(context).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
                             }else {
 //                                dashboard.setfragment();
-                                Glide.with(getContext()).load( userStatus.getProfileImg()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
+                                Glide.with(context).load( userStatus.getProfileImg()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
                             }
 
 
