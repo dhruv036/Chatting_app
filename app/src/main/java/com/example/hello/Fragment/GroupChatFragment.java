@@ -2,6 +2,7 @@ package com.example.hello.Fragment;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,9 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,6 +44,7 @@ public class GroupChatFragment extends Fragment {
     ArrayList<String> list = new ArrayList<>();
     Context context;
     int count = 0;
+    ActivityResultLauncher<String> photoresult;
 
     @Nullable
     @Override
@@ -47,7 +52,15 @@ public class GroupChatFragment extends Fragment {
         binding = NewgrouplayoutBinding.inflate(inflater, container, false);
         context = getActivity().getApplicationContext();
         database = FirebaseDatabase.getInstance();
-
+        photoresult = registerForActivityResult(
+                new ActivityResultContracts.GetContent(),
+                new ActivityResultCallback<Uri>() {
+                    @Override
+                    public void onActivityResult(Uri result) {
+                        binding.image.setImageURI(result);
+                    }
+                }
+        );
         getnames();
         ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, list.toArray());
         binding.addcontact.setAdapter(adapter);
@@ -91,6 +104,15 @@ public class GroupChatFragment extends Fragment {
                 }
             }
         });
+
+        binding.image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              photoresult.launch("image/*");
+            }
+        });
+
+
         return binding.getRoot();
     }
 
