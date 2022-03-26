@@ -106,7 +106,6 @@ public class StatusFragment extends Fragment {
                                 status.add(status1);
                             }
                             userStatus.setStatuses(status);
-                            MainDashboard dashboard = new MainDashboard();
                             binding.circularStatusView.setPortionsCount(status.size());
                             if (userStatus.getStatuses().size() > 1) {
                                 Status laststatus = userStatus.getStatuses().get(userStatus.getStatuses().size() - 1);

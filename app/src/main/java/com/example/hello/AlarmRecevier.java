@@ -28,8 +28,8 @@ public class AlarmRecevier extends BroadcastReceiver {
 
     public void show(Context context) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        database.getReference().child("Stories").child("bRfcORJZIkR713Qhg56NjsrHGps1").child("statuses").setValue(null);
-        database.getReference().child("Stories").child("bRfcORJZIkR713Qhg56NjsrHGps1").child("lastUpdated").setValue(101);
+        database.getReference().child("Stories").child(FeatureController.getInstance().getUser().getUid()).child("statuses").setValue(null);
+        database.getReference().child("Stories").child(FeatureController.getInstance().getUser().getUid()).child("lastUpdated").setValue(101);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context.getApplicationContext(),"foxandroid")
                 .setSmallIcon(R.drawable.ic_launcher_background)

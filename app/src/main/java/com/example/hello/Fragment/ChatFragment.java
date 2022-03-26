@@ -49,8 +49,8 @@ public class ChatFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
 
-        binding.chats.showShimmerAdapter();
-        binding.chats.hideShimmerAdapter();
+//        binding.chats.showShimmerAdapter();
+//        binding.chats.hideShimmerAdapter();
         Log.e("Activity","Chatfragment");
              //String i = java.text.DateFormat.getDateTimeInstance().format(new Date());
         //Toast.makeText(getActivity(),i,Toast.LENGTH_SHORT).show();
@@ -77,7 +77,6 @@ public class ChatFragment extends Fragment {
                 }
 
                 FeatureController.getInstance().setMyfriends(userss);
-                binding.chats.hideShimmerAdapter();
                 adapter.notifyDataSetChanged();
                 binding.chats.setAdapter(adapter);
             }

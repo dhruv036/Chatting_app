@@ -398,10 +398,10 @@ setalarm();
         database.getReference().child("Presence").child(currid).setValue(String.valueOf(calendar.getTimeInMillis()));
     }
 
-    public void go() {
-        Intent intentt = new Intent(MainDashboard.this, GroupChatActivity.class);
-        startActivity(intentt);
-    }
+//    public void go() {
+//        Intent intentt = new Intent(MainDashboard.this, GroupChatActivity.class);
+//        startActivity(intentt);
+//    }
 
     @Override
     protected void onRestart() {

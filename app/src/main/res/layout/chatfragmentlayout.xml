@@ -28,7 +28,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,10 +36,8 @@
             android:layout_marginTop="10dp"
             android:visibility="visible"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:shimmer_demo_angle="20"
-            app:shimmer_demo_grid_child_count="2"
-            app:shimmer_demo_layout="@layout/chats_shimmer"
-            app:shimmer_demo_layout_manager_type="linear_vertical" />
+            tools:listitem="@layout/row_conversation"
+           />
 
     </RelativeLayout>
 

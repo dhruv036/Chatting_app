@@ -7,17 +7,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.hello.Activity.FeatureController;
-import com.example.hello.Activity.MainDashboard;
 import com.example.hello.Modal_Class.Friends;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -26,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Calendar;
 
 public class ViewDialog {
-    String add_name="",add_phone ="";
+    String add_name = "", add_phone = "";
     FirebaseDatabase database;
     String curuid = "";
 
@@ -44,7 +41,7 @@ public class ViewDialog {
         mDialogNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("NO","Clicked");
+                Log.i("NO", "Clicked");
                 //hghfg
 
 
@@ -56,15 +53,15 @@ public class ViewDialog {
         mDialogOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("Ok","Clicked");
-                EditText in_name,in_phone;
+                Log.i("Ok", "Clicked");
+                EditText in_name, in_phone;
                 in_name = dialog.findViewById(R.id.name);
                 in_phone = dialog.findViewById(R.id.phone);
 
                 add_name = in_name.getText().toString();
                 add_phone = in_phone.getText().toString();
 
-                Toast.makeText(activity.getApplicationContext(),add_name+add_phone,Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity.getApplicationContext(), add_name + add_phone, Toast.LENGTH_SHORT).show();
 
                 database.getReference("Users").child(add_phone).addValueEventListener(new ValueEventListener() {
                     @Override

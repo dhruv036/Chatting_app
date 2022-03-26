@@ -53,7 +53,7 @@ public class GroupChatActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
-        senderuid = auth.getUid();
+        senderuid = auth.getUid(); // my uid
         messages =  new ArrayList<>();
         adapter = new GroupMessageAdapter(this,messages);
         binding.chatrecycle.setLayoutManager(new LinearLayoutManager(this));
