@@ -1,7 +1,7 @@
 package com.example.hello.Modal_Class;
 
 public class Messages {
-    String message, messageId, senderTd, image,seen;
+    String message, messageId, senderTd, image,seen,phoneno;
     private Long timestamp;
     private int feeling = -1;
 
@@ -13,6 +13,14 @@ public class Messages {
         this.senderTd = senderTd;
    //     this.seen = seen;
         this.timestamp = timestamp;
+    }
+
+    public String getPhoneno() {
+        return phoneno;
+    }
+
+    public void setPhoneno(String phoneno) {
+        this.phoneno = phoneno;
     }
 
     public String getSeen() {

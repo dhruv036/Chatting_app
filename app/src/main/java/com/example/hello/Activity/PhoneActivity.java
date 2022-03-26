@@ -4,12 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 
+import com.example.hello.FeatureController;
 import com.example.hello.Modal_Class.New_user;
 import com.example.hello.R;
 import com.example.hello.databinding.ActivityPhoneBinding;

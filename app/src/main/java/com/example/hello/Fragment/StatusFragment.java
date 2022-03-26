@@ -23,10 +23,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.hello.Activity.FeatureController;
-import com.example.hello.Activity.MainDashboard;
+
 import com.example.hello.AlarmRecevier;
 import com.example.hello.Constants;
+import com.example.hello.FeatureController;
 import com.example.hello.Modal_Class.Friends;
 import com.example.hello.Modal_Class.Status;
 import com.example.hello.Modal_Class.UserStatus;
@@ -61,7 +61,7 @@ public class StatusFragment extends Fragment {
     StatusAdapter statusAdapter;
     UserStatus userStatus;
     Context context ;
-            FirebaseDatabase database;
+    FirebaseDatabase database;
     String currid="";
 
 
@@ -109,28 +109,23 @@ public class StatusFragment extends Fragment {
                             binding.circularStatusView.setPortionsCount(status.size());
                             if (userStatus.getStatuses().size() > 1) {
                                 Status laststatus = userStatus.getStatuses().get(userStatus.getStatuses().size() - 1);
-                            if(userStatus.getLastupadted()==101)
-                            {
-                                binding.timeupdated.setText(Constants.militotime(userStatus.getLastupadted()));
-                            }else {
+                                if(userStatus.getLastupadted()==101)
+                                {
+                                    binding.timeupdated.setText(" ");
+                                }else {
+                                    binding.timeupdated.setText(Constants.militotime(userStatus.getLastupadted()));
+                                }
 
-                            }
-
-//                             dashboard.setfragment();
                                 Glide.with(getContext()).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
                             }else if(userStatus.getStatuses().size() == 1)
                             {
                                 Status laststatus = userStatus.getStatuses().get(0);
                                 binding.timeupdated.setText(Constants.militotime(userStatus.getLastupadted()));
-//                                dashboard.setfragment();
+
                                 Glide.with(context).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
                             }else {
-//                                dashboard.setfragment();
                                 Glide.with(context).load( userStatus.getProfileImg()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
                             }
-
-
-
                         }
                     }
 

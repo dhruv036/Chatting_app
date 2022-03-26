@@ -1,17 +1,12 @@
 package com.example.hello;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.example.hello.Activity.FeatureController;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class AlarmRecevier extends BroadcastReceiver {

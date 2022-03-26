@@ -19,25 +19,20 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.hello.Activity.FeatureController;
+import com.example.hello.FeatureController;
 import com.example.hello.Adapters.AllGroupAdapter;
 import com.example.hello.Modal_Class.Friendinfo;
 import com.example.hello.Modal_Class.Friends;
 import com.example.hello.Modal_Class.Group;
-import com.example.hello.Modal_Class.GroupModal;
 import com.example.hello.R;
 import com.example.hello.databinding.NewgrouplayoutBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.theme.MaterialComponentsViewInflater;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -148,12 +143,11 @@ public class GroupChatFragment extends Fragment {
                 if (snapshot.exists()) {
 
                     for (DataSnapshot snapshot1 : snapshot.child("MyGroups").getChildren()) {
-                        Group group =new Group();
+                        Group group = new Group();
                         ArrayList<Friendinfo> friendinfo = new ArrayList<>();
                         friendinfo.clear();
-                        for (DataSnapshot snapshot2 :snapshot1.child("gMembers").getChildren())
-                        {
-                                friendinfo.add(snapshot2.getValue(Friendinfo.class));
+                        for (DataSnapshot snapshot2 : snapshot1.child("gMembers").getChildren()) {
+                            friendinfo.add(snapshot2.getValue(Friendinfo.class));
                         }
                         group = snapshot1.getValue(Group.class);
                         group.setgMembers(friendinfo);
@@ -205,7 +199,7 @@ public class GroupChatFragment extends Fragment {
                             Toast.makeText(context, "Image is successfully uploaded", Toast.LENGTH_SHORT).show();
                             String gid = database.getReference().push().getKey();
                             Calendar calendar1 = Calendar.getInstance();
-                            Group groupInfo = new Group("1", gid, binding.grpname.getText().toString(), binding.grpdiscpt.getText().toString(), uri.toString(), arrayList,"@Group_Created",String.valueOf(calendar1.getTimeInMillis()));
+                            Group groupInfo = new Group("1", gid, binding.grpname.getText().toString(), binding.grpdiscpt.getText().toString(), uri.toString(), arrayList, "@Group_Created", String.valueOf(calendar1.getTimeInMillis()));
                             database.getReference().child("Groups").child(FeatureController.getInstance().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -217,6 +211,13 @@ public class GroupChatFragment extends Fragment {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
+                                                    database.getReference("Group_Messages").child(FeatureController.getInstance().getUid()).child(gid).child("Messages").setValue("");
+                                                    for (Friendinfo friendinfo : arrayList) {
+                                                        Group groupInfo = new Group("0", gid, binding.grpname.getText().toString(), binding.grpdiscpt.getText().toString(), uri.toString(), arrayList, "@Group_Created", String.valueOf(calendar1.getTimeInMillis()));
+                                                        database.getReference().child("Groups").child(friendinfo.getFrduid()).child("MyGroups").child(gid).setValue(groupInfo);
+                                                        database.getReference("Group_Messages").child(friendinfo.getFrduid()).child(gid).child("Messages").setValue("");
+                                                    }
+
                                                     binding.progress.setVisibility(View.GONE);
                                                     Toast.makeText(context, "Group is created", Toast.LENGTH_SHORT).show();
                                                 }
@@ -240,7 +241,6 @@ public class GroupChatFragment extends Fragment {
             }
         });
     }
-
 
 
     private void getnames() {

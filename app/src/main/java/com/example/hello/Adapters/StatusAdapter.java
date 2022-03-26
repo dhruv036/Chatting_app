@@ -47,40 +47,49 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.Myviewhold
 //            }
 //        }
         UserStatus userStatus = arrayList.get(position);
-        Status laststatus = userStatus.getStatuses().get(userStatus.getStatuses().size() - 1);
-        holder.binding.statName.setText(userStatus.getName());
-        Glide.with(context).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(holder.binding.circularImg);
-        holder.binding.timeupdated.setText(Constants.militotime(userStatus.getStatuses().get(userStatus.getStatuses().size()-1).getTimestamp()));
-        holder.binding.circularStatusView.setPortionsCount(userStatus.getStatuses().size());
+        if(userStatus.getStatuses().size()>0 && userStatus.getStatuses() != null )
+        {
+            Status laststatus = userStatus.getStatuses().get(userStatus.getStatuses().size() - 1);
+            holder.binding.statName.setText(userStatus.getName());
+            Glide.with(context).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(holder.binding.circularImg);
+            holder.binding.timeupdated.setText(Constants.militotime(userStatus.getStatuses().get(userStatus.getStatuses().size()-1).getTimestamp()));
+            holder.binding.circularStatusView.setPortionsCount(userStatus.getStatuses().size());
 
-        holder.binding.circularStatusView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArrayList<MyStory> myStories = new ArrayList<>();
-                for (Status status : userStatus.getStatuses()) {
-                    myStories.add(new MyStory(status.getImgurl()));
+            holder.binding.circularStatusView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ArrayList<MyStory> myStories = new ArrayList<>();
+                    for (Status status : userStatus.getStatuses()) {
+                        myStories.add(new MyStory(status.getImgurl()));
+                    }
+                    new StoryView.Builder(((MainDashboard) context).getSupportFragmentManager())
+                            .setStoriesList(myStories) // Required
+                            .setStoryDuration(6000) // Default is 2000 Millis (2 Seconds)
+                            .setTitleText(userStatus.getName().toString()) // Default is Hidden
+                            .setSubtitleText("") // Default is Hidden
+                            .setTitleLogoUrl(userStatus.getProfileImg()) // Default is Hidden
+                            .setStoryClickListeners(new StoryClickListeners() {
+                                @Override
+                                public void onDescriptionClickListener(int position) {
+                                    //your action
+                                }
+
+                                @Override
+                                public void onTitleIconClickListener(int position) {
+                                    //your action
+                                }
+                            }) // Optional Listeners
+                            .build() // Must be called before calling show method
+                            .show();
                 }
-                new StoryView.Builder(((MainDashboard) context).getSupportFragmentManager())
-                        .setStoriesList(myStories) // Required
-                        .setStoryDuration(6000) // Default is 2000 Millis (2 Seconds)
-                        .setTitleText(userStatus.getName().toString()) // Default is Hidden
-                        .setSubtitleText("") // Default is Hidden
-                        .setTitleLogoUrl(userStatus.getProfileImg()) // Default is Hidden
-                        .setStoryClickListeners(new StoryClickListeners() {
-                            @Override
-                            public void onDescriptionClickListener(int position) {
-                                //your action
-                            }
+            });
+        }else
+        {
+            holder.binding.imageLayout.setVisibility(View.GONE);
+        }
 
-                            @Override
-                            public void onTitleIconClickListener(int position) {
-                                //your action
-                            }
-                        }) // Optional Listeners
-                        .build() // Must be called before calling show method
-                        .show();
-            }
-        });
+
+
 
 
     }

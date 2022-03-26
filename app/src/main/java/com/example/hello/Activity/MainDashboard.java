@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.hello.AlarmRecevier;
+import com.example.hello.FeatureController;
 import com.example.hello.Fragment.ChatFragment;
 import com.example.hello.Fragment.GroupChatFragment;
 import com.example.hello.Fragment.StatusFragment;
@@ -80,7 +81,7 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
         binding = ActivityMainDashboardBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         getSupportActionBar().hide();
-setalarm();
+//        setalarm();
 //        Intent intent2 = new Intent(getApplicationContext(), FirebaseService.class);
 //        startService(intent2);
         aniup = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
@@ -608,23 +609,24 @@ setalarm();
         toast.show();
     }
 
-    public void setalarm()
-    {  createNotificationChannel(this);
+    public void setalarm() {
+        createNotificationChannel(this);
         manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmRecevier.class);
 //        PendingIntent pendingIntent1 =  PendingIntent.getService(this,0,new Intent(this,FirebaseService.class),0);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
-        manager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+(60*1000),pendingIntent);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        manager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (60 * 1000), pendingIntent);
 //        manager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+(60*1000),pendingIntent1);
         Toast.makeText(this, "Alarm set", Toast.LENGTH_SHORT).show();
     }
+
     public void createNotificationChannel(Context context) {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "foxandroidReminderChannel";
             String description = "Channel For Alarm Manager";
             int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("foxandroid",name,importance);
+            NotificationChannel channel = new NotificationChannel("foxandroid", name, importance);
             channel.setDescription(description);
 
             NotificationManager notificationManager = context.getApplicationContext().getSystemService(NotificationManager.class);

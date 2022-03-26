@@ -9,14 +9,16 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.hello.Adapters.GroupMessageAdapter;
+import com.example.hello.FeatureController;
+import com.example.hello.Modal_Class.Friendinfo;
 import com.example.hello.Modal_Class.Messages;
 import com.example.hello.databinding.ActivityGroupChatBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -25,41 +27,42 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-
 
 
 public class GroupChatActivity extends AppCompatActivity {
-     ActivityGroupChatBinding binding;
-
+    ActivityGroupChatBinding binding;
+    String gid;
     String senderuid;
-    GroupMessageAdapter adapter;
-    FirebaseAuth auth;
-    ArrayList<Messages> messages;
     FirebaseDatabase database;
+    ArrayList<Friendinfo> friendinfos;
     FirebaseStorage storage;
+    GroupMessageAdapter adapter;
+    ArrayList<Messages> messages;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityGroupChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-       getSupportActionBar().setTitle("Group Chat");
-       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-       // setSupportActionBar(binding.toolbar);
-        auth = FirebaseAuth.getInstance();
+        getSupportActionBar().setTitle("Group Chat");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // setSupportActionBar(binding.toolbar);
+        gid = getIntent().getStringExtra("G_id");
+        friendinfos = FeatureController.getInstance().getGroupFrdList();
+        Toast.makeText(this, "" + gid, Toast.LENGTH_SHORT).show();
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
-        senderuid = auth.getUid(); // my uid
+        senderuid = FeatureController.getInstance().getUid(); // my uid
+
         messages =  new ArrayList<>();
         adapter = new GroupMessageAdapter(this,messages);
         binding.chatrecycle.setLayoutManager(new LinearLayoutManager(this));
         binding.chatrecycle.setAdapter(adapter);
 
-        database.getReference().child("Public")
+        database.getReference("Group_Messages").child(senderuid).child(gid).child("Messages")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -85,41 +88,38 @@ public class GroupChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String message = binding.msgInput.getText().toString();
-               // Date date = new Date();
-//                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-//                String time = sdf.format(new Date());
                 Calendar calendar = Calendar.getInstance();
                 Messages chat = new Messages(message, senderuid, calendar.getTimeInMillis());
+                chat.setPhoneno(FeatureController.getInstance().getUser().getPhoneNo());
                 binding.msgInput.setText("");
-
-                database.getReference().child("Public")
-                        .push()
-                        .setValue(chat);
+                String key = database.getReference().push().getKey();
+                for (Friendinfo friendinfo : friendinfos) {
+                    database.getReference("Group_Messages").child(friendinfo.getFrduid()).child(gid).child("Messages").child(key).setValue(chat);
+                }
             }
         });
 
         binding.attachment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =  new Intent();
+                Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(intent,25);
+                startActivityForResult(intent, 25);
             }
         });
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data != null)
-        {
-            if(data.getData() != null)
-            {
+        if (data != null) {
+            if (data.getData() != null) {
                 Uri selectedimg = data.getData();
-            //     Uri compressedImageFile = Compressor.INSTANCE.compress(this,selectedimg);
+                //     Uri compressedImageFile = Compressor.INSTANCE.compress(this,selectedimg);
                 Calendar time = Calendar.getInstance();
-                StorageReference reference = storage.getReference().child("Chats").child(time.getTimeInMillis()+"");
+                StorageReference reference = storage.getReference().child("Chats").child(time.getTimeInMillis() + "");
                 reference.putFile(selectedimg).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -127,16 +127,16 @@ public class GroupChatActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Uri uri) {
                                 String urll = uri.toString();
-                                String message = binding.msgInput.getText().toString();
-                              //  Date date = new Date();
-//                                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:");
-//                                String time = sdf.format(new Date());
+                                ;
                                 Calendar calendar = Calendar.getInstance();
-                                Messages chat = new Messages(message, senderuid,calendar.getTimeInMillis());
-                                chat.setMessage("Photos");
+                                Messages chat = new Messages("Photos", senderuid, calendar.getTimeInMillis());
                                 chat.setImage(urll);
+                                chat.setPhoneno(FeatureController.getInstance().getUser().getPhoneNo());
                                 binding.msgInput.setText("");
-                                database.getReference().child("Public").push().setValue(chat);
+                                String key = database.getReference().push().getKey();
+                                for (Friendinfo friendinfo : friendinfos) {
+                                    database.getReference("Group_Messages").child(friendinfo.getFrduid()).child(gid).child("Messages").child(key).setValue(chat);
+                                }
                             }
                         });
                     }
@@ -144,12 +144,13 @@ public class GroupChatActivity extends AppCompatActivity {
             }
         }
     }
+
     @Override
     protected void onPause() {
         super.onPause();
-        Calendar calendar = Calendar.getInstance();
-        String currid = FirebaseAuth.getInstance().getUid();
-        database.getReference().child("Presence").child(currid).setValue(String.valueOf(calendar.getTimeInMillis()));
+//        Calendar calendar = Calendar.getInstance();
+//        String currid = FirebaseAuth.getInstance().getUid();
+//        database.getReference().child("Presence").child(currid).setValue(String.valueOf(calendar.getTimeInMillis()));
     }
 //    @Override
 //    protected void onDestroy() {
@@ -161,8 +162,7 @@ public class GroupChatActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        String currid = FirebaseAuth.getInstance().getUid();
-        database.getReference().child("Presence").child(currid).setValue("Online");
+        database.getReference().child("Presence").child(FeatureController.getInstance().getUid()).setValue("Online");
     }
 
     @Override

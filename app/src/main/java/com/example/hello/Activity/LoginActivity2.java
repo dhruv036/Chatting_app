@@ -9,10 +9,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.hello.FeatureController;
 import com.example.hello.Modal_Class.User;
-import com.example.hello.R;
 import com.example.hello.databinding.ActivityLogin2Binding;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;

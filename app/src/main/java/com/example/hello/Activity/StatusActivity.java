@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.hello.FeatureController;
 import com.example.hello.Modal_Class.Status;
 import com.example.hello.Modal_Class.UserStatus;
 import com.example.hello.Adapters.StatusAdapter;
@@ -29,10 +30,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 import omari.hamza.storyview.StoryView;

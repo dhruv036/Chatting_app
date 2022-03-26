@@ -9,9 +9,9 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.hello.FeatureController;
 import com.example.hello.Modal_Class.User;
 import com.example.hello.databinding.ActivitySetupProfileBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -79,7 +79,7 @@ public class SetupProfile extends AppCompatActivity {
                                       String imgUrl = uri.toString();
                                       String uid = auth.getUid();
 
-                                      User user = new User(uid,FeatureController.getInstance().getNew_user().getName(),imgUrl,phone,FeatureController.getInstance().getNew_user().getPass(),FeatureController.getInstance().getNew_user().getEmail());
+                                      User user = new User(uid, FeatureController.getInstance().getNew_user().getName(),imgUrl,phone,FeatureController.getInstance().getNew_user().getPass(),FeatureController.getInstance().getNew_user().getEmail());
                                       database.getReference()
                                               .child("Users")
                                               .child(phone)
