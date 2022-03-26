@@ -32,9 +32,11 @@
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_group_chat.xml" value="0.20416666666666666" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/chatfragmentlayout.xml" value="0.20416666666666666" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/custome_dialog.xml" value="0.20416666666666666" />
+        <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/delete_dialog.xml" value="0.20416666666666666" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/group_chat_fragment.xml" value="0.20416666666666666" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/groupchatreceiver.xml" value="0.5" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/newgrouplayout.xml" value="0.25" />
+        <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/receiver_delete_dialog.xml" value="0.20416666666666666" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/receiver_layout.xml" value="0.20416666666666666" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/row_conversation.xml" value="0.20416666666666666" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/status_item.xml" value="0.20416666666666666" />

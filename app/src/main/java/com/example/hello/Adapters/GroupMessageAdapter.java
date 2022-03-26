@@ -18,6 +18,7 @@ import com.example.hello.Modal_Class.User;
 import com.example.hello.R;
 import com.example.hello.databinding.DeleteDialogBinding;
 import com.example.hello.databinding.GroupchatreceiverBinding;
+import com.example.hello.databinding.ReceiverDeleteDialogBinding;
 import com.example.hello.databinding.ReceiverLayoutBinding;
 import com.example.hello.databinding.SenderLayoutBinding;
 import com.github.pgreze.reactions.ReactionPopup;
@@ -69,6 +70,8 @@ public class GroupMessageAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        ArrayList<Friendinfo> friendList = FeatureController.getInstance().getGroupFrdList();
+        String g_id = FeatureController.getInstance().getG_id();
         Messages m = arrayList.get(position);
         int reactions[] = {
                 R.drawable.like,
@@ -105,9 +108,11 @@ public class GroupMessageAdapter extends RecyclerView.Adapter {
             }
             m.setFeeling(pos);
 
-            FirebaseDatabase.getInstance().getReference()
-                    .child("Public")
-                    .child(m.getMessageId()).setValue(m);
+            for (Friendinfo friendinfo : friendList) {
+                FirebaseDatabase.getInstance().getReference("Group_Messages").child(friendinfo.getFrduid()).child(g_id).child("Messages").child(m.getMessageId()).setValue(m);
+            }
+
+
 
             return true; // true is closing popup, false is requesting a new selection
         });
@@ -131,20 +136,20 @@ public class GroupMessageAdapter extends RecyclerView.Adapter {
                 viewHolder.binding.imageView2.setVisibility(View.GONE);
             }
 
-            viewHolder.binding.sender.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    popup.onTouch(v, event);
-                    return false;
-                }
-            });
-            viewHolder.binding.senderImg.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    popup.onTouch(v, event);
-                    return false;
-                }
-            });
+//            viewHolder.binding.sender.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    popup.onTouch(v, event);
+//                    return false;
+//                }
+//            });
+//            viewHolder.binding.senderImg.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    popup.onTouch(v, event);
+//                    return false;
+//                }
+//            });
 
             viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -160,15 +165,56 @@ public class GroupMessageAdapter extends RecyclerView.Adapter {
                     binding.everyone.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+
                             m.setMessage("This message is removed.");
                             m.setFeeling(-1);
-                            FirebaseDatabase.getInstance().getReference()
-                                    .child("Public")
-                                    .child(m.getMessageId()).setValue(m);
+
+                            for (Friendinfo friendinfo : friendList) {
+                                FirebaseDatabase.getInstance().getReference()
+                                        .child("Group_Messages")
+                                        .child(friendinfo.getFrduid())
+                                        .child(g_id)
+                                        .child("Messages")
+                                        .child(m.getMessageId()).setValue(m);
+
+                                if (position == (arrayList.size() - 1)) {
+                                    FirebaseDatabase.getInstance().getReference()
+                                            .child("Groups")
+                                            .child(friendinfo.getFrduid())
+                                            .child("MyGroups")
+                                            .child(g_id)
+                                            .child("gLastmsg")
+                                            .setValue("This message is removed.");
+                                }
+                            }
                             dialog.dismiss();
                         }
                     });
+                    binding.delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
 
+                            m.setMessage("This message is removed.");
+                            m.setFeeling(-1);
+                            FirebaseDatabase.getInstance().getReference()
+                                    .child("Group_Messages")
+                                    .child(FeatureController.getInstance().getUid())
+                                    .child(g_id)
+                                    .child("Messages")
+                                    .child(m.getMessageId()).removeValue();
+
+                            if (position == (arrayList.size() - 1)) {
+                                FirebaseDatabase.getInstance().getReference()
+                                        .child("Groups")
+                                        .child(FeatureController.getInstance().getUid())
+                                        .child("MyGroups")
+                                        .child(g_id)
+                                        .child("gLastmsg")
+                                        .setValue(arrayList.get(arrayList.size() - 1).getMessage());
+                            }
+                            dialog.dismiss();
+                        }
+                    });
 
                     binding.cancel.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -188,14 +234,30 @@ public class GroupMessageAdapter extends RecyclerView.Adapter {
                 viewHolder.binding.receiverImg.setVisibility(View.VISIBLE);
                 viewHolder.binding.receiver.setVisibility(View.GONE);
                 Glide.with(context).load(m.getImage()).placeholder(R.drawable.placeholderr).into(viewHolder.binding.receiverImg);
-            }else {
                 FirebaseDatabase.getInstance().getReference().child("Friends").child(FeatureController.getInstance().getUid()).child(m.getPhoneno())
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()) {
                                     User user = snapshot.getValue(User.class);
+                                    viewHolder.binding.receivername.setText(user.getName());
+                                    viewHolder.binding.receivername.setVisibility(View.VISIBLE);
+                                }
+                            }
 
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+            } else {
+                FirebaseDatabase.getInstance().getReference().child("Friends").child(FeatureController.getInstance().getUid()).child(m.getPhoneno())
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    User user = snapshot.getValue(User.class);
                                     viewHolder.binding.receivername.setText(user.getName());
                                     viewHolder.binding.receivername.setVisibility(View.VISIBLE);
                                 }
@@ -219,20 +281,72 @@ public class GroupMessageAdapter extends RecyclerView.Adapter {
                 viewHolder.binding.imageView2.setVisibility(View.GONE);
             }
 
-            viewHolder.binding.receiver.setOnTouchListener(new View.OnTouchListener() {
+//            viewHolder.binding.receiver.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    popup.onTouch(v, event);
+//                    return false;
+//                }
+//            });
+//            viewHolder.binding.receiverImg.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    popup.onTouch(v, event);
+//                    return false;
+//                }
+//            });
+
+
+            viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    popup.onTouch(v, event);
+                public boolean onLongClick(View v) {
+                    View view = LayoutInflater.from(context).inflate(R.layout.receiver_delete_dialog, null);
+                    ReceiverDeleteDialogBinding binding = ReceiverDeleteDialogBinding.bind(view);
+                    AlertDialog dialog = new AlertDialog.Builder(context)
+                            .setTitle("Delete Message")
+                            .setView(binding.getRoot())
+                            .create();
+
+                    binding.delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            m.setMessage("This message is removed.");
+                            m.setFeeling(-1);
+
+                            FirebaseDatabase.getInstance().getReference()
+                                    .child("Group_Messages")
+                                    .child(FeatureController.getInstance().getUid())
+                                    .child(g_id)
+                                    .child("Messages")
+                                    .child(m.getMessageId()).removeValue();
+
+                            if (position == (arrayList.size() - 1)) {
+
+                                FirebaseDatabase.getInstance().getReference()
+                                        .child("Groups")
+                                        .child(FeatureController.getInstance().getUid())
+                                        .child("MyGroups")
+                                        .child(g_id)
+                                        .child("gLastmsg")
+                                        .setValue(arrayList.get(arrayList.size() - 1).getMessage());
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+
+                    binding.cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
                     return false;
                 }
             });
-            viewHolder.binding.receiverImg.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    popup.onTouch(v, event);
-                    return false;
-                }
-            });
+
+
         }
     }
 

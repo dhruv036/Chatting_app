@@ -88,6 +88,7 @@ public class SetupProfile extends AppCompatActivity {
                                                   @Override
                                                   public void onSuccess(Void aVoid) {
                                                       binding.progressBar.setVisibility(View.GONE);
+                                                      database.getReference().child("Groups").child(uid).child("tGroup").setValue(0);
                                                       FeatureController.getInstance().setUser(user);
                                                       FeatureController.getInstance().setName(FeatureController.getInstance().getNew_user().getName());
                                                       FeatureController.getInstance().setUserimg(imgUrl);
@@ -118,6 +119,7 @@ public class SetupProfile extends AppCompatActivity {
                                @Override
                                public void onSuccess(Void aVoid) {
                                    binding.progressBar.setVisibility(View.GONE);
+                                   database.getReference().child("Groups").child(uid).child("tGroup").setValue(0);
                                    FeatureController.getInstance().setUser(user);
                                    FeatureController.getInstance().setName(FeatureController.getInstance().getNew_user().getName());
                                    editor.putString("name",user.getName());

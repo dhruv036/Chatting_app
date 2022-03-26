@@ -31,7 +31,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/receiver_round"
         android:orientation="vertical"
-        android:paddingEnd="@dimen/_25sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/date">
 
@@ -41,8 +40,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:fontFamily="@font/poppins"
+            android:layout_marginEnd="@dimen/_25sdp"
+            android:text="fdfddfgdfgdfgfdgdf"
             android:textSize="@dimen/_8ssp"
-            android:layout_marginRight="25dp"
             android:visibility="visible" />
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -67,7 +67,7 @@
             android:fontFamily="@font/poppins"
             android:text="dsdd"
             android:textColor="#FFFFFF"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"

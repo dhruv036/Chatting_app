@@ -298,6 +298,7 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
                         break;
                     case R.id.callitems:
                         fvbttype = 2;
+                        binding.addPerson.setVisibility(View.GONE);
                         fragment = new GroupChatFragment();
                         break;
                 }

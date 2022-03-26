@@ -128,7 +128,6 @@
         android:backgroundTint="#F46E6B"
         android:layout_marginBottom="20dp"
         android:clickable="true"
-
         style="@style/FloatingActionOverlay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

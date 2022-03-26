@@ -14,6 +14,16 @@
         android:text="Delete for Everyone"
         android:textColor="@color/black"
         android:textSize="16sp" />
+    <TextView
+        android:id="@+id/delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:gravity="right"
+        android:padding="10dp"
+        android:text="Delete for Me"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/cancel"
@@ -26,14 +36,5 @@
         android:textColor="@color/black"
         android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/delete"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?selectableItemBackground"
-        android:gravity="right"
-        android:padding="10dp"
-        android:text="Delete for Me"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+
 </LinearLayout>

@@ -51,6 +51,7 @@ public class GroupChatActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // setSupportActionBar(binding.toolbar);
         gid = getIntent().getStringExtra("G_id");
+        FeatureController.getInstance().setG_id(gid);
         friendinfos = FeatureController.getInstance().getGroupFrdList();
         Toast.makeText(this, "" + gid, Toast.LENGTH_SHORT).show();
         database = FirebaseDatabase.getInstance();
@@ -94,6 +95,22 @@ public class GroupChatActivity extends AppCompatActivity {
                 binding.msgInput.setText("");
                 String key = database.getReference().push().getKey();
                 for (Friendinfo friendinfo : friendinfos) {
+
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("Groups")
+                            .child(friendinfo.getFrduid())
+                            .child("MyGroups")
+                            .child(gid)
+                            .child("gLastmsg")
+                            .setValue(message);
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("Groups")
+                            .child(friendinfo.getFrduid())
+                            .child("MyGroups")
+                            .child(gid)
+                            .child("glstMsgTime")
+                            .setValue(String.valueOf(chat.getTimestamp()));
+
                     database.getReference("Group_Messages").child(friendinfo.getFrduid()).child(gid).child("Messages").child(key).setValue(chat);
                 }
             }
@@ -135,6 +152,21 @@ public class GroupChatActivity extends AppCompatActivity {
                                 binding.msgInput.setText("");
                                 String key = database.getReference().push().getKey();
                                 for (Friendinfo friendinfo : friendinfos) {
+                                    FirebaseDatabase.getInstance().getReference()
+                                            .child("Groups")
+                                            .child(friendinfo.getFrduid())
+                                            .child("MyGroups")
+                                            .child(gid)
+                                            .child("gLastmsg")
+                                            .setValue("Photos");
+
+                                    FirebaseDatabase.getInstance().getReference()
+                                            .child("Groups")
+                                            .child(friendinfo.getFrduid())
+                                            .child("MyGroups")
+                                            .child(gid)
+                                            .child("glstMsgTime")
+                                            .setValue(String.valueOf(chat.getTimestamp()));
                                     database.getReference("Group_Messages").child(friendinfo.getFrduid()).child(gid).child("Messages").child(key).setValue(chat);
                                 }
                             }

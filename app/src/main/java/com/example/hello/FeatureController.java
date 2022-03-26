@@ -16,6 +16,7 @@ public class FeatureController {
     User user = null;
     String uid="";
     New_user new_user;
+    String g_id="";
     ArrayList<Friendinfo> groupFrdList;
     String my_mesibo_token = "";
     ArrayList<Friends> myfriends = new ArrayList<>();
@@ -27,6 +28,14 @@ public class FeatureController {
              instance=  new FeatureController();
         }
         return instance;
+    }
+
+    public String getG_id() {
+        return g_id;
+    }
+
+    public void setG_id(String g_id) {
+        this.g_id = g_id;
     }
 
     public New_user getNew_user() {

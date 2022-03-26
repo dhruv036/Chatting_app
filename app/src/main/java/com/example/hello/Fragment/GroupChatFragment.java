@@ -53,7 +53,7 @@ public class GroupChatFragment extends Fragment {
     ArrayList<Friends> myfriends = FeatureController.getInstance().getMyfriends();
     Context context;
     Uri gicon;
-
+    int bol = 0;
     FirebaseStorage storage;
     int count = 0;
     ActivityResultLauncher<String> photoresult;
@@ -117,10 +117,27 @@ public class GroupChatFragment extends Fragment {
                 binding.childgroup.setSingleSelection(false);
             }
         });
+        binding.createGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (bol == 0) {
+                    bol = 1;
+                    binding.grouplay.setVisibility(View.VISIBLE);
+                    binding.showGroups.setVisibility(View.GONE);
+                } else {
+                    bol = 0;
+
+                    binding.grouplay.setVisibility(View.GONE);
+                    binding.showGroups.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
         binding.submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 makegroup();
+
             }
         });
         binding.image.setOnClickListener(new View.OnClickListener() {
@@ -143,8 +160,10 @@ public class GroupChatFragment extends Fragment {
                 if (snapshot.exists()) {
 
                     for (DataSnapshot snapshot1 : snapshot.child("MyGroups").getChildren()) {
-                        Group group = new Group();
+
+                        arrayList.clear();
                         ArrayList<Friendinfo> friendinfo = new ArrayList<>();
+                        Group group = new Group();
                         friendinfo.clear();
                         for (DataSnapshot snapshot2 : snapshot1.child("gMembers").getChildren()) {
                             friendinfo.add(snapshot2.getValue(Friendinfo.class));
@@ -187,59 +206,66 @@ public class GroupChatFragment extends Fragment {
 
         Calendar calendar = Calendar.getInstance();
         StorageReference reference = storage.getReference().child("Group_chat").child(String.valueOf(calendar.getTimeInMillis() + " "));
+        if (gicon != null) {
+            reference.putFile(gicon).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    if (task.isSuccessful()) {
 
-        reference.putFile(gicon).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                if (task.isSuccessful()) {
+                        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Toast.makeText(context, "Image is successfully uploaded", Toast.LENGTH_SHORT).show();
+                                String gid = database.getReference().push().getKey();
+                                Calendar calendar1 = Calendar.getInstance();
+                                Group groupInfo = new Group("1", gid, binding.grpname.getText().toString(), binding.grpdiscpt.getText().toString(), uri.toString(), arrayList, "@Group_Created", String.valueOf(calendar1.getTimeInMillis()));
+                                database.getReference().child("Groups").child(FeatureController.getInstance().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if (snapshot.exists()) {
+                                            count = snapshot.child("tGroup").getValue(Integer.class);
+                                            count++;
+                                            database.getReference().child("Groups").child(FeatureController.getInstance().getUid()).child("tGroup").setValue(count);
+                                            database.getReference().child("Groups").child(FeatureController.getInstance().getUid()).child("MyGroups").child(gid).setValue(groupInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
 
-                    reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            Toast.makeText(context, "Image is successfully uploaded", Toast.LENGTH_SHORT).show();
-                            String gid = database.getReference().push().getKey();
-                            Calendar calendar1 = Calendar.getInstance();
-                            Group groupInfo = new Group("1", gid, binding.grpname.getText().toString(), binding.grpdiscpt.getText().toString(), uri.toString(), arrayList, "@Group_Created", String.valueOf(calendar1.getTimeInMillis()));
-                            database.getReference().child("Groups").child(FeatureController.getInstance().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if (snapshot.exists()) {
-                                        count = snapshot.child("tGroup").getValue(Integer.class);
-                                        count++;
-                                        database.getReference().child("Groups").child(FeatureController.getInstance().getUid()).child("tGroup").setValue(count);
-                                        database.getReference().child("Groups").child(FeatureController.getInstance().getUid()).child("MyGroups").child(gid).setValue(groupInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    database.getReference("Group_Messages").child(FeatureController.getInstance().getUid()).child(gid).child("Messages").setValue("");
-                                                    for (Friendinfo friendinfo : arrayList) {
-                                                        Group groupInfo = new Group("0", gid, binding.grpname.getText().toString(), binding.grpdiscpt.getText().toString(), uri.toString(), arrayList, "@Group_Created", String.valueOf(calendar1.getTimeInMillis()));
-                                                        database.getReference().child("Groups").child(friendinfo.getFrduid()).child("MyGroups").child(gid).setValue(groupInfo);
-                                                        database.getReference("Group_Messages").child(friendinfo.getFrduid()).child(gid).child("Messages").setValue("");
+                                                        database.getReference("Group_Messages").child(FeatureController.getInstance().getUid()).child(gid).child("Messages").setValue("");
+                                                        for (Friendinfo friendinfo : arrayList) {
+                                                            Group groupInfo = new Group("0", gid, binding.grpname.getText().toString(), binding.grpdiscpt.getText().toString(), uri.toString(), arrayList, "@Group_Created", String.valueOf(calendar1.getTimeInMillis()));
+                                                            database.getReference().child("Groups").child(friendinfo.getFrduid()).child("MyGroups").child(gid).setValue(groupInfo);
+                                                            database.getReference("Group_Messages").child(friendinfo.getFrduid()).child(gid).child("Messages").setValue("");
+                                                        }
+
+                                                        binding.progress.setVisibility(View.GONE);
+                                                        binding.grouplay.setVisibility(View.GONE);
+                                                        binding.showGroups.setVisibility(View.VISIBLE);
+                                                        Toast.makeText(context, "Group is created", Toast.LENGTH_SHORT).show();
                                                     }
-
-                                                    binding.progress.setVisibility(View.GONE);
-                                                    Toast.makeText(context, "Group is created", Toast.LENGTH_SHORT).show();
                                                 }
-                                            }
-                                        });
+                                            });
+                                        }
                                     }
-                                }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
 
-                                }
-                            });
-
-
-                        }
-                    });
+                                    }
+                                });
 
 
+                            }
+                        });
+
+
+                    }
                 }
-            }
-        });
+            });
+        }
+        binding.progress.setVisibility(View.GONE);
+        binding.grouplay.setVisibility(View.GONE);
+        binding.showGroups.setVisibility(View.VISIBLE);
     }
 
 

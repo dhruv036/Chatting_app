@@ -23,6 +23,7 @@ import com.example.hello.Constants;
 import com.example.hello.Modal_Class.Messages;
 import com.example.hello.R;
 import com.example.hello.databinding.DeleteDialogBinding;
+import com.example.hello.databinding.ReceiverDeleteDialogBinding;
 import com.example.hello.databinding.ReceiverLayoutBinding;
 import com.example.hello.databinding.SenderLayoutBinding;
 import com.github.pgreze.reactions.ReactionPopup;
@@ -344,33 +345,12 @@ public class MessageAdapter extends RecyclerView.Adapter {
             viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    View view = LayoutInflater.from(context).inflate(R.layout.delete_dialog, null);
-                    DeleteDialogBinding binding = DeleteDialogBinding.bind(view);
+                    View view = LayoutInflater.from(context).inflate(R.layout.receiver_delete_dialog, null);
+                    ReceiverDeleteDialogBinding binding = ReceiverDeleteDialogBinding.bind(view);
                     AlertDialog dialog = new AlertDialog.Builder(context)
                             .setTitle("Delete Message")
                             .setView(binding.getRoot())
                             .create();
-
-                    binding.everyone.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-//                            m.setMessage("This message is removed.");
-//                            m.setFeeling(-1);
-//                            FirebaseDatabase.getInstance().getReference()
-//                                    .child("Chats")
-//                                    .child(senderRoom)
-//                                    .child("messages")
-//                                    .child(m.getMessageId()).setValue(m);
-//
-//                            FirebaseDatabase.getInstance().getReference()
-//                                    .child("Chats")
-//                                    .child(receiverRoom)
-//                                    .child("messages")
-//                                    .child(m.getMessageId()).setValue(m);
-
-                            dialog.dismiss();
-                        }
-                    });
 
                     binding.delete.setOnClickListener(new View.OnClickListener() {
                         @Override
