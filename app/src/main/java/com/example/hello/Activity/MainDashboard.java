@@ -60,7 +60,9 @@ import static com.example.hello.R.drawable.ic_baseline_person_add_24;
 
 public class MainDashboard extends AppCompatActivity implements MesiboCall.IncomingListener, Mesibo.ConnectionListener, Mesibo.MessageListener {
     ActivityMainDashboardBinding binding;
-    AlarmManager manager;
+    private AlarmManager alarmManager;
+    private Calendar calendar;
+    private PendingIntent pendingIntent;
     String token = "hh3ef9cu5npwhvvo9b8rsse5n60wcn4rsrjp9b6xm54wqh16amxgdzplfe8fgoyu";
     String op = "useradd";
     Animation aniup;
@@ -81,7 +83,8 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
         binding = ActivityMainDashboardBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         getSupportActionBar().hide();
-//        setalarm();
+//        createNotificationChannel();
+
 //        Intent intent2 = new Intent(getApplicationContext(), FirebaseService.class);
 //        startService(intent2);
         aniup = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
@@ -610,31 +613,24 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
         toast.show();
     }
 
-    public void setalarm() {
-        createNotificationChannel(this);
-        manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+    public void setalarm(String key) {
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        calendar = Calendar.getInstance();
         Intent intent = new Intent(this, AlarmRecevier.class);
-//        PendingIntent pendingIntent1 =  PendingIntent.getService(this,0,new Intent(this,FirebaseService.class),0);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-        manager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (60 * 1000), pendingIntent);
-//        manager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+(60*1000),pendingIntent1);
-        Toast.makeText(this, "Alarm set", Toast.LENGTH_SHORT).show();
-    }
+        intent.putExtra("key", key);
+        intent.setAction(key);
+        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
-    public void createNotificationChannel(Context context) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "foxandroidReminderChannel";
-            String description = "Channel For Alarm Manager";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("foxandroid", name, importance);
-            channel.setDescription(description);
-
-            NotificationManager notificationManager = context.getApplicationContext().getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + 6 * 1000, pendingIntent);
         }
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
+//                AlarmManager.INTERVAL_DAY,pendingIntent);
+        Log.e("Time", String.valueOf(calendar.getTimeInMillis()));
 
+        Toast.makeText(this, "Alarm set Successfully", Toast.LENGTH_SHORT).show();
 
     }
+
+
 }

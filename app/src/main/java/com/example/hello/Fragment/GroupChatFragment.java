@@ -158,10 +158,8 @@ public class GroupChatFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-
+                    arrayList.clear();
                     for (DataSnapshot snapshot1 : snapshot.child("MyGroups").getChildren()) {
-
-                        arrayList.clear();
                         ArrayList<Friendinfo> friendinfo = new ArrayList<>();
                         Group group = new Group();
                         friendinfo.clear();

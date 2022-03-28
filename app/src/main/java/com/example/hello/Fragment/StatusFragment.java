@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import com.example.hello.Activity.MainDashboard;
 import com.example.hello.AlarmRecevier;
 import com.example.hello.Constants;
 import com.example.hello.FeatureController;
@@ -56,26 +57,28 @@ import omari.hamza.storyview.model.MyStory;
 
 public class StatusFragment extends Fragment {
     StatusfragmentlayoutBinding binding;
-
+    private AlarmManager alarmManager;
+    private Calendar calendar;
+    private PendingIntent pendingIntent;
     ArrayList<UserStatus> status = new ArrayList<>();
     StatusAdapter statusAdapter;
     UserStatus userStatus;
-    Context context ;
+    Context contextt;
     FirebaseDatabase database;
-    String currid="";
+    String currid = "";
 
 
     @Override
     public void onStart() {
         super.onStart();
-        context = binding.getRoot().getContext();
+        contextt = binding.getRoot().getContext();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = StatusfragmentlayoutBinding.inflate(inflater, container, false);
-        context = binding.getRoot().getContext();
+        contextt = binding.getRoot().getContext();
         currid = FeatureController.getInstance().getUid();
         database = FirebaseDatabase.getInstance();
         userStatus = new UserStatus();
@@ -109,22 +112,33 @@ public class StatusFragment extends Fragment {
                             binding.circularStatusView.setPortionsCount(status.size());
                             if (userStatus.getStatuses().size() > 1) {
                                 Status laststatus = userStatus.getStatuses().get(userStatus.getStatuses().size() - 1);
-                                if(userStatus.getLastupadted()==101)
-                                {
+                                if (userStatus.getLastupadted() == 101) {
                                     binding.timeupdated.setText(" ");
-                                }else {
+                                } else {
                                     binding.timeupdated.setText(Constants.militotime(userStatus.getLastupadted()));
                                 }
+                                if (getActivity() != null) {
+                                    Glide.with(getActivity()).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
+                                } else {
+//                                    Glide.with(getActivity()).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
+                                }
 
-                                Glide.with(getContext()).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
-                            }else if(userStatus.getStatuses().size() == 1)
-                            {
+                            } else if (userStatus.getStatuses().size() == 1) {
                                 Status laststatus = userStatus.getStatuses().get(0);
                                 binding.timeupdated.setText(Constants.militotime(userStatus.getLastupadted()));
+                                if (contextt != null) {
+                                    Glide.with(contextt).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
+                                } else {
 
-                                Glide.with(context).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
-                            }else {
-                                Glide.with(context).load( userStatus.getProfileImg()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
+                                }
+
+                            } else {
+                                if (contextt != null) {
+                                    Glide.with(contextt).load(userStatus.getProfileImg()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
+                                } else {
+
+                                }
+
                             }
                         }
                     }
@@ -139,8 +153,7 @@ public class StatusFragment extends Fragment {
         binding.circularStatusView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(userStatus.getStatuses() != null && userStatus.getStatuses().size() >0)
-                {
+                if (userStatus.getStatuses() != null && userStatus.getStatuses().size() > 0) {
                     ArrayList<MyStory> myStories = new ArrayList<>();
 
                     for (Status status : userStatus.getStatuses()) {
@@ -169,9 +182,8 @@ public class StatusFragment extends Fragment {
                             }) // Optional Listeners
                             .build() // Must be called before calling show method
                             .show();
-                }else
-                {
-                    Toast.makeText(context, "Add Status", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(contextt, "Add Status", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -213,13 +225,13 @@ public class StatusFragment extends Fragment {
 
 
     }
-    public void show()
-    {
-        AlarmRecevier  recevier = new AlarmRecevier();
-//        recevier.createNotificationChannel(context);
-        recevier.show(context);
-        Log.e("calling","calling");
-    }
+//    public void show()
+//    {
+//        AlarmRecevier  recevier = new AlarmRecevier();
+////        recevier.createNotificationChannel(context);
+//        recevier.show(contextt);
+//        Log.e("calling","calling");
+//    }
 
 
     public void picdialog() {
@@ -269,12 +281,13 @@ public class StatusFragment extends Fragment {
                                             database.getReference().child("Stories")
                                                     .child(currid)
                                                     .updateChildren(story);
-
+                                            String key = database.getReference().push().getKey();
                                             database.getReference().child("Stories")
                                                     .child(currid)
                                                     .child("statuses")
-                                                    .push()
+                                                    .child(key)
                                                     .setValue(status1);
+                                            setalarm(key);
                                             Toast.makeText(getActivity(), "Successfull posted", Toast.LENGTH_SHORT).show();
                                         }
                                     });
@@ -285,12 +298,24 @@ public class StatusFragment extends Fragment {
         }
     }
 
-    public void statues()
-    {
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(contextt);
+        contextt = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        contextt = null;
+    }
+
+    public void statues() {
         ArrayList<Friends> myfriends = FeatureController.getInstance().getMyfriends();
         int size = myfriends.size();
         status.clear();
-        for(int i =0; i<size; i++) {
+        for (int i = 0; i < size; i++) {
             int finalI = i;
             database.getReference().child("Stories")
                     .child(myfriends.get(i).getUid())
@@ -325,5 +350,37 @@ public class StatusFragment extends Fragment {
         }
     }
 
+    public void setalarm(String key) {
+        alarmManager = (AlarmManager) contextt.getSystemService(Context.ALARM_SERVICE);
+        calendar = Calendar.getInstance();
+        Intent intent = new Intent(contextt, AlarmRecevier.class);
+        intent.putExtra("key", key);
+        intent.setAction(key);
+        pendingIntent = PendingIntent.getBroadcast(contextt, 0, intent, 0);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + 86340000, pendingIntent);
+        }
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
+//                AlarmManager.INTERVAL_DAY,pendingIntent);
+        Log.e("Time", String.valueOf(calendar.getTimeInMillis()));
+
+        Toast.makeText(contextt, "Alarm set Successfully", Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "foxandroidReminderChannel";
+            String description = "Channel For Alarm Manager";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel("foxandroid", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = contextt.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+
+        }
+
+    }
 }

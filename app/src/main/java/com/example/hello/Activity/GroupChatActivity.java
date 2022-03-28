@@ -39,6 +39,7 @@ public class GroupChatActivity extends AppCompatActivity {
     ArrayList<Friendinfo> friendinfos;
     FirebaseStorage storage;
     GroupMessageAdapter adapter;
+    String gname ="";
     ArrayList<Messages> messages;
 
     @Override
@@ -46,11 +47,12 @@ public class GroupChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityGroupChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        getSupportActionBar().setTitle("Group Chat");
+        gname =  getIntent().getStringExtra("g_name");
+        getSupportActionBar().setTitle(gname);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // setSupportActionBar(binding.toolbar);
         gid = getIntent().getStringExtra("G_id");
+
         FeatureController.getInstance().setG_id(gid);
         friendinfos = FeatureController.getInstance().getGroupFrdList();
         Toast.makeText(this, "" + gid, Toast.LENGTH_SHORT).show();
