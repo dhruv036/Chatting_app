@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 if (preferences.getString("phone", "").length() > 0) {
                     getdata();
                     intent = new Intent(MainActivity.this, MainDashboard.class);
-                    database.getReference("Users").child(phone).addValueEventListener(new ValueEventListener() {
+                    database.getReference("Users").child(phone).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()) {
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getdata() {
-        database.getReference("Users").child(phone).addValueEventListener(new ValueEventListener() {
+        database.getReference("Users").child(phone).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {

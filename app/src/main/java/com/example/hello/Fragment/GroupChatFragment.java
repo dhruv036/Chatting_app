@@ -75,8 +75,12 @@ public class GroupChatFragment extends Fragment {
                 new ActivityResultCallback<Uri>() {
                     @Override
                     public void onActivityResult(Uri result) {
-                        gicon = result;
-                        binding.image.setImageURI(result);
+                        if(result !=null)
+                        {
+                            gicon = result;
+                            binding.image.setImageURI(result);
+                        }
+
                     }
                 }
         );

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.hello.Modal_Class.User;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -114,21 +117,25 @@ public class Constants {
                 int min1 = Integer.parseInt(simpleDateFormat.format(calendar1.getTime()));
                 if (min1 < date.getMinutes()) {
                     int interval = date.getMinutes() - min1;
+                    Log.e("c","1");
                     return interval + " minutes ago";
                 } else if (min1 == date.getMinutes()) {
+                    Log.e("c","2");
                     return "Just now";
                 } else {
                 }
             } else {
                 simpleDateFormat = new SimpleDateFormat("HH:mm");
+                Log.e("c","355");
                 return "today,  " + simpleDateFormat.format(calendar1.getTime());
-
             }
         } else {
             if (d == (date.getDate() - 1)) {
+                Log.e("c","4");
                 simpleDateFormat = new SimpleDateFormat("HH:mm");
                 return "Yesterday,  " + simpleDateFormat.format(calendar1.getTime());
             } else {
+                Log.e("c","5");
                 simpleDateFormat = new SimpleDateFormat("dd/MM/yy");
                 return simpleDateFormat.format(calendar1.getTime());
             }
@@ -251,6 +258,7 @@ public class Constants {
             return "" + simpleDateFormat.format(calendar1.getTime());
         }
     }
+
 
 
 

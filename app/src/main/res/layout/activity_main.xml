@@ -16,34 +16,35 @@
         app:srcCompat="@drawable/splash" />
 
     <FrameLayout
-     android:id="@+id/frame"
-     android:layout_alignParentBottom="true"
-     android:layout_width="match_parent"
-     android:background="@drawable/round"
-     android:layout_height="wrap_content"
-     >
-     <TextView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:fontFamily="@font/poppins"
-         android:textStyle="bold"
-         android:textSize="30dp"
-         android:textColor="#D2FFFFFF"
-         android:layout_marginTop="20dp"
-         android:gravity="center"
-         android:layout_gravity="center_horizontal"
-         android:text="Let's connect \n with each other" />
-     <TextView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:fontFamily="@font/poppins"
-         android:textColor="#85FFFFFF"
-         android:textStyle="bold"
-         android:textSize="14dp"
-         android:layout_marginTop="120dp"
-         android:gravity="center"
-         android:layout_gravity="center_horizontal"
-         android:text="A message is a discrete communication \n intendended by the source consumption" />
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/round">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/poppins"
+            android:gravity="center"
+            android:text="Let's connect \n with each other"
+            android:textColor="#D2FFFFFF"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="120dp"
+            android:fontFamily="@font/poppins"
+            android:gravity="center"
+            android:text="A message is a discrete communication \n intendended by the source consumption"
+            android:textColor="#85FFFFFF"
+            android:textSize="14dp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/splashbt"
@@ -51,16 +52,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="195dp"
-            android:textColor="@color/light_grey"
             android:layout_marginBottom="40dp"
             android:background="@drawable/round3_red"
             android:drawableRight="@drawable/arrow"
             android:fontFamily="@font/poppins"
             android:text="Lets's Start   "
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:textColor="@color/light_grey" />
 
 
- </FrameLayout>
+    </FrameLayout>
 
 
 

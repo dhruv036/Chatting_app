@@ -3,16 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/chatsitem"
-        android:icon="@drawable/ic_chats"
+        android:icon="@drawable/chatss"
         android:title=""></item>
     <item
         android:id="@+id/statusitem"
-        android:icon="@drawable/ic_status"
+        android:icon="@drawable/status"
         android:title=""></item>
     <item
         android:id="@+id/callitems"
-        android:icon="@drawable/ic_calls"
+        android:icon="@drawable/navgroup"
         android:title=""></item>
-
-
 </menu>

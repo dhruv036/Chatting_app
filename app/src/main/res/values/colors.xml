@@ -10,7 +10,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="status">#64B3F1</color>
     <color name="bt_red">#E53935</color>
-    <color name="light_grey">#D2FFFFFF</color>
+    <color name="light_grey">#E5E5E5</color>
     <color name="text_light_grey">#52000000</color>
     <color name="text_grey">#A10B0B0B</color>
     <color name="grey">#85FFFFFF</color>
@@ -19,7 +19,7 @@
     <color name="colorGradientStart">#191919</color>
     <color name="colorGradientCenter">#d76d77</color>
     <color name="colorGradientEnd">#3a1c71</color>
-    <color name="By_creating">#D2FFFFFF</color>
+    <color name="By_creating">#E5E5E5</color>
     <color name="terms_conditons">#855A5959</color>
     <color name="Already_have">#2C2C2C</color>
 </resources>

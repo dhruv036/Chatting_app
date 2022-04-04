@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.ShowProfile">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/showimage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_60sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_60sdp"
+        android:src="@drawable/placeholderr"
+        app:layout_constraintBottom_toBottomOf="@id/guideline3"
+        app:layout_constraintLeft_toLeftOf="@id/guideline1"
+        app:layout_constraintRight_toRightOf="@id/guideline2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/myname"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:background="@null"
+        android:backgroundTint="@null"
+        android:enabled="false"
+        android:fontFamily="@font/poppins"
+        android:minHeight="@dimen/_48sdp"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:textSize="@dimen/_20ssp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@id/guideline1"
+        app:layout_constraintRight_toRightOf="@id/guideline2"
+        app:layout_constraintTop_toBottomOf="@id/showimage" />
+
+    <TextView
+        android:id="@+id/active"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Active now"
+        android:textAlignment="center"
+        android:textSize="@dimen/_10ssp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@id/guideline1"
+        app:layout_constraintRight_toRightOf="@id/guideline2"
+        app:layout_constraintTop_toBottomOf="@id/myname" />
+
+    <LinearLayout
+        android:id="@+id/stats"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        app:layout_constraintLeft_toLeftOf="@id/guideline1"
+        app:layout_constraintRight_toRightOf="@id/guideline2"
+        app:layout_constraintTop_toBottomOf="@id/active">
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_margin="@dimen/_10sdp"-->
+        <!--            android:layout_weight="0.5"-->
+        <!--            android:orientation="vertical">-->
+
+        <!--            <TextView-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:fontFamily="@font/poppins"-->
+        <!--                android:text="Total Connected"-->
+        <!--                android:textAlignment="center"-->
+        <!--                android:textStyle="bold" />-->
+
+        <!--            <TextView-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:fontFamily="@font/poppins"-->
+        <!--                android:text="250+"-->
+        <!--                android:textAlignment="center"-->
+        <!--                android:textColor="@color/bt_red"-->
+        <!--                android:textStyle="bold" />-->
+        <!--        </LinearLayout>-->
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_margin="@dimen/_10sdp"-->
+        <!--            android:layout_weight="0.5"-->
+        <!--            android:orientation="vertical">-->
+
+        <!--            <TextView-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:fontFamily="@font/poppins"-->
+        <!--                android:text="Recently Connected"-->
+        <!--                android:textAlignment="center"-->
+        <!--                android:textStyle="bold" />-->
+
+        <!--            <TextView-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:fontFamily="@font/poppins"-->
+        <!--                android:text="250+"-->
+        <!--                android:textAlignment="center"-->
+        <!--                android:textColor="@color/bt_red"-->
+        <!--                android:textStyle="bold" />-->
+        <!--        </LinearLayout>-->
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/labelphone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:fontFamily="@font/poppins"
+        android:text="Phone Number"
+        android:textSize="@dimen/_10ssp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@id/guideline1"
+        app:layout_constraintTop_toBottomOf="@id/stats" />
+
+    <EditText
+        android:id="@+id/shownumber"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/_15sdp"
+        android:background="@drawable/round_img"
+        android:backgroundTint="@null"
+        android:cursorVisible="true"
+        android:enabled="false"
+        android:fontFamily="@font/poppins"
+        android:inputType="number"
+        android:minWidth="@dimen/_50sdp"
+        android:minHeight="48dp"
+        android:paddingLeft="@dimen/_10sdp"
+        android:paddingRight="@dimen/_10ssp"
+        android:text=""
+        android:textSize="@dimen/_15ssp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@id/guideline1"
+        app:layout_constraintRight_toLeftOf="@id/edphone"
+        app:layout_constraintTop_toBottomOf="@id/labelphone" />
+
+    <TextView
+        android:id="@+id/edphone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Change number"
+        android:visibility="invisible"
+        android:textColor="@color/bt_red"
+        android:textSize="@dimen/_8ssp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/shownumber"
+        app:layout_constraintRight_toRightOf="@id/guideline2"
+        app:layout_constraintTop_toTopOf="@id/labelphone" />
+
+    <TextView
+        android:id="@+id/labelemail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:fontFamily="@font/poppins"
+        android:text="Email"
+        android:textSize="@dimen/_10ssp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@id/guideline1"
+        app:layout_constraintTop_toBottomOf="@id/shownumber" />
+
+
+    <EditText
+        android:id="@+id/showemail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/_15sdp"
+        android:background="@drawable/round_img"
+        android:backgroundTint="@null"
+        android:cursorVisible="true"
+        android:enabled="false"
+        android:fontFamily="@font/poppins"
+        android:inputType="textEmailAddress"
+        android:minWidth="@dimen/_50sdp"
+        android:minHeight="48dp"
+        android:paddingLeft="@dimen/_10sdp"
+        android:paddingRight="@dimen/_10ssp"
+        android:text=""
+        android:textSize="@dimen/_15ssp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@id/guideline1"
+        app:layout_constraintRight_toLeftOf="@id/edphone"
+        app:layout_constraintTop_toBottomOf="@id/labelemail" />
+
+    <TextView
+        android:id="@+id/edemail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Change email"
+        android:textColor="@color/bt_red"
+        android:textSize="@dimen/_8ssp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/showemail"
+        app:layout_constraintRight_toRightOf="@id/guideline2"
+        app:layout_constraintTop_toTopOf="@id/labelemail" />
+
+
+    <TextView
+        android:id="@+id/labelpass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:fontFamily="@font/poppins"
+        android:text="Password"
+        android:textSize="@dimen/_10ssp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@id/guideline1"
+        app:layout_constraintTop_toBottomOf="@id/showemail" />
+    <RelativeLayout
+        android:id="@+id/passlay"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/_15sdp"
+        app:layout_constraintLeft_toLeftOf="@id/guideline1"
+        app:layout_constraintRight_toLeftOf="@id/edphone"
+        app:layout_constraintTop_toBottomOf="@id/labelpass"
+        >
+
+        <EditText
+            android:id="@+id/showpassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_img"
+            android:backgroundTint="@null"
+            android:cursorVisible="true"
+            android:enabled="false"
+            android:fontFamily="@font/poppins"
+            android:inputType="textPassword"
+            android:minWidth="@dimen/_50sdp"
+            android:minHeight="48dp"
+            android:paddingLeft="@dimen/_10sdp"
+            android:paddingRight="@dimen/_10ssp"
+            android:text=""
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/togglepass"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:onClick="ShowHidePass"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:src="@drawable/hide" />
+    </RelativeLayout>
+
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/paslay"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginRight="@dimen/_15sdp"-->
+<!--        android:cursorVisible="true"-->
+
+<!--        android:fontFamily="@font/poppins"-->
+<!--        android:inputType="textPassword"-->
+<!--        android:textColorHint="#0F9D58"-->
+<!--        android:textStyle="bold"-->
+<!--        app:hintTextAppearance="@style/TextAppearance.AppCompat.Large"-->
+<!--        app:layout_constraintLeft_toLeftOf="@id/guideline1"-->
+<!--        app:layout_constraintRight_toLeftOf="@id/edphone"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/labelpass"-->
+<!--        app:passwordToggleTint="@color/colorPrimary">-->
+
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:id="@+id/showpassword"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/round_img"-->
+<!--            android:backgroundTint="@null"-->
+<!--            android:enabled="false"-->
+<!--            android:inputType="textPassword"-->
+<!--            android:text=""-->
+<!--            android:minWidth="@dimen/_50sdp"-->
+<!--            android:minHeight="48dp"-->
+<!--            android:paddingLeft="@dimen/_10sdp"-->
+<!--            android:paddingRight="@dimen/_10ssp"-->
+<!--            android:textSize="@dimen/_15ssp" />-->
+
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+    <!--    <EditText-->
+    <!--        android:id="@+id/showpassword"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginRight="@dimen/_15sdp"-->
+    <!--        android:background="@drawable/round_img"-->
+    <!--        android:backgroundTint="@null"-->
+    <!--        android:cursorVisible="true"-->
+    <!--        android:enabled="false"-->
+    <!--        android:fontFamily="@font/poppins"-->
+    <!--        android:inputType="textPassword"-->
+    <!--        android:minWidth="@dimen/_50sdp"-->
+    <!--        android:minHeight="48dp"-->
+    <!--        android:paddingLeft="@dimen/_10sdp"-->
+    <!--        android:paddingRight="@dimen/_10ssp"-->
+    <!--        android:text=""-->
+    <!--        android:textSize="@dimen/_15ssp"-->
+    <!--        android:textStyle="bold"-->
+    <!--        app:layout_constraintLeft_toLeftOf="@id/guideline1"-->
+    <!--        app:layout_constraintRight_toLeftOf="@id/edphone"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/labelpass" />-->
+
+    <TextView
+        android:id="@+id/edpass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Change Password"
+        android:textColor="@color/bt_red"
+        android:textSize="@dimen/_8ssp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/passlay"
+        app:layout_constraintRight_toRightOf="@id/guideline2"
+        app:layout_constraintTop_toTopOf="@id/labelpass" />
+
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/round3_red"
+        android:onClick="update"
+        android:text="  Update  "
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@id/guideline2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/guideline1"
+        app:layout_constraintTop_toBottomOf="@id/passlay" />
+
+
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round"
+        android:elevation="@dimen/_7sdp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/guideline1"
+        app:layout_constraintRight_toRightOf="@id/guideline2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/close"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:fontFamily="@font/poppins"
+                android:gravity="right"
+                android:onClick="close"
+                android:text="Cancel"
+                android:textColor="#D2FFFFFF"
+                android:textSize="12dp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/chngname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/round3_red"
+                android:fontFamily="@font/poppins"
+                android:text="Change Name"
+                android:textAllCaps="false"
+                android:textColor="@color/light_grey" />
+
+            <Button
+                android:id="@+id/chngpic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/round3_red"
+                android:fontFamily="@font/poppins"
+                android:text="Change Profile image"
+                android:textAllCaps="false"
+                android:textColor="@color/light_grey" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

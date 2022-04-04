@@ -111,6 +111,12 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
 
         }
         setuser();
+        binding.mydp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainDashboard.this,ShowProfile.class));
+            }
+        });
 
         database = FirebaseDatabase.getInstance();
         currid = FeatureController.getInstance().getUid();
@@ -310,11 +316,7 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
         });
     }
 
-    public void setfragment() {
-        fvbttype = 1;
-        fragment = new StatusFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout2, fragment).commit();
-    }
+
 
     //@Override
 //    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

@@ -28,7 +28,7 @@
             android:layout_marginRight="35dp"
             android:layout_marginBottom="35dp"
             android:background="@drawable/round3"
-            app:cnb_unselectedColor="@color/white"
+            app:cnb_unselectedColor="#E5E5E5"
             android:elevation="8dp"
             app:cnb_menuResource="@menu/bottom_nav_menu"
             app:cnb_orientationMode="horizontal"

@@ -16,6 +16,7 @@ public class FeatureController {
     User user = null;
     String uid="";
     New_user new_user;
+    int bool =0;
     String g_id="";
     ArrayList<Friendinfo> groupFrdList;
     String my_mesibo_token = "";
@@ -56,6 +57,14 @@ public class FeatureController {
 
     public static void setInstance(FeatureController instance) {
         FeatureController.instance = instance;
+    }
+
+    public int getBool() {
+        return bool;
+    }
+
+    public void setBool(int bool) {
+        this.bool = bool;
     }
 
     public String getMy_mesibo_token() {

@@ -125,19 +125,19 @@ public class StatusFragment extends Fragment {
 
                             } else if (userStatus.getStatuses().size() == 1) {
                                 Status laststatus = userStatus.getStatuses().get(0);
-                                binding.timeupdated.setText(Constants.militotime(userStatus.getLastupadted()));
+                                if (userStatus.getLastupadted() == 101) {
+                                    binding.timeupdated.setText(" ");
+                                } else {
+                                    binding.timeupdated.setText(Constants.militotime(userStatus.getLastupadted()));
+                                }
                                 if (contextt != null) {
                                     Glide.with(contextt).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
-                                } else {
-
-                                }
+                                } else { }
 
                             } else {
                                 if (contextt != null) {
                                     Glide.with(contextt).load(userStatus.getProfileImg()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
-                                } else {
-
-                                }
+                                } else { }
 
                             }
                         }
@@ -287,7 +287,7 @@ public class StatusFragment extends Fragment {
                                                     .child("statuses")
                                                     .child(key)
                                                     .setValue(status1);
-                                            setalarm(key);
+                                            setalarm(key,currid);
                                             Toast.makeText(getActivity(), "Successfull posted", Toast.LENGTH_SHORT).show();
                                         }
                                     });
@@ -350,16 +350,17 @@ public class StatusFragment extends Fragment {
         }
     }
 
-    public void setalarm(String key) {
+    public void setalarm(String key,String uid) {
         alarmManager = (AlarmManager) contextt.getSystemService(Context.ALARM_SERVICE);
         calendar = Calendar.getInstance();
         Intent intent = new Intent(contextt, AlarmRecevier.class);
         intent.putExtra("key", key);
+        intent.putExtra("uid", uid);
         intent.setAction(key);
         pendingIntent = PendingIntent.getBroadcast(contextt, 0, intent, 0);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + 86340000, pendingIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + (10*1000), pendingIntent);
         }
 //        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
 //                AlarmManager.INTERVAL_DAY,pendingIntent);
