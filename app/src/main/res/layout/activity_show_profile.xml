@@ -152,10 +152,10 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
         android:text="Change number"
-        android:visibility="invisible"
         android:textColor="@color/bt_red"
         android:textSize="@dimen/_8ssp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/shownumber"
         app:layout_constraintRight_toRightOf="@id/guideline2"
         app:layout_constraintTop_toTopOf="@id/labelphone" />
@@ -220,6 +220,7 @@
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="@id/guideline1"
         app:layout_constraintTop_toBottomOf="@id/showemail" />
+
     <RelativeLayout
         android:id="@+id/passlay"
         android:layout_width="0dp"
@@ -227,8 +228,7 @@
         android:layout_marginRight="@dimen/_15sdp"
         app:layout_constraintLeft_toLeftOf="@id/guideline1"
         app:layout_constraintRight_toLeftOf="@id/edphone"
-        app:layout_constraintTop_toBottomOf="@id/labelpass"
-        >
+        app:layout_constraintTop_toBottomOf="@id/labelpass">
 
         <EditText
             android:id="@+id/showpassword"
@@ -254,44 +254,44 @@
             android:layout_height="@dimen/_20sdp"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:onClick="ShowHidePass"
             android:layout_marginRight="@dimen/_5sdp"
+            android:onClick="ShowHidePass"
             android:src="@drawable/hide" />
     </RelativeLayout>
 
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:id="@+id/paslay"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginRight="@dimen/_15sdp"-->
-<!--        android:cursorVisible="true"-->
+    <!--    <com.google.android.material.textfield.TextInputLayout-->
+    <!--        android:id="@+id/paslay"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginRight="@dimen/_15sdp"-->
+    <!--        android:cursorVisible="true"-->
 
-<!--        android:fontFamily="@font/poppins"-->
-<!--        android:inputType="textPassword"-->
-<!--        android:textColorHint="#0F9D58"-->
-<!--        android:textStyle="bold"-->
-<!--        app:hintTextAppearance="@style/TextAppearance.AppCompat.Large"-->
-<!--        app:layout_constraintLeft_toLeftOf="@id/guideline1"-->
-<!--        app:layout_constraintRight_toLeftOf="@id/edphone"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/labelpass"-->
-<!--        app:passwordToggleTint="@color/colorPrimary">-->
+    <!--        android:fontFamily="@font/poppins"-->
+    <!--        android:inputType="textPassword"-->
+    <!--        android:textColorHint="#0F9D58"-->
+    <!--        android:textStyle="bold"-->
+    <!--        app:hintTextAppearance="@style/TextAppearance.AppCompat.Large"-->
+    <!--        app:layout_constraintLeft_toLeftOf="@id/guideline1"-->
+    <!--        app:layout_constraintRight_toLeftOf="@id/edphone"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/labelpass"-->
+    <!--        app:passwordToggleTint="@color/colorPrimary">-->
 
-<!--        <com.google.android.material.textfield.TextInputEditText-->
-<!--            android:id="@+id/showpassword"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@drawable/round_img"-->
-<!--            android:backgroundTint="@null"-->
-<!--            android:enabled="false"-->
-<!--            android:inputType="textPassword"-->
-<!--            android:text=""-->
-<!--            android:minWidth="@dimen/_50sdp"-->
-<!--            android:minHeight="48dp"-->
-<!--            android:paddingLeft="@dimen/_10sdp"-->
-<!--            android:paddingRight="@dimen/_10ssp"-->
-<!--            android:textSize="@dimen/_15ssp" />-->
+    <!--        <com.google.android.material.textfield.TextInputEditText-->
+    <!--            android:id="@+id/showpassword"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:background="@drawable/round_img"-->
+    <!--            android:backgroundTint="@null"-->
+    <!--            android:enabled="false"-->
+    <!--            android:inputType="textPassword"-->
+    <!--            android:text=""-->
+    <!--            android:minWidth="@dimen/_50sdp"-->
+    <!--            android:minHeight="48dp"-->
+    <!--            android:paddingLeft="@dimen/_10sdp"-->
+    <!--            android:paddingRight="@dimen/_10ssp"-->
+    <!--            android:textSize="@dimen/_15ssp" />-->
 
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
+    <!--    </com.google.android.material.textfield.TextInputLayout>-->
 
     <!--    <EditText-->
     <!--        android:id="@+id/showpassword"-->
@@ -404,6 +404,23 @@
                 android:textColor="@color/light_grey" />
         </LinearLayout>
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/logoutbt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:text="Logout"
+        android:paddingLeft="@dimen/_20sdp"
+        android:paddingRight="@dimen/_20sdp"
+        android:textAlignment="center"
+        android:textColor="@color/bt_red"
+        android:textSize="@dimen/_13ssp"
+        android:textStyle="bold"
+        android:layout_marginBottom="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"

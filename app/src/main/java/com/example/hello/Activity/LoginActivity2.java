@@ -6,11 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.hello.FeatureController;
 import com.example.hello.Modal_Class.User;
+import com.example.hello.R;
 import com.example.hello.databinding.ActivityLogin2Binding;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,7 +35,7 @@ public class LoginActivity2 extends AppCompatActivity {
         binding.submtBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = binding.edtName.getText().toString();
+                String username = "+91"+binding.edtName.getText().toString();
                 String pass = binding.edtPass.getText().toString();
 
                 FirebaseDatabase.getInstance().getReference("Users").child(username).addValueEventListener(new ValueEventListener() {
@@ -69,5 +72,23 @@ public class LoginActivity2 extends AppCompatActivity {
             }
         });
     }
+    public void ShowHidePass(View view){
 
+        if(view.getId()== R.id.togglepass){
+
+            if(binding.edtPass.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())){
+                binding.togglepass.setImageResource(R.drawable.hide);
+
+                //Show Password
+                binding.edtPass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            }
+            else{
+                binding.togglepass.setImageResource(R.drawable.eye);
+
+                //Hide Password
+                binding.edtPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+            }
+        }
+    }
 }

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,9 +36,11 @@ public class ChatFragment extends Fragment {
 
      binding = ChatfragmentlayoutBinding.inflate(inflater,container,false);
 
-      uid = getActivity().getIntent().getStringExtra("uid");
+        uid = FeatureController.getInstance().getUid();
       if(( uid== null || uid.equals("")))
       {
+
+      }else{
           uid = FeatureController.getInstance().getUid();
       }
       Log.e("uid",uid);
@@ -68,14 +71,20 @@ public class ChatFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userss.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Friends users = dataSnapshot.getValue(Friends.class);
-                    userss.add(users);
+                if(snapshot.exists())
+                {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Friends users = dataSnapshot.getValue(Friends.class);
+                        userss.add(users);
+                    }
+
+                    FeatureController.getInstance().setMyfriends(userss);
+                    adapter.notifyDataSetChanged();
+                    binding.chats.setAdapter(adapter);
+                }else{
+                    Toast.makeText(getActivity(), "Plz Add friends", Toast.LENGTH_SHORT).show();
                 }
 
-                FeatureController.getInstance().setMyfriends(userss);
-                adapter.notifyDataSetChanged();
-                binding.chats.setAdapter(adapter);
             }
 
             @Override

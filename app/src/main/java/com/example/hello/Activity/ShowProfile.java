@@ -6,7 +6,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
@@ -46,6 +48,8 @@ public class ShowProfile extends AppCompatActivity implements View.OnClickListen
     Animation aniup, animfade;
     ActivityResultLauncher<String> resultLauncher;
     int bool = 0;
+    SharedPreferences preferences;
+    SharedPreferences.Editor preferenceseditor;
     String imgresult= null;
     int strt = 0;
     @Override
@@ -61,7 +65,8 @@ public class ShowProfile extends AppCompatActivity implements View.OnClickListen
         storage = FirebaseStorage.getInstance();
         user = new User();
         mynumber = FeatureController.getInstance().getUser().getPhoneNo();
-
+        preferences = getSharedPreferences("Logincredentials",0);
+        preferenceseditor = preferences.edit();
 
         getmyinfo();
 
@@ -70,6 +75,8 @@ public class ShowProfile extends AppCompatActivity implements View.OnClickListen
         binding.edpass.setOnClickListener(this);
         binding.chngpic.setOnClickListener(this);
         binding.chngname.setOnClickListener(this);
+        binding.logoutbt.setOnClickListener(this);
+
 
         resultLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
             @Override
@@ -144,6 +151,11 @@ public class ShowProfile extends AppCompatActivity implements View.OnClickListen
                     bool = 0;
                 }
                 break;
+            case R.id.logoutbt:
+                preferenceseditor.clear().commit();
+                finishAffinity();
+                break;
+
             case R.id.chngname:
                 binding.myname.setEnabled(true);
                 binding.myname.setCursorVisible(true);

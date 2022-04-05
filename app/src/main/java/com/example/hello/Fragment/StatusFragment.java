@@ -277,7 +277,6 @@ public class StatusFragment extends Fragment {
                                             story.put("profileImg", status.getProfileImg());
                                             story.put("lastUpdated", status.getLastupadted());
 
-
                                             database.getReference().child("Stories")
                                                     .child(currid)
                                                     .updateChildren(story);
@@ -287,6 +286,8 @@ public class StatusFragment extends Fragment {
                                                     .child("statuses")
                                                     .child(key)
                                                     .setValue(status1);
+
+                                            createNotificationChannel();
                                             setalarm(key,currid);
                                             Toast.makeText(getActivity(), "Successfull posted", Toast.LENGTH_SHORT).show();
                                         }
@@ -324,7 +325,6 @@ public class StatusFragment extends Fragment {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()) {
                                 UserStatus s = new UserStatus();
-
                                 s.setLastupadted(snapshot.child("lastUpdated").getValue(Long.class));
                                 s.setProfileImg(snapshot.child("profileImg").getValue(String.class));
                                 s.setName(myfriends.get(finalI).getName());
@@ -338,7 +338,6 @@ public class StatusFragment extends Fragment {
                                 status.add(s);
                                 statusAdapter.notifyDataSetChanged();
                             }
-
                         }
 
                         @Override
@@ -358,18 +357,12 @@ public class StatusFragment extends Fragment {
         intent.putExtra("uid", uid);
         intent.setAction(key);
         pendingIntent = PendingIntent.getBroadcast(contextt, 0, intent, 0);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + (10*1000), pendingIntent);
         }
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
-//                AlarmManager.INTERVAL_DAY,pendingIntent);
         Log.e("Time", String.valueOf(calendar.getTimeInMillis()));
-
         Toast.makeText(contextt, "Alarm set Successfully", Toast.LENGTH_SHORT).show();
-
     }
-
     public void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "foxandroidReminderChannel";
@@ -377,7 +370,6 @@ public class StatusFragment extends Fragment {
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel("foxandroid", name, importance);
             channel.setDescription(description);
-
             NotificationManager notificationManager = contextt.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
 

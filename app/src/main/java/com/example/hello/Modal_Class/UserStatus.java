@@ -19,6 +19,11 @@ public class UserStatus {
         this.statuses = statuses;
     }
 
+    public UserStatus(String name, String profileImg, Long lastupadted) {
+        this.name = name;
+        this.profileImg = profileImg;
+        this.lastupadted = lastupadted;
+    }
 
     public boolean isAuth() {
         return auth;

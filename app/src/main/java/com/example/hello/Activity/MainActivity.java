@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         preferences = getApplicationContext().getSharedPreferences("Logincredentials", 0);
         if (preferences.getString("phone", "").length() > 0) {
             phone = preferences.getString("phone", "");
+
 //            FirebaseMessaging.getInstance().getToken()
 //                    .addOnSuccessListener(new OnSuccessListener<String>() {
 //                        @Override
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 //                            Toast.makeText(MainActivity.this, ""+s, Toast.LENGTH_SHORT).show();
 //                        }
 //                    });
+
             Thread thread = new Thread();
             thread.start();
             //  Toast.makeText(MainActivity.this, ""+preferences.getString("phone",""), Toast.LENGTH_SHORT).show();

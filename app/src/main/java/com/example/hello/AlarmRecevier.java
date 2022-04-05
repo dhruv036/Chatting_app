@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -61,7 +60,7 @@ public class AlarmRecevier extends BroadcastReceiver {
 
             }
         });
-        database.getReference().child("Stories").child("bRfcORJZIkR713Qhg56NjsrHGps1").child("lastUpdated").setValue(101);
+        database.getReference().child("Stories").child(uid).child("lastUpdated").setValue(101);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"foxandroid")
                 .setSmallIcon(R.drawable.ic_launcher_background)

@@ -13,7 +13,7 @@
         android:layout_height="350dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="80dp"
-        app:srcCompat="@drawable/splash" />
+        app:srcCompat="@drawable/ic_main" />
 
     <FrameLayout
         android:id="@+id/frame"

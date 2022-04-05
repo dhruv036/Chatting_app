@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.hello.FeatureController;
 import com.example.hello.Modal_Class.User;
+import com.example.hello.Modal_Class.UserStatus;
 import com.example.hello.databinding.ActivitySetupProfileBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -61,10 +62,7 @@ public class SetupProfile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 binding.progressBar.setVisibility(View.VISIBLE);
-                if (!binding.nameInput.getText().equals("")) {
 
-                } else
-                    Toast.makeText(SetupProfile.this, "Please give your name", Toast.LENGTH_SHORT).show();
                 if (selectedImg != null) {
                     StorageReference reference = storage.getReference().child("Profiles").child(auth.getUid());
                     reference.putFile(selectedImg).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -87,6 +85,8 @@ public class SetupProfile extends AppCompatActivity {
                                                     public void onSuccess(Void aVoid) {
                                                         binding.progressBar.setVisibility(View.GONE);
                                                         database.getReference().child("Groups").child(uid).child("tGroup").setValue(0);
+                                                        UserStatus status = new UserStatus( FeatureController.getInstance().getNew_user().getName(),imgUrl,101l);
+                                                        database.getReference().child("Stories").child(uid).setValue(status);
                                                         FeatureController.getInstance().setUser(user);
                                                         FeatureController.getInstance().setName(FeatureController.getInstance().getNew_user().getName());
                                                         FeatureController.getInstance().setUserimg(imgUrl);
