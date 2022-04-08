@@ -15,6 +15,10 @@ import com.example.hello.FeatureController;
 import com.example.hello.Modal_Class.Status;
 import com.example.hello.R;
 import com.example.hello.databinding.MystatuschildBinding;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -48,6 +52,57 @@ public class MystatusAdapter extends RecyclerView.Adapter<MystatusAdapter.Myview
                 Glide.with(context).load(arrayList.get(size - position - 1).getImgurl()).into(holder.binding.circularImg);
             }
             holder.binding.timeupdated.setText(Constants.militotime(arrayList.get(size - position - 1).getTimestamp()));
+            holder.binding.deletebt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FirebaseDatabase.getInstance().getReference().child("Stories").child(FeatureController.getInstance().getUid()).child("statuses").orderByChild("timestamp").equalTo(arrayList.get(size - position - 1).getTimestamp()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                    FirebaseDatabase.getInstance().getReference().child("Stories").child(FeatureController.getInstance().getUid()).child("statuses").child(snapshot1.getKey()).removeValue();
+                                }
+                                FirebaseDatabase.getInstance().getReference().child("Stories").child(FeatureController.getInstance().getUid()).child("statuses").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot3) {
+                                        if (snapshot.exists()) {
+                                            ArrayList<Status> arrayList2 =new ArrayList<>();
+                                            for (DataSnapshot snapshot2 : snapshot3.getChildren()) {
+                                                Status status = new Status();
+                                                status = snapshot2.getValue(Status.class);
+                                                arrayList2.add(status);
+                                            }
+                                            if((arrayList2.size()) > 0)
+                                            {
+                                                Long lsttime = arrayList2.get(arrayList2.size()-1).getTimestamp();
+                                                holder.binding.timeupdated.setText(Constants.militotime(lsttime));
+                                                FirebaseDatabase.getInstance().getReference().child("Stories").child(FeatureController.getInstance().getUid()).child("lastUpdated").setValue(lsttime);
+                                            }else {
+                                                holder.binding.timeupdated.setText("");
+                                                FirebaseDatabase.getInstance().getReference().child("Stories").child(FeatureController.getInstance().getUid()).child("lastUpdated").setValue(101);
+                                            }
+
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            });
             holder.binding.circularStatusView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

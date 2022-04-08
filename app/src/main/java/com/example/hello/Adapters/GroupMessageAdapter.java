@@ -2,15 +2,25 @@ package com.example.hello.Adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
+import com.example.hello.Activity.ViewImageActivity;
+import com.example.hello.Constants;
 import com.example.hello.FeatureController;
 import com.example.hello.Modal_Class.Friendinfo;
 import com.example.hello.Modal_Class.Messages;
@@ -120,13 +130,57 @@ public class GroupMessageAdapter extends RecyclerView.Adapter {
         if (holder.getClass() == SenderViewHolder.class) {
             SenderViewHolder viewHolder = (SenderViewHolder) holder;
 
+            viewHolder.binding.show.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(m.getMessage().equals("Photos"))
+                    {
+                        Intent i= new Intent(context, ViewImageActivity.class);
+                        i.putExtra("url",m.getImage());
+                        context.startActivity(i);
+                    }
+                }
+            });
+
             if (m.getMessage().equals("Photos")) {
+                viewHolder.binding.show.setVisibility(View.VISIBLE);
                 viewHolder.binding.senderImg.setVisibility(View.VISIBLE);
                 viewHolder.binding.sender.setVisibility(View.GONE);
-                Glide.with(context).load(m.getImage()).placeholder(R.drawable.placeholderr).into(viewHolder.binding.senderImg);
+
+                Glide.with(context).load(m.getImage())
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                ((GroupMessageAdapter.SenderViewHolder) holder).binding.status.setVisibility(View.GONE);
+                                return false;
+                            }
+                        })
+                        .skipMemoryCache(true)
+                        .placeholder(R.drawable.place).apply(RequestOptions.centerInsideTransform()).into(viewHolder.binding.senderImg);
+
             } else {
+                viewHolder.binding.show.setVisibility(View.GONE);
                 viewHolder.binding.senderImg.setVisibility(View.GONE);
             }
+            if (position == 0) {
+                viewHolder.binding.date.setVisibility(View.VISIBLE);
+                viewHolder.binding.date.setText(Constants.givedate(String.valueOf(arrayList.get(position).getTimestamp())));
+            }else{
+                if(Constants.checktwodate(String.valueOf(arrayList.get(position-1).getTimestamp()), String.valueOf(arrayList.get(position).getTimestamp())).equals("same"))
+                {
+                    viewHolder.binding.date.setVisibility(View.GONE);
+                    viewHolder.binding.date.setText("");
+                }else {
+                    viewHolder.binding.date.setText(Constants.givedate(String.valueOf(arrayList.get(position).getTimestamp())));
+                    viewHolder.binding.date.setVisibility(View.VISIBLE);
+                }
+            }
+
             viewHolder.binding.sender.setText(m.getMessage());
 
             if (m.getFeeling() >= 0) {
@@ -230,7 +284,20 @@ public class GroupMessageAdapter extends RecyclerView.Adapter {
 
         } else {
             ReceiverViewHolder viewHolder = (ReceiverViewHolder) holder;
+
+            viewHolder.binding.show.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(m.getMessage().equals("Photos"))
+                    {
+                        Intent i= new Intent(context, ViewImageActivity.class);
+                        i.putExtra("url",m.getImage());
+                        context.startActivity(i);
+                    }
+                }
+            });
             if (m.getMessage().equals("Photos")) {
+                viewHolder.binding.show.setVisibility(View.VISIBLE);
                 viewHolder.binding.receiverImg.setVisibility(View.VISIBLE);
                 viewHolder.binding.receiver.setVisibility(View.GONE);
                 Glide.with(context).load(m.getImage()).placeholder(R.drawable.placeholderr).into(viewHolder.binding.receiverImg);
@@ -252,6 +319,14 @@ public class GroupMessageAdapter extends RecyclerView.Adapter {
                         });
 
             } else {
+                viewHolder.binding.show.setVisibility(View.GONE);
+                viewHolder.binding.receiverImg.setVisibility(View.GONE);
+
+                if (position == 0) {
+                    viewHolder.binding.date.setVisibility(View.VISIBLE);
+                    viewHolder.binding.date.setText(Constants.givedate(String.valueOf(arrayList.get(position).getTimestamp())));
+                }
+
                 FirebaseDatabase.getInstance().getReference().child("Friends").child(FeatureController.getInstance().getUid()).child(m.getPhoneno())
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -271,9 +346,21 @@ public class GroupMessageAdapter extends RecyclerView.Adapter {
 
             }
 
-
             viewHolder.binding.receiver.setText(arrayList.get(position).getMessage());
 
+            if (position == 0) {
+                viewHolder.binding.date.setVisibility(View.VISIBLE);
+                viewHolder.binding.date.setText(Constants.givedate(String.valueOf(arrayList.get(position).getTimestamp())));
+            }else{
+                if(Constants.checktwodate(String.valueOf(arrayList.get(position-1).getTimestamp()), String.valueOf(arrayList.get(position).getTimestamp())).equals("same"))
+                {
+                    viewHolder.binding.date.setVisibility(View.GONE);
+                    viewHolder.binding.date.setText("");
+                }else {
+                    viewHolder.binding.date.setText(Constants.givedate(String.valueOf(arrayList.get(position).getTimestamp())));
+                    viewHolder.binding.date.setVisibility(View.VISIBLE);
+                }
+            }
             if (m.getFeeling() >= 0) {
                 viewHolder.binding.imageView2.setImageResource(reactions[m.getFeeling()]);
                 viewHolder.binding.imageView2.setVisibility(View.VISIBLE);

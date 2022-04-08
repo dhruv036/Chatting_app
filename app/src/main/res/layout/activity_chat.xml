@@ -52,8 +52,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:fontFamily="@font/poppins"
-                    android:text="Dhruv Sharma"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="2dp"
-                    android:fontFamily="@font/poppins"
+                    android:fontFamily="@font/poppins_medium"
                     android:text="Online"
                     android:textColor="#B5B3B3"
                     android:textSize="10sp"
@@ -88,7 +88,7 @@
         android:layout_margin="5dp"
         app:cardCornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/send_bt"
+        app:layout_constraintEnd_toStartOf="@+id/sendBt"
         app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
@@ -96,48 +96,50 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:orientation="horizontal">
 
             <EditText
                 android:id="@+id/msg_input"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.999"
+                android:layout_weight="0.9"
+                android:fontFamily="@font/poppins"
                 android:background="@color/fui_transparent"
-                android:ems="10"
                 android:gravity="center_vertical"
                 android:hint="Type a message"
                 android:inputType="textPersonName"
-                android:padding="8dp" />
+                android:padding="8dp"  />
 
             <ImageView
                 android:id="@+id/attachment"
-                android:layout_width="30dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                app:srcCompat="@drawable/plus_24px" />
-
-            <ImageView
-                android:id="@+id/img_send"
-                android:layout_width="30dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="0.2"
                 android:layout_gravity="center"
-                android:layout_marginRight="12dp"
-                app:srcCompat="@drawable/googleg_standard_color_18" />
+                android:paddingRight="@dimen/_10sdp"
+                android:layout_marginLeft="5dp"
+                android:scaleType="centerCrop"
+                android:layout_marginRight="5dp"
+                app:srcCompat="@drawable/pplace" />
+
+<!--            <ImageView-->
+<!--                android:id="@+id/img_send"-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginRight="12dp"-->
+<!--                app:srcCompat="@drawable/googleg_standard_color_18" />-->
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <ImageView
-        android:id="@+id/send_bt"
+        android:id="@+id/sendBt"
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/cardview"
-        app:srcCompat="@android:drawable/ic_menu_send" />
+        app:layout_constraintTop_toTopOf="@id/cardview"
+        app:srcCompat="@android:drawable/ic_menu_send"  />
 
     <androidx.recyclerview.widget.RecyclerView
 

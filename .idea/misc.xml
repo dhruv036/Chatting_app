@@ -41,11 +41,13 @@
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/drawable/round3_red.xml" value="0.1945" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/drawable/round_img.xml" value="0.1945" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/drawable/statusbg.xml" value="0.185" />
-        <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_chat.xml" value="0.16417272338606242" />
+        <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_chat.xml" value="0.25" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_forgotpassword.xml" value="0.25" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_group_chat.xml" value="0.33" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_group_info.xml" value="0.22" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_login2.xml" value="0.25" />
+        <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_loginactivity.xml" value="0.1675929884566054" />
+        <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_loginactivity1.xml" value="0.1675929884566054" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_main_dashboard.xml" value="0.25" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_my_profile.xml" value="0.25" />
@@ -54,7 +56,12 @@
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_phone.xml" value="0.24495677233429394" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_setup_profile.xml" value="0.25" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_show_profile.xml" value="0.25" />
+        <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_sign_up.xml" value="0.1675929884566054" />
+        <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_status.xml" value="0.1675929884566054" />
+        <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/activity_view_image.xml" value="0.1675929884566054" />
+        <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/add_user.xml" value="0.1675929884566054" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/chatfragmentlayout.xml" value="0.20416666666666666" />
+        <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/chats_shimmer.xml" value="0.1675929884566054" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/custome_dialog.xml" value="0.20416666666666666" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/delete_dialog.xml" value="0.20416666666666666" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/group_chat_fragment.xml" value="0.20416666666666666" />
@@ -66,6 +73,7 @@
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/receiver_delete_dialog.xml" value="0.20416666666666666" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/receiver_layout.xml" value="0.20416666666666666" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/row_conversation.xml" value="0.20416666666666666" />
+        <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/sender_layout.xml" value="0.67" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/status_item.xml" value="0.20416666666666666" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/layout/statusfragmentlayout.xml" value="0.33" />
         <entry key="..\:/desktop/Chatting_app/app/src/main/res/menu/bottom_nav_menu.xml" value="0.20416666666666666" />

@@ -28,6 +28,7 @@
             android:id="@+id/grpname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
             android:hint="Enter group name"
             android:textAlignment="center" />
 
@@ -35,6 +36,7 @@
             android:id="@+id/grpdiscpt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
             android:hint="Enter group discription"
             android:textAlignment="center" />
 
@@ -58,6 +60,7 @@
             android:id="@+id/addcontact"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
             android:hint="Select contact"
             android:textAlignment="center" />
 
@@ -74,7 +77,6 @@
             android:id="@+id/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:visibility="gone" />
 
 

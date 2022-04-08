@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
-        android:fontFamily="@font/poppins"
+        android:fontFamily="@font/poppins_bold"
         android:textColor="#FFFFFF"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
@@ -37,6 +37,7 @@
         <TextView
             android:id="@+id/receivername"
             android:layout_width="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
@@ -59,9 +60,10 @@
             android:paddingTop="10dp"
             android:paddingRight="25dp"
             android:paddingBottom="10dp"
+            android:fontFamily="@font/poppins"
             android:text="dsdd"
             android:textColor="#FFFFFF"
-            android:textSize="16sp"
+            android:textSize="@dimen/_12sdp"
             android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -11,6 +11,7 @@
         android:background="?selectableItemBackground"
         android:gravity="right"
         android:padding="10dp"
+        android:fontFamily="@font/poppins_semibold"
         android:text="Delete for Everyone"
         android:textColor="@color/black"
         android:textSize="16sp" />
@@ -20,6 +21,7 @@
         android:layout_height="wrap_content"
         android:background="?selectableItemBackground"
         android:gravity="right"
+        android:fontFamily="@font/poppins_semibold"
         android:padding="10dp"
         android:text="Delete for Me"
         android:textColor="@color/black"
@@ -31,6 +33,7 @@
         android:layout_height="wrap_content"
         android:background="?selectableItemBackground"
         android:gravity="right"
+        android:fontFamily="@font/poppins_semibold"
         android:padding="10dp"
         android:text="Cancel"
         android:textColor="@color/black"
