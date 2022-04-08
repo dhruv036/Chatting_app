@@ -75,8 +75,7 @@ public class GroupChatFragment extends Fragment {
                 new ActivityResultCallback<Uri>() {
                     @Override
                     public void onActivityResult(Uri result) {
-                        if(result !=null)
-                        {
+                        if (result != null) {
                             gicon = result;
                             binding.image.setImageURI(result);
                         }
@@ -220,7 +219,9 @@ public class GroupChatFragment extends Fragment {
                                 Toast.makeText(context, "Image is successfully uploaded", Toast.LENGTH_SHORT).show();
                                 String gid = database.getReference().push().getKey();
                                 Calendar calendar1 = Calendar.getInstance();
+
                                 Group groupInfo = new Group("1", gid, binding.grpname.getText().toString(), binding.grpdiscpt.getText().toString(), uri.toString(), arrayList, "@Group_Created", String.valueOf(calendar1.getTimeInMillis()));
+                             groupInfo.setAdminuid(FeatureController.getInstance().getUid());
                                 database.getReference().child("Groups").child(FeatureController.getInstance().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -234,12 +235,31 @@ public class GroupChatFragment extends Fragment {
                                                     if (task.isSuccessful()) {
 
                                                         database.getReference("Group_Messages").child(FeatureController.getInstance().getUid()).child(gid).child("Messages").setValue("");
-                                                        for (Friendinfo friendinfo : arrayList) {
-                                                            Group groupInfo = new Group("0", gid, binding.grpname.getText().toString(), binding.grpdiscpt.getText().toString(), uri.toString(), arrayList, "@Group_Created", String.valueOf(calendar1.getTimeInMillis()));
-                                                            database.getReference().child("Groups").child(friendinfo.getFrduid()).child("MyGroups").child(gid).setValue(groupInfo);
-                                                            database.getReference("Group_Messages").child(friendinfo.getFrduid()).child(gid).child("Messages").setValue("");
-                                                        }
 
+                                                        for (Friendinfo friendinfo : arrayList) {
+                                                            if (!friendinfo.getFrduid().equals(FeatureController.getInstance().getUid())) {
+                                                                database.getReference().child("Groups").child(friendinfo.getFrduid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                        if (snapshot.exists()) {
+                                                                            count = snapshot.child("tGroup").getValue(Integer.class);
+                                                                            count++;
+                                                                            database.getReference().child("Groups").child(friendinfo.getFrduid()).child("tGroup").setValue(count);
+                                                                            Group groupInfo = new Group("0", gid, binding.grpname.getText().toString(), binding.grpdiscpt.getText().toString(), uri.toString(), arrayList, "@Group_Created", String.valueOf(calendar1.getTimeInMillis()));
+                                                                            groupInfo.setAdminuid(FeatureController.getInstance().getUid());
+                                                                            database.getReference().child("Groups").child(friendinfo.getFrduid()).child("MyGroups").child(gid).setValue(groupInfo);
+                                                                            database.getReference("Group_Messages").child(friendinfo.getFrduid()).child(gid).child("Messages").setValue("");
+                                                                        }
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                    }
+                                                                });
+
+                                                            }
+                                                        }
                                                         binding.progress.setVisibility(View.GONE);
                                                         binding.grouplay.setVisibility(View.GONE);
                                                         binding.showGroups.setVisibility(View.VISIBLE);

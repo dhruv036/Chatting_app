@@ -60,7 +60,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewholder
                    intent.putExtra("username", arrayList.get(arrayList.size() - position - 1).getName());
                    intent.putExtra("profileimg", arrayList.get(arrayList.size() - position - 1).getProfileImg());
                    intent.putExtra("phoneno", arrayList.get(arrayList.size() - position - 1).getPhoneNo());
-
+                   intent.putExtra("isblock",arrayList.get(arrayList.size() - position - 1).getBlock());
                    context.startActivity(intent);
                }
            });

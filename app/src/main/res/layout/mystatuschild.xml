@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/_10sdp"
+    android:layout_marginTop="@dimen/_15sdp">
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circular_img"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:padding="4dp"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.devlomi.circularstatusview.CircularStatusView
+        android:id="@+id/circular_status_view"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:portion_color="@color/status"
+        app:portion_spacing="4dp"
+        app:portion_width="3dp" />
+
+    <ImageView
+        android:id="@+id/editbt"
+        android:layout_width="@dimen/_17sdp"
+        android:layout_height="@dimen/_17sdp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:src="@drawable/edit_60px"
+        app:layout_constraintStart_toEndOf="@id/circular_img"
+        app:layout_constraintTop_toTopOf="@id/circular_img" />
+
+    <ImageView
+
+        android:id="@+id/deletebt"
+        android:layout_width="@dimen/_17sdp"
+        android:layout_height="@dimen/_17sdp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:src="@drawable/delete_60px"
+        app:layout_constraintBottom_toBottomOf="@id/circular_img"
+        app:layout_constraintStart_toEndOf="@id/circular_img" />
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/label"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_below="@id/circular_img"-->
+    <!--            android:layout_marginTop="5dp"-->
+    <!--            android:fontFamily="@font/poppins"-->
+    <!--            android:text="Time"-->
+    <!--            android:textSize="12sp"-->
+    <!--            android:textStyle="bold" />-->
+
+    <TextView
+        android:id="@+id/timeupdated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/poppins"
+        android:paddingLeft="@dimen/_5sdp"
+        android:text=""
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/circular_img"
+        app:layout_constraintTop_toBottomOf="@id/circular_img" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

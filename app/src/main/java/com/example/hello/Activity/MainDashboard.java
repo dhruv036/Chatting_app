@@ -78,6 +78,18 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
     String pimg;
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        database.getReference().child("Presence").child(currid).setValue("Online");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        database.getReference().child("Presence").child(currid).setValue("Online");
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainDashboardBinding.inflate(getLayoutInflater());
@@ -114,7 +126,7 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
         binding.mydp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainDashboard.this,ShowProfile.class));
+                startActivity(new Intent(MainDashboard.this, ShowProfile.class));
             }
         });
 
@@ -317,7 +329,6 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
     }
 
 
-
     //@Override
 //    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);
@@ -410,18 +421,6 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
 //        startActivity(intentt);
 //    }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        database.getReference().child("Presence").child(currid).setValue("Online");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        database.getReference().child("Presence").child(currid).setValue("Online");
-    }
 
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

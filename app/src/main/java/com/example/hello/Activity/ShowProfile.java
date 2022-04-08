@@ -199,7 +199,15 @@ public class ShowProfile extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
+        database.getReference().child("Presence").child(FeatureController.getInstance().getUser().getUid()).setValue("Online");
         binding.frame.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Calendar calendar = Calendar.getInstance();
+        database.getReference().child("Presence").child(FeatureController.getInstance().getUser().getUid()).setValue(String.valueOf(calendar.getTimeInMillis()));
     }
 
     @Override
@@ -252,7 +260,7 @@ public class ShowProfile extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public boolean onSupportNavigateUp() {
-        finish();
+       startActivity(new Intent(ShowProfile.this,MainDashboard.class));
         return super.onSupportNavigateUp();
     }
 }

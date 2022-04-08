@@ -71,19 +71,26 @@ public class LoginActivity2 extends AppCompatActivity {
                 });
             }
         });
+
+        binding.forgotbt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity2.this,ForgotpasswordActivity.class));
+            }
+        });
     }
     public void ShowHidePass(View view){
 
-        if(view.getId()== R.id.togglepass){
+        if(view.getId()== R.id.togglepassl){
 
             if(binding.edtPass.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())){
-                binding.togglepass.setImageResource(R.drawable.hide);
+                binding.togglepassl.setImageResource(R.drawable.hide);
 
                 //Show Password
                 binding.edtPass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
             }
             else{
-                binding.togglepass.setImageResource(R.drawable.eye);
+                binding.togglepassl.setImageResource(R.drawable.eye);
 
                 //Hide Password
                 binding.edtPass.setTransformationMethod(PasswordTransformationMethod.getInstance());

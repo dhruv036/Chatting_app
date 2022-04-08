@@ -1,7 +1,7 @@
 package com.example.hello.Modal_Class;
 
 public class Friends {
-    String uid,name,profileImg,phoneNo,lastMsg;
+    String uid,name,profileImg,phoneNo,lastMsg,block="0";
     Long lastMsgTime;
 
     public Friends() {
@@ -42,6 +42,14 @@ public class Friends {
 
     public String getPhoneNo() {
         return phoneNo;
+    }
+
+    public String getBlock() {
+        return block;
+    }
+
+    public void setBlock(String block) {
+        this.block = block;
     }
 
     public void setPhoneNo(String phoneNo) {

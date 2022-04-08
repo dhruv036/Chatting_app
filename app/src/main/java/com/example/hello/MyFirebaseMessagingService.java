@@ -13,12 +13,10 @@ import static com.google.firebase.messaging.Constants.TAG;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
-
-
     @Override
     public void onNewToken(@NonNull String s) {
-        String ss =s;
-        Log.d("TAG","New Token"+ss);
+        String ss = s;
+        Log.d("TAG", "New Token" + ss);
 
     }
 }

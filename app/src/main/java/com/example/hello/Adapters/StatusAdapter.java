@@ -47,12 +47,11 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.Myviewhold
 //            }
 //        }
         UserStatus userStatus = arrayList.get(position);
-        if(userStatus.getStatuses().size()>0 && userStatus.getStatuses() != null )
-        {
+        if (userStatus.getStatuses().size() > 0 && userStatus.getStatuses() != null) {
             Status laststatus = userStatus.getStatuses().get(userStatus.getStatuses().size() - 1);
             holder.binding.statName.setText(userStatus.getName());
             Glide.with(context).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(holder.binding.circularImg);
-            holder.binding.timeupdated.setText(Constants.militotime(userStatus.getStatuses().get(userStatus.getStatuses().size()-1).getTimestamp()));
+            holder.binding.timeupdated.setText(Constants.militotime(userStatus.getStatuses().get(userStatus.getStatuses().size() - 1).getTimestamp()));
             holder.binding.circularStatusView.setPortionsCount(userStatus.getStatuses().size());
 
             holder.binding.circularStatusView.setOnClickListener(new View.OnClickListener() {
@@ -83,15 +82,9 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.Myviewhold
                             .show();
                 }
             });
-        }else
-        {
+        } else {
             holder.binding.imageLayout.setVisibility(View.GONE);
         }
-
-
-
-
-
     }
 
     @Override

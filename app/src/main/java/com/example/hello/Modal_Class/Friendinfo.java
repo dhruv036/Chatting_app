@@ -1,5 +1,7 @@
 package com.example.hello.Modal_Class;
 
+import java.util.Objects;
+
 public class Friendinfo {
     String frdphn, frdname, frduid;
 
@@ -34,5 +36,18 @@ public class Friendinfo {
 
     public void setFrduid(String frduid) {
         this.frduid = frduid;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Friendinfo that = (Friendinfo) o;
+        return frdname.equals(that.frdname);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(frdname);
     }
 }

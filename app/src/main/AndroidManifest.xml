@@ -11,6 +11,15 @@
         android:theme="@style/Theme.Hello"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Activity.GroupInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.PasswordResetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ForgotpasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.ShowProfile"
             android:exported="false" />
         <activity android:name=".Activity.LoginActivity2" />
@@ -24,7 +33,9 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Activity.GroupChatActivity" />
+        <activity android:name=".Activity.GroupChatActivity"
+            android:theme="@style/Theme.Hello.NoActionBar"
+            />
         <activity
             android:name=".Activity.ChatActivity"
             android:theme="@style/Theme.Hello.NoActionBar" />

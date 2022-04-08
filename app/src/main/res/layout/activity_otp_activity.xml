@@ -37,7 +37,7 @@
         android:layout_marginLeft="@dimen/_30sdp"
         android:layout_marginRight="@dimen/_30sdp"
         android:fontFamily="@font/poppins"
-        android:text='Please type verification code sent \n to +918302827722'
+        android:text='Please type verification code sent \n to '
         android:textAlignment="center"
         android:textSize="@dimen/_12ssp"
         android:textStyle="bold"

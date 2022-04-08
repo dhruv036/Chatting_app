@@ -77,14 +77,15 @@ public class PhoneActivity extends AppCompatActivity {
                                         if (emailisvalid(binding.emailInput.getText().toString())) {
 
                                             if (binding.InputPassword.getText() != null && !binding.InputPassword.getText().toString().equals("")) {
-                                                if (binding.InputPassword.getText() != null && !binding.InputPassword.getText().toString().equals("")) {
+                                                if (binding.reInputPassword.getText() != null && !binding.reInputPassword.getText().toString().equals("")) {
                                                     if (binding.InputPassword.getText().toString().equals(binding.reInputPassword.getText().toString())) {
 
                                                         FeatureController.getInstance().setNew_user(new New_user(binding.InputFname.getText().toString() + " " + binding.InputLname.getText().toString(), "+91" + binding.phoneInput.getText().toString(), binding.emailInput.getText().toString(), binding.InputPassword.getText().toString()));
                                                         String phone = "+91"+binding.phoneInput.getText().toString();
                                                         FeatureController.getInstance().setCurr_user_phone(phone);
                                                         Intent i = new Intent(PhoneActivity.this, Otp_activity.class);
-                                                        i.putExtra("Phone", "+91" + phone);
+                                                        i.putExtra("Phone",  phone);
+                                                        i.putExtra("activity","register");
                                                         finishAffinity();
                                                         startActivity(i);
                                                     }else {

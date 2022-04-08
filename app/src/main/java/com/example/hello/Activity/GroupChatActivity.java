@@ -11,10 +11,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.hello.Adapters.GroupMessageAdapter;
 import com.example.hello.FeatureController;
 import com.example.hello.Modal_Class.Friendinfo;
 import com.example.hello.Modal_Class.Messages;
+import com.example.hello.R;
 import com.example.hello.databinding.ActivityGroupChatBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,6 +42,7 @@ public class GroupChatActivity extends AppCompatActivity {
     FirebaseStorage storage;
     GroupMessageAdapter adapter;
     String gname ="";
+    String gimg ="";
     ArrayList<Messages> messages;
 
     @Override
@@ -48,10 +51,13 @@ public class GroupChatActivity extends AppCompatActivity {
         binding = ActivityGroupChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         gname =  getIntent().getStringExtra("g_name");
-        getSupportActionBar().setTitle(gname);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setSupportActionBar(binding.toolbar);
         // setSupportActionBar(binding.toolbar);
         gid = getIntent().getStringExtra("G_id");
+        gimg = getIntent().getStringExtra("g_img");
+        Glide.with(this).load(gimg).placeholder(R.drawable.placeholderr).into(binding.profileimg);
+        binding.namee.setText(gname);
+
 
         FeatureController.getInstance().setG_id(gid);
         friendinfos = FeatureController.getInstance().getGroupFrdList();
@@ -61,6 +67,23 @@ public class GroupChatActivity extends AppCompatActivity {
         senderuid = FeatureController.getInstance().getUid(); // my uid
 
         messages =  new ArrayList<>();
+
+        binding.back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        binding.info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(GroupChatActivity.this,GroupInfoActivity.class);
+                i.putExtra("g_id",gid);
+                startActivity(i);
+            }
+        });
+
         adapter = new GroupMessageAdapter(this,messages);
         binding.chatrecycle.setLayoutManager(new LinearLayoutManager(this));
         binding.chatrecycle.setAdapter(adapter);
@@ -96,6 +119,7 @@ public class GroupChatActivity extends AppCompatActivity {
                 chat.setPhoneno(FeatureController.getInstance().getUser().getPhoneNo());
                 binding.msgInput.setText("");
                 String key = database.getReference().push().getKey();
+                friendinfos  = FeatureController.getInstance().getGroupFrdList();
                 for (Friendinfo friendinfo : friendinfos) {
 
                     FirebaseDatabase.getInstance().getReference()
@@ -153,6 +177,7 @@ public class GroupChatActivity extends AppCompatActivity {
                                 chat.setPhoneno(FeatureController.getInstance().getUser().getPhoneNo());
                                 binding.msgInput.setText("");
                                 String key = database.getReference().push().getKey();
+                                friendinfos  = FeatureController.getInstance().getGroupFrdList();
                                 for (Friendinfo friendinfo : friendinfos) {
                                     FirebaseDatabase.getInstance().getReference()
                                             .child("Groups")

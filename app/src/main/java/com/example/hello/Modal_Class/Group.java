@@ -8,6 +8,7 @@ public class Group {
     String gIsadmin, gid, gName, gDiscpt, gIcon;
     ArrayList<Friendinfo> gMembers;
     String gLastmsg,glstMsgTime;
+    String adminuid;
     public Group() {
     }
 
@@ -28,6 +29,14 @@ public class Group {
 
     public void setgLastmsg(String gLastmsg) {
         this.gLastmsg = gLastmsg;
+    }
+
+    public String getAdminuid() {
+        return adminuid;
+    }
+
+    public void setAdminuid(String adminuid) {
+        this.adminuid = adminuid;
     }
 
     public String getGlstMsgTime() {

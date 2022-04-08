@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.hello.Modal_Class.Friendinfo;
 import com.example.hello.Modal_Class.Friends;
+import com.example.hello.Modal_Class.Group;
 import com.example.hello.Modal_Class.New_user;
 import com.example.hello.Modal_Class.User;
 
@@ -12,23 +13,41 @@ import java.util.ArrayList;
 public class FeatureController {
 
     String curr_user_phone;
-    String name="",receiverpho,receiveruid,userimg="";
+    String name = "", receiverpho, receiveruid, userimg = "";
     User user = null;
-    String uid="";
+    String uid = "";
     New_user new_user;
-    int bool =0;
-    String g_id="";
+    int bool = 0;
+    String isadmin = "0";
+    String adminuid;
+    Group group;
+    String g_id = "";
     ArrayList<Friendinfo> groupFrdList;
     String my_mesibo_token = "";
     ArrayList<Friends> myfriends = new ArrayList<>();
     public static FeatureController instance = null;
 
     public static FeatureController getInstance() {
-        if(instance == null)
-        {
-             instance=  new FeatureController();
+        if (instance == null) {
+            instance = new FeatureController();
         }
         return instance;
+    }
+
+    public String getAdminuid() {
+        return adminuid;
+    }
+
+    public void setAdminuid(String adminuid) {
+        this.adminuid = adminuid;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
     public String getG_id() {
@@ -57,6 +76,14 @@ public class FeatureController {
 
     public static void setInstance(FeatureController instance) {
         FeatureController.instance = instance;
+    }
+
+    public String getIsadmin() {
+        return isadmin;
+    }
+
+    public void setIsadmin(String isadmin) {
+        this.isadmin = isadmin;
     }
 
     public int getBool() {
@@ -140,13 +167,9 @@ public class FeatureController {
     }
 
 
-
-    public  void setTheme()
-    {
+    public void setTheme() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
     }
-
-
 
 
 }

@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import com.example.hello.FeatureController;
 import com.example.hello.Modal_Class.User;
 import com.example.hello.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -60,28 +61,17 @@ public class MainActivity extends AppCompatActivity {
 //                        }
 //                    });
 
-            Thread thread = new Thread();
-            thread.start();
-            //  Toast.makeText(MainActivity.this, ""+preferences.getString("phone",""), Toast.LENGTH_SHORT).show();
+//            Thread thread = new Thread();
+//            thread.start();
 
         }
 
-
-//        FeatureController.getInstance().setCurr_user_phone(preferences.getString("phone", ""));
-//        FeatureController.getInstance().setName(preferences.getString("name", ""));
-//        FeatureController.getInstance().setUserimg(preferences.getString("userimg", ""));
-
-//        FirebaseDatabase.getInstance().getReference().child("Users").push().setValue("ffs").addOnSuccessListener(new OnSuccessListener<Void>() {
-//            @Override
-//            public void onSuccess(Void unused) {
-//
-//            }
-//        });
         Log.e("Activity", "Mainactivity");
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (preferences.getString("phone", "").length() > 0) {
+                    Log.e("check","store");
                     getdata();
                     intent = new Intent(MainActivity.this, MainDashboard.class);
                     database.getReference("Users").child(phone).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -107,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
                     });
 
                 } else {
+                    Log.e("check","empty");
+                    FirebaseAuth.getInstance().signOut();
                     Intent i = new Intent(MainActivity.this, PhoneActivity.class);
                     startActivity(i);
                 }

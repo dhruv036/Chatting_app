@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import com.example.hello.Activity.MainDashboard;
+import com.example.hello.Adapters.MystatusAdapter;
 import com.example.hello.AlarmRecevier;
 import com.example.hello.Constants;
 import com.example.hello.FeatureController;
@@ -32,6 +35,7 @@ import com.example.hello.Modal_Class.Friends;
 import com.example.hello.Modal_Class.Status;
 import com.example.hello.Modal_Class.UserStatus;
 import com.example.hello.Adapters.StatusAdapter;
+import com.example.hello.R;
 import com.example.hello.databinding.StatusfragmentlayoutBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -66,7 +70,8 @@ public class StatusFragment extends Fragment {
     Context contextt;
     FirebaseDatabase database;
     String currid = "";
-
+    MystatusAdapter adapter;
+    Animation anim;
 
     @Override
     public void onStart() {
@@ -82,13 +87,17 @@ public class StatusFragment extends Fragment {
         currid = FeatureController.getInstance().getUid();
         database = FirebaseDatabase.getInstance();
         userStatus = new UserStatus();
+        anim = AnimationUtils.loadAnimation(contextt, R.anim.bounce);
 
-//show();
+        //show();
         statusAdapter = new StatusAdapter(getActivity(), status);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         binding.status.setLayoutManager(layoutManager);
         binding.status.setAdapter(statusAdapter);
+        binding.allsts.setLayoutManager(new LinearLayoutManager(contextt, LinearLayoutManager.HORIZONTAL, false));
+
         String myname = FeatureController.getInstance().getName();
         binding.statName.setText(myname);
         // M Y  S T A T U S
@@ -96,18 +105,21 @@ public class StatusFragment extends Fragment {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                        ArrayList<Status> status = new ArrayList<>();
                         if (snapshot.exists()) {
                             userStatus.setName(snapshot.child("name").getValue(String.class));
                             userStatus.setProfileImg(snapshot.child("profileImg").getValue(String.class));
                             FeatureController.getInstance().setUserimg(snapshot.child("profileImg").getValue(String.class));
-
                             userStatus.setLastupadted(snapshot.child("lastUpdated").getValue(Long.class));
-                            ArrayList<Status> status = new ArrayList<>();
+                            status.clear();
                             for (DataSnapshot snapshot1 : snapshot.child("statuses").getChildren()) {
                                 Status status1 = snapshot1.getValue(Status.class);
                                 status.add(status1);
                             }
+                            adapter = new MystatusAdapter(status, contextt);
+                            adapter.notifyDataSetChanged();
+                            binding.allsts.setAdapter(adapter);
+
                             userStatus.setStatuses(status);
                             binding.circularStatusView.setPortionsCount(status.size());
                             if (userStatus.getStatuses().size() > 1) {
@@ -132,12 +144,14 @@ public class StatusFragment extends Fragment {
                                 }
                                 if (contextt != null) {
                                     Glide.with(contextt).load(laststatus.getImgurl()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
-                                } else { }
+                                } else {
+                                }
 
                             } else {
                                 if (contextt != null) {
                                     Glide.with(contextt).load(userStatus.getProfileImg()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(binding.mystatus);
-                                } else { }
+                                } else {
+                                }
 
                             }
                         }
@@ -148,16 +162,20 @@ public class StatusFragment extends Fragment {
 
                     }
                 });
-
+        binding.editstatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.lay.setVisibility(View.VISIBLE);
+                binding.lay.setAnimation(anim);
+            }
+        });
 
         binding.circularStatusView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (userStatus.getStatuses() != null && userStatus.getStatuses().size() > 0) {
                     ArrayList<MyStory> myStories = new ArrayList<>();
-
                     for (Status status : userStatus.getStatuses()) {
-
                         myStories.add(new MyStory(status.getImgurl()));
                         // to add comment in status
                         //  myStories.add(new MyStory(status.getImgurl(),null,"Add Comment here"));
@@ -262,34 +280,41 @@ public class StatusFragment extends Fragment {
                                         @Override
                                         public void onSuccess(Uri uri) {
 
-                                            Toast.makeText(getActivity(), "Dhruv", Toast.LENGTH_SHORT).show();
+                                            try {
 
-                                            UserStatus status = new UserStatus();
-                                            status.setName(FeatureController.getInstance().getName());
-                                            status.setProfileImg(FeatureController.getInstance().getUserimg());
-                                            status.setLastupadted(calendar.getTimeInMillis());
 
-                                            String imgurl = uri.toString();
-                                            Status status1 = new Status(imgurl, status.getLastupadted());
+                                                Toast.makeText(getActivity(), "Dhruv", Toast.LENGTH_SHORT).show();
 
-                                            HashMap<String, Object> story = new HashMap<>();
-                                            story.put("name", status.getName());
-                                            story.put("profileImg", status.getProfileImg());
-                                            story.put("lastUpdated", status.getLastupadted());
+                                                UserStatus status = new UserStatus();
+                                                status.setName(FeatureController.getInstance().getName());
+                                                status.setProfileImg(FeatureController.getInstance().getUserimg());
+                                                status.setLastupadted(calendar.getTimeInMillis());
 
-                                            database.getReference().child("Stories")
-                                                    .child(currid)
-                                                    .updateChildren(story);
-                                            String key = database.getReference().push().getKey();
-                                            database.getReference().child("Stories")
-                                                    .child(currid)
-                                                    .child("statuses")
-                                                    .child(key)
-                                                    .setValue(status1);
+                                                String imgurl = uri.toString();
+                                                Status status1 = new Status(imgurl, status.getLastupadted());
 
-                                            createNotificationChannel();
-                                            setalarm(key,currid);
-                                            Toast.makeText(getActivity(), "Successfull posted", Toast.LENGTH_SHORT).show();
+                                                HashMap<String, Object> story = new HashMap<>();
+                                                story.put("name", status.getName());
+                                                story.put("profileImg", status.getProfileImg());
+                                                story.put("lastUpdated", status.getLastupadted());
+
+                                                database.getReference().child("Stories")
+                                                        .child(currid)
+                                                        .updateChildren(story);
+                                                String key = database.getReference().push().getKey();
+                                                database.getReference().child("Stories")
+                                                        .child(currid)
+                                                        .child("statuses")
+                                                        .child(key)
+                                                        .setValue(status1);
+
+                                                createNotificationChannel();
+                                                setalarm(key, currid);
+                                                Toast.makeText(getActivity(), "Successfull posted", Toast.LENGTH_SHORT).show();
+                                            }catch (NullPointerException e)
+                                            {
+                                                Log.e("e",e.getMessage());
+                                            }
                                         }
                                     });
                                 }
@@ -349,7 +374,7 @@ public class StatusFragment extends Fragment {
         }
     }
 
-    public void setalarm(String key,String uid) {
+    public void setalarm(String key, String uid) {
         alarmManager = (AlarmManager) contextt.getSystemService(Context.ALARM_SERVICE);
         calendar = Calendar.getInstance();
         Intent intent = new Intent(contextt, AlarmRecevier.class);
@@ -358,11 +383,12 @@ public class StatusFragment extends Fragment {
         intent.setAction(key);
         pendingIntent = PendingIntent.getBroadcast(contextt, 0, intent, 0);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + (10*1000), pendingIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + (10 * 1000), pendingIntent);
         }
         Log.e("Time", String.valueOf(calendar.getTimeInMillis()));
         Toast.makeText(contextt, "Alarm set Successfully", Toast.LENGTH_SHORT).show();
     }
+
     public void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "foxandroidReminderChannel";

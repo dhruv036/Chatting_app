@@ -48,6 +48,7 @@ public class AllGroupAdapter extends RecyclerView.Adapter<AllGroupAdapter.Myview
                 Intent intent = new Intent(context, GroupChatActivity.class);
                 intent.putExtra("G_id",arrayList.get(arrayList.size()-position-1).getGid());
                 intent.putExtra("g_name",arrayList.get(arrayList.size() - position - 1).getgName());
+                intent.putExtra("g_img",arrayList.get(arrayList.size() - position - 1).getgIcon());
                 FeatureController.getInstance().setGroupFrdList(arrayList.get(arrayList.size()-position-1).getgMembers());
                 context.startActivity(intent);
             }

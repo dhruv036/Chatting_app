@@ -34,6 +34,7 @@ public class Otp_activity extends AppCompatActivity {
     String verificationId;
     FirebaseAuth auth;
     String phone;
+    int bool=0;
     EditText otppp;
     private OtpTextView otpTextView;
     PhoneAuthProvider.ForceResendingToken token;
@@ -48,8 +49,13 @@ public class Otp_activity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         phone = getIntent().getStringExtra("Phone").toString();
         Log.e("phone", phone);
-
-        Toast.makeText(getApplicationContext(), "" + FeatureController.getInstance().getNew_user().getName(), Toast.LENGTH_SHORT).show();
+        binding.content.append(phone);
+        if(getIntent().getStringExtra("activity").toString().equals("register"))
+        {
+            bool =0;
+        }else if(getIntent().getStringExtra("activity").toString().equals("forgot")){
+            bool =1;
+        }
         sendVerificationCodeToUser(phone);
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,11 +198,21 @@ public class Otp_activity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(Otp_activity.this, "Login successfull", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Otp_activity.this, SetupProfile.class);
-                    intent.putExtra("phone", phone);
-                    startActivity(intent);
-                    finishAffinity();
+                    if(bool==0)
+                    {
+                        Toast.makeText(Otp_activity.this, "Login successfull", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(Otp_activity.this, SetupProfile.class);
+                        intent.putExtra("phone", phone);
+                        startActivity(intent);
+                        finishAffinity();
+                    }else{
+                        Toast.makeText(Otp_activity.this, "Login successfull", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(Otp_activity.this, PasswordResetActivity.class);
+                        intent.putExtra("phone", phone);
+                        startActivity(intent);
+                        finishAffinity();
+                    }
+
                 } else {
                     Toast.makeText(Otp_activity.this, "Login Failed", Toast.LENGTH_SHORT).show();
                 }

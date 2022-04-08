@@ -2,9 +2,11 @@ package com.example.hello.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -46,20 +48,23 @@ import java.util.HashMap;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
-public class ChatActivity extends AppCompatActivity implements Mesibo.ConnectionListener, Mesibo.MessageListener, MesiboCall.IncomingListener{
+public class ChatActivity extends AppCompatActivity implements Mesibo.ConnectionListener, Mesibo.MessageListener, MesiboCall.IncomingListener {
     ActivityChatBinding binding;
 
     String senderuid;
     FirebaseAuth auth;
     FirebaseDatabase database;
-    String Callername ="";
+    String Callername = "";
     ArrayList<Messages> messages;
     String receiveruid = "";
     MessageAdapter adapter;
-    String username ="";
+    String username = "";
     FirebaseStorage storage;
-    String currid="";
+    String currid = "";
     String phone;
+    String block2 ;
+    String block;
+    String isblock;
     String SenderRoom, ReceiverRoom;
 
     @Override
@@ -68,22 +73,22 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-   //     setmiso();
+        //     setmiso();
 
         receiveruid = getIntent().getStringExtra("Uid");
         FeatureController.getInstance().setReceiveruid(receiveruid);
-       username = getIntent().getStringExtra("username");
+        username = getIntent().getStringExtra("username");
         String pimg = getIntent().getStringExtra("profileimg");
-         phone = getIntent().getStringExtra("phoneno");
+        phone = getIntent().getStringExtra("phoneno");
+        isblock = getIntent().getStringExtra("isblock");
         FeatureController.getInstance().setReceiverpho(phone);
         setSupportActionBar(binding.toolbar);
 
 
         //receiver name and image
-        if(username == null)
-        {
+        if (username == null) {
             binding.namee.setText(phone);
-        }else {
+        } else {
             binding.namee.setText(username);
         }
 
@@ -98,7 +103,6 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
         senderuid = currid;
         SenderRoom = senderuid + receiveruid;
         ReceiverRoom = receiveruid + senderuid;
-
 
 
         binding.back.setOnClickListener(new View.OnClickListener() {
@@ -119,7 +123,6 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
                         if (status.equals("Typing...") || status.equals("Online")) {
                             binding.statuss.setVisibility(View.VISIBLE);
                             binding.statuss.setText(status);
-
                         } else {
                             binding.statuss.setText(Constants.militotimestap(status));
                             binding.statuss.setVisibility(View.VISIBLE);
@@ -172,61 +175,187 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
             @Override
             public void onClick(View v) {
                 String message = binding.msgInput.getText().toString();
-//                try {
-//                    //gethash(message);
-//                } catch (NoSuchAlgorithmException e) {
-//                    e.printStackTrace();
-//                }
-                if (!message.isEmpty()) {
-                    //  Date date = new Date();
-//                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-//                    String time = sdf.format(new Date());
-                    Calendar calendar = Calendar.getInstance();
-                    Messages chat = new Messages(message, senderuid, calendar.getTimeInMillis());
-                    binding.msgInput.setText("");
-                    String randomkey = database.getReference().push().getKey();
-                    HashMap<String, Object> lastmsg = new HashMap<>();
-                    lastmsg.put("lastMsg", chat.getMessage());
-                    lastmsg.put("lastMsgTime", calendar.getTimeInMillis());
 
+                database.getReference().child("Friends").child(currid).child(phone).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            block = snapshot.child("block").getValue(String.class);
+                            if (!message.isEmpty()) {
 
-                    database.getReference().child("Chats").child(SenderRoom).updateChildren(lastmsg);
-                    database.getReference().child("Chats").child(ReceiverRoom).updateChildren(lastmsg);
+                                if (block.equals("0")) {
+                                    Calendar calendar = Calendar.getInstance();
+                                    Messages chat = new Messages(message, senderuid, calendar.getTimeInMillis());
+                                    binding.msgInput.setText("");
+                                    String randomkey = database.getReference().push().getKey();
 
-                    database.getReference().child("Friends").child(currid).child(phone).updateChildren(lastmsg);
-                    lastmsg.put("uid",senderuid);
-                    lastmsg.put("phoneNo",FeatureController.getInstance().getUser().getPhoneNo());
-                    database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).updateChildren(lastmsg);
+                                    HashMap<String, Object> lastmsg = new HashMap<>();
+                                    lastmsg.put("lastMsg", chat.getMessage());
+                                    lastmsg.put("lastMsgTime", calendar.getTimeInMillis());
 
-                    database.getReference().child("Chats")
-                            .child(SenderRoom)
-                            .child("messages")
-                            .child(randomkey)
-                            .setValue(chat)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
+                                    database.getReference().child("Chats").child(SenderRoom).updateChildren(lastmsg);
+                                    database.getReference().child("Chats").child(ReceiverRoom).updateChildren(lastmsg);
+
+                                    database.getReference().child("Friends").child(currid).child(phone).updateChildren(lastmsg);
+                                    lastmsg.put("uid", senderuid);
+                                    lastmsg.put("phoneNo", FeatureController.getInstance().getUser().getPhoneNo());
+                                    database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).updateChildren(lastmsg);
+
                                     database.getReference().child("Chats")
-                                            .child(ReceiverRoom)
+                                            .child(SenderRoom)
                                             .child("messages")
                                             .child(randomkey)
                                             .setValue(chat)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
+                                                    database.getReference().child("Chats")
+                                                            .child(ReceiverRoom)
+                                                            .child("messages")
+                                                            .child(randomkey)
+                                                            .setValue(chat)
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+
+                                                                }
+                                                            });
+
 
                                                 }
                                             });
 
-
                                 }
-                            });
-                } else {
+                                if (block.equals("ME") || block.equals("BOTH")) {
+                                    Toast.makeText(ChatActivity.this, "You block " + username + " plz unblock", LENGTH_SHORT).show();
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+                                    builder.setCancelable(true);
+                                    builder.setTitle("Unblock");
+                                    builder.setMessage("Would you like to unblock " + username);
+                                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                }
+
+                                            if (block.equals("ME")) {
+                                                database.getReference().child("Friends").child(currid).child(phone).child("block").setValue("0");
+                                                database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).child("block").setValue("0");
+                                                Toast.makeText(ChatActivity.this, "Unblocked", LENGTH_SHORT).show();
+                                            }
+                                            if (block.equals("BOTH")) {
+                                                database.getReference().child("Friends").child(currid).child(phone).child("block").setValue("YOU");
+                                                database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).child("block").setValue("ME");
+                                                Toast.makeText(ChatActivity.this, "You unblocked but receiver has blocked you", LENGTH_SHORT).show();
+                                            }
+
+//                                            if (blockk.equals("YOU")) {
+//                                                database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                    @Override
+//                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                                        if (snapshot.exists()) {
+//                                                            String blockk;
+//                                                            blockk = snapshot.child("block").getValue(String.class);
+//                                                            if (blockk.equals("BOTH")) {
+//
+//                                                                database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).child("block").setValue("ME");
+//                                                            }
+//                                                            if (blockk.equals("YOU"))
+//                                                            {
+//                                                                database.getReference().child("Friends").child(currid).child(phone).child("block").setValue("0");
+//                                                                database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).child("block").setValue("0");
+//                                                            }
+//                                                        }
+//                                                    }
+//
+//                                                    @Override
+//                                                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                                                    }
+//                                                });
+//
+//                                            }
+//                                            else {
+//                                                if (blockk.equals("0")) {
+//                                                    database.getReference().child("Friends").child(currid).child(phone).child("block").setValue("0");
+//                                                    database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).child("block").setValue("0");
+//                                                    Toast.makeText(ChatActivity.this, "Unblocked", LENGTH_SHORT).show();
+//                                                }
+//                                                if(blockk.equals("BOTH"))
+//                                                {
+//                                                    database.getReference().child("Friends").child(currid).child(phone).child("block").setValue("YOU");
+//                                                    database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).child("block").setValue("0");
+//                                                }
+//
+//                                            }
+
+                                        }
+                                    });
+                                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.dismiss();
+                                        }
+                                    });
+                                    builder.create().show();
+                                }
+                                if (block.equals("YOU")) {
+                                    database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if (snapshot.exists()) {
+
+                                                block2 = snapshot.child("block").getValue(String.class);
+                                                if (block2.equals("BOTH")) {
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+                                                    builder.setCancelable(true);
+                                                    builder.setTitle("Unblock");
+                                                    builder.setMessage("Would you like to unblock " + username);
+                                                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                            database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).child("block").setValue("ME");
+                                                            Toast.makeText(ChatActivity.this, "Unblocked :)", LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            dialogInterface.dismiss();
+                                                        }
+                                                    });
+                                                    builder.create().show();
+
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+                                    Toast.makeText(ChatActivity.this, "I am blocked :(", LENGTH_SHORT).show();
+                                }
+
+                            } else {
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+//                try {
+//                    //gethash(message);
+//                } catch (NoSuchAlgorithmException e) {
+//                    e.printStackTrace();
+//                }
+
             }
         });
-
         // S E N D  I M A G E
         binding.attachment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -298,6 +427,29 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
                 // Video call to user
                 Toast.makeText(ChatActivity.this, "Video Calling", LENGTH_SHORT).show();
                 MesiboCall.getInstance().callUi(ChatActivity.this, phone, true);
+                break;
+            case R.id.block:
+//                database.getReference().child("")
+                database.getReference().child("Friends").child(currid).child(phone).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            String blockk;
+                            blockk = snapshot.child("block").getValue(String.class);
+                            if (blockk.equals("YOU")) {
+                                database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).child("block").setValue("BOTH");
+                            } else if (blockk.equals("0")) {
+                                database.getReference().child("Friends").child(currid).child(phone).child("block").setValue("ME");
+                                database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).child("block").setValue("YOU");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             default:
                 //
         }
@@ -383,7 +535,7 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
 //                                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 //                                        String time = sdf.format(new Date());
                                         Calendar calendar = Calendar.getInstance();
-                                        Messages chat = new Messages(message, senderuid,calendar.getTimeInMillis());
+                                        Messages chat = new Messages(message, senderuid, calendar.getTimeInMillis());
                                         chat.setMessage("Photos");
                                         chat.setImage(urll);
                                         binding.msgInput.setText("");
@@ -473,12 +625,13 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
     public void Mesibo_onFile(Mesibo.MessageParams messageParams, Mesibo.FileInfo fileInfo) {
 
     }
+
     @Override
     public MesiboCall.CallProperties MesiboCall_OnIncoming(MesiboProfile mesiboProfile, boolean b) {
         MesiboCall.CallProperties cc;
         cc = MesiboCall.getInstance().createCallProperties(b);
 
-        String name  = mesiboProfile.address.toString();
+        String name = mesiboProfile.address.toString();
 
         database.getReference()
                 .child("Friends")
@@ -487,11 +640,10 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.exists())
-                        {
+                        if (snapshot.exists()) {
                             Friends name = snapshot.getValue(Friends.class);
 
-                            Callername =  name.getName();
+                            Callername = name.getName();
                         }
 //                        for (DataSnapshot snapshot1 : snapshot.getChildren()) {
 //                            Messages messages1 = snapshot1.getValue(Messages.class);
@@ -520,7 +672,7 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
 
     @Override
     public boolean MesiboCall_OnShowUserInterface(MesiboCall.Call call, MesiboCall.CallProperties callProperties) {
-      callProperties.runInBackground = true;
+        callProperties.runInBackground = true;
         return false;
     }
 
