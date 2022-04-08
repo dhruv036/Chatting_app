@@ -170,6 +170,21 @@ public class GroupInfoActivity extends AppCompatActivity {
             }
         });
     }
+    public  void update(View v)
+    {
+
+        ArrayList<Friendinfo> group1 = FeatureController.getInstance().getGroupFrdList();
+        for(Friendinfo friendinfo : group1){
+            FirebaseDatabase.getInstance().getReference().child("Groups").child(friendinfo.getFrduid()).child("MyGroups").child(gid).child("gName").setValue(binding.gname.getText().toString());
+            FirebaseDatabase.getInstance().getReference().child("Groups").child(friendinfo.getFrduid()).child("MyGroups").child(gid).child("gDiscpt").setValue(binding.gdis.getText().toString());
+        }
+        Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
+        binding.gname.setEnabled(false);
+        binding.gname.setBackground(null);
+        binding.gdis.setEnabled(false);
+        binding.gdis.setBackground(null);
+        binding.submit.setVisibility(View.GONE);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -181,6 +196,7 @@ public class GroupInfoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.edit)
         {
+            binding.submit.setVisibility(View.VISIBLE);
             binding.gname.setEnabled(true);
             binding.gname.setBackground(getDrawable(R.drawable.round_img));
             binding.gdis.setEnabled(true);

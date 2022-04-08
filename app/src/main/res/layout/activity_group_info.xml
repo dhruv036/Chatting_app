@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Activity.GroupInfoActivity">
 
-
-
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/showgicon"
         android:layout_width="0dp"
@@ -74,6 +72,20 @@
         android:textSize="@dimen/_10ssp"
         android:textStyle="bold"
         />
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/round3_red"
+            android:onClick="update"
+            android:text="  Update  "
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            />
+
 
     <TextView
         android:id="@+id/pcount"

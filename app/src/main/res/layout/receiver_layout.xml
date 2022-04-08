@@ -40,7 +40,17 @@
             android:fontFamily="@font/poppins_semibold"
             android:layout_height="wrap_content"
             android:visibility="gone" />
-
+        <ImageView
+            android:id="@+id/show"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_gravity="right"
+            android:visibility="gone"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_marginBottom="-40dp"
+            android:elevation="@dimen/_5sdp"
+            android:src="@drawable/dots_loading"
+            />
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/receiver_img"
             android:layout_width="200dp"

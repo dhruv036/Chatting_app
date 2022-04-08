@@ -28,7 +28,7 @@
         android:backgroundTint="@null"
         android:enabled="false"
         android:fontFamily="@font/poppins"
-        android:minHeight="@dimen/_48sdp"
+        android:minHeight="@dimen/_35sdp"
         android:text=""
         android:textAlignment="center"
         android:textColor="@color/grey"
@@ -47,6 +47,7 @@
         android:textAlignment="center"
         android:textSize="@dimen/_10ssp"
         android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@id/guideline1"
         app:layout_constraintRight_toRightOf="@id/guideline2"
         app:layout_constraintTop_toBottomOf="@id/myname" />

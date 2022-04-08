@@ -2,6 +2,7 @@ package com.example.hello.Adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,6 +19,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.example.hello.Activity.ViewImageActivity;
 import com.example.hello.FeatureController;
 import com.example.hello.Constants;
 import com.example.hello.Modal_Class.Messages;
@@ -129,7 +131,20 @@ public class MessageAdapter extends RecyclerView.Adapter {
         if (holder.getClass() == SenderViewHolder.class) {
             SenderViewHolder viewHolder = (SenderViewHolder) holder;
 
+            viewHolder.binding.show.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(m.getMessage().equals("Photos"))
+                    {
+                        Intent i= new Intent(context, ViewImageActivity.class);
+                        i.putExtra("url",m.getImage());
+                        context.startActivity(i);
+                    }
+                }
+            });
+
             if (m.getMessage().equals("Photos")) {
+                viewHolder.binding.show.setVisibility(View.VISIBLE);
                 viewHolder.binding.senderImg.setVisibility(View.VISIBLE);
                 viewHolder.binding.sender.setVisibility(View.GONE);
                 ((SenderViewHolder) holder).binding.status.setVisibility(View.VISIBLE);
@@ -150,6 +165,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
                         .skipMemoryCache(true)
                         .placeholder(R.drawable.place).apply(RequestOptions.centerInsideTransform()).into(viewHolder.binding.senderImg);
             } else {
+                viewHolder.binding.show.setVisibility(View.GONE);
                 viewHolder.binding.senderImg.setVisibility(View.GONE);
             }
             if (position == 0) {
@@ -307,7 +323,21 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
         } else {
             ReceiverViewHolder viewHolder = (ReceiverViewHolder) holder;
+
+            viewHolder.binding.show.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(m.getMessage().equals("Photos"))
+                    {
+                        Intent i= new Intent(context, ViewImageActivity.class);
+                        i.putExtra("url",m.getImage());
+                        context.startActivity(i);
+                    }
+                }
+            });
+
             if (m.getMessage().equals("Photos")) {
+                viewHolder.binding.show.setVisibility(View.VISIBLE);
                 viewHolder.binding.receiverImg.setVisibility(View.VISIBLE);
                 viewHolder.binding.receiver.setVisibility(View.GONE);
                 Glide.with(context).load(m.getImage()).placeholder(R.drawable.place)
@@ -319,7 +349,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 viewHolder.binding.date.setText(Constants.givedate(String.valueOf(arrayList.get(position).getTimestamp())));
             }
 
-
+//            viewHolder.binding.show.setVisibility(View.GONE);
             viewHolder.binding.receiver.setText(arrayList.get(position).getMessage());
             if (position == 0) {
                 viewHolder.binding.date.setVisibility(View.VISIBLE);
@@ -405,8 +435,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
                 }
             });
         }
-
-        //    Log.e("TAG", String.valueOf(arrayList.size()));
     }
 
     @Override
