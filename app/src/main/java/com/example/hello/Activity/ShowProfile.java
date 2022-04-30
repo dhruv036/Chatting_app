@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.scottyab.aescrypt.AESCrypt;
 
 import java.util.Calendar;
 
@@ -50,12 +52,13 @@ public class ShowProfile extends AppCompatActivity implements View.OnClickListen
     int bool = 0;
     SharedPreferences preferences;
     SharedPreferences.Editor preferenceseditor;
-    String imgresult= null;
+    String imgresult = null;
     int strt = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding  = ActivityShowProfileBinding.inflate(getLayoutInflater());
+        binding = ActivityShowProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         getSupportActionBar().setTitle("Profile");
@@ -65,7 +68,7 @@ public class ShowProfile extends AppCompatActivity implements View.OnClickListen
         storage = FirebaseStorage.getInstance();
         user = new User();
         mynumber = FeatureController.getInstance().getUser().getPhoneNo();
-        preferences = getSharedPreferences("Logincredentials",0);
+        preferences = getSharedPreferences("Logincredentials", 0);
         preferenceseditor = preferences.edit();
 
         getmyinfo();
@@ -94,7 +97,7 @@ public class ShowProfile extends AppCompatActivity implements View.OnClickListen
                             reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    User user =   FeatureController.getInstance().getUser();
+                                    User user = FeatureController.getInstance().getUser();
                                     user.setProfileImg(uri.toString());
                                     FeatureController.getInstance().setUser(user);
                                     FirebaseDatabase.getInstance().getReference("Users").child(mynumber).child("profileImg").setValue(uri.toString());
@@ -110,20 +113,18 @@ public class ShowProfile extends AppCompatActivity implements View.OnClickListen
         });
 
 
-
-
     }
-    public void ShowHidePass(View view){
 
-        if(view.getId()==R.id.togglepass){
+    public void ShowHidePass(View view) {
 
-            if(binding.showpassword.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())){
+        if (view.getId() == R.id.togglepass) {
+
+            if (binding.showpassword.getTransformationMethod().equals(PasswordTransformationMethod.getInstance())) {
                 binding.togglepass.setImageResource(R.drawable.hide);
 
                 //Show Password
                 binding.showpassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-            }
-            else{
+            } else {
                 binding.togglepass.setImageResource(R.drawable.eye);
 
                 //Hide Password
@@ -165,37 +166,49 @@ public class ShowProfile extends AppCompatActivity implements View.OnClickListen
                 break;
         }
     }
+
     public void update(View v) {
-        User user =   FeatureController.getInstance().getUser();
+        User user = FeatureController.getInstance().getUser();
 
         if (binding.showpassword.isEnabled()) {
-            user.setPass(binding.showpassword.getText().toString());
-            Toast.makeText(this, "pass", Toast.LENGTH_SHORT).show();
+            try {
+                String pass = AESCrypt.encrypt("123456ASDFGHJKL;", binding.showpassword.getText().toString());
+                Log.d("Encrypt", "onClick: " + pass);
+
+                user.setPass(pass);
+                Toast.makeText(this, "pass", Toast.LENGTH_SHORT).show();
+
+            } catch (Exception e) {
+
+            }
+
+
         } else {
             Toast.makeText(this, "no pass", Toast.LENGTH_SHORT).show();
         }
-        if(binding.showemail.isEnabled()){
+        if (binding.showemail.isEnabled()) {
             user.setEmail(binding.showemail.getText().toString());
-            Toast.makeText(this,"email",Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(this,"no email",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "email", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "no email", Toast.LENGTH_SHORT).show();
         }
-        if(binding.myname.isEnabled()){
+        if (binding.myname.isEnabled()) {
             user.setName(binding.myname.getText().toString());
-            Toast.makeText(this,"name",Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(this,"no name",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "name", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "no name", Toast.LENGTH_SHORT).show();
         }
         FeatureController.getInstance().setName(binding.myname.getText().toString());
         FeatureController.getInstance().setUser(user);
         FirebaseDatabase.getInstance().getReference("Users").child(mynumber).setValue(user);
-        Toast.makeText(this,"updated",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "updated", Toast.LENGTH_SHORT).show();
     }
 
     public void close(View v) {
         bool = 0;
         binding.frame.setVisibility(View.GONE);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -224,7 +237,15 @@ public class ShowProfile extends AppCompatActivity implements View.OnClickListen
                     user = snapshot.getValue(User.class);
                     binding.showemail.setText(user.getEmail());
                     binding.shownumber.setText(user.getPhoneNo());
-                    binding.showpassword.setText(user.getPass());
+                    try {
+                        String passen = AESCrypt.decrypt("123456ASDFGHJKL;", user.getPass());
+//                             Log.d(" Decrypt", "onClick: "+msgdec);
+                        Log.e(" Decrypt", "onClick: " + passen);
+                        binding.showpassword.setText(passen);
+                    } catch (Exception e) {
+
+                    }
+
                     binding.myname.setText(user.getName());
                     FeatureController.getInstance().setUser(user);
 
@@ -260,7 +281,7 @@ public class ShowProfile extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public boolean onSupportNavigateUp() {
-       startActivity(new Intent(ShowProfile.this,MainDashboard.class));
+        startActivity(new Intent(ShowProfile.this, MainDashboard.class));
         return super.onSupportNavigateUp();
     }
 }

@@ -59,6 +59,7 @@ public class FeatureController {
     }
 
     public New_user getNew_user() {
+
         return new_user;
     }
 

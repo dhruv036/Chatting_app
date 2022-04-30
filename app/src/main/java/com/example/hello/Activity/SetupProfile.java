@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.scottyab.aescrypt.AESCrypt;
 
 public class SetupProfile extends AppCompatActivity {
     ActivitySetupProfileBinding binding;
@@ -31,7 +33,7 @@ public class SetupProfile extends AppCompatActivity {
     FirebaseDatabase database;
     SharedPreferences preferences;
     FirebaseStorage storage;
-
+String pass;
     Uri selectedImg = null;
 
     @Override
@@ -62,6 +64,13 @@ public class SetupProfile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 binding.progressBar.setVisibility(View.VISIBLE);
+                try {
+                    pass = AESCrypt.encrypt("123456ASDFGHJKL;", FeatureController.getInstance().getNew_user().getPass());
+                    Log.d("Encrypt", "onClick: "+pass);
+
+                } catch (Exception e) {
+
+                }
 
                 if (selectedImg != null) {
                     StorageReference reference = storage.getReference().child("Profiles").child(auth.getUid());
@@ -75,7 +84,8 @@ public class SetupProfile extends AppCompatActivity {
                                         String imgUrl = uri.toString();
                                         String uid = auth.getUid();
 
-                                        User user = new User(uid, FeatureController.getInstance().getNew_user().getName(), imgUrl, phone, FeatureController.getInstance().getNew_user().getPass(), FeatureController.getInstance().getNew_user().getEmail());
+
+                                        User user = new User(uid, FeatureController.getInstance().getNew_user().getName(), imgUrl, phone, pass, FeatureController.getInstance().getNew_user().getEmail());
                                         database.getReference()
                                                 .child("Users")
                                                 .child(phone)
@@ -88,6 +98,7 @@ public class SetupProfile extends AppCompatActivity {
                                                         UserStatus status = new UserStatus( FeatureController.getInstance().getNew_user().getName(),imgUrl,101l);
                                                         database.getReference().child("Stories").child(uid).setValue(status);
                                                         FeatureController.getInstance().setUser(user);
+                                                        FeatureController.getInstance().setUid(uid);
                                                         FeatureController.getInstance().setName(FeatureController.getInstance().getNew_user().getName());
                                                         FeatureController.getInstance().setUserimg(imgUrl);
                                                         editor.putString("name", user.getName());
@@ -106,7 +117,7 @@ public class SetupProfile extends AppCompatActivity {
                     });
                 } else {
                     String uid = auth.getUid();
-                    User user = new User(uid, FeatureController.getInstance().getNew_user().getName(), "No image", phone, FeatureController.getInstance().getNew_user().getPhone(), FeatureController.getInstance().getNew_user().getEmail());
+                    User user = new User(uid, FeatureController.getInstance().getNew_user().getName(), "No image", phone, pass, FeatureController.getInstance().getNew_user().getEmail());
                     database.getReference()
                             .child("Users")
                             .child(phone)
@@ -117,6 +128,7 @@ public class SetupProfile extends AppCompatActivity {
                                     binding.progressBar.setVisibility(View.GONE);
                                     database.getReference().child("Groups").child(uid).child("tGroup").setValue(0);
                                     FeatureController.getInstance().setUser(user);
+                                    FeatureController.getInstance().setUid(uid);
                                     FeatureController.getInstance().setName(FeatureController.getInstance().getNew_user().getName());
                                     editor.putString("name", user.getName());
                                     editor.putString("phone", user.getPhoneNo());

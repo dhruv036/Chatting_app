@@ -17,6 +17,7 @@ import com.example.hello.Fragment.ChatFragment;
 import com.example.hello.Modal_Class.Friends;
 import com.example.hello.R;
 import com.example.hello.databinding.RowConversationBinding;
+import com.scottyab.aescrypt.AESCrypt;
 
 import java.util.ArrayList;
 
@@ -39,7 +40,16 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewholder
     @Override
     public void onBindViewHolder(@NonNull MyViewholder holder, int position) {
         Log.e("Activity","Chatadapter");
-        holder.binding.lastmsg.setText(arrayList.get(arrayList.size() - position - 1).getLastMsg());
+
+        try {
+            String msgdec = AESCrypt.decrypt("123456ASDFGHJKL;", arrayList.get(arrayList.size() - position - 1).getLastMsg());
+//                    Log.d(" Decrypt", "onClick: "+msgdec);
+            Log.d(" Decrypt", "onClick: " + msgdec);
+            holder.binding.lastmsg.setText(msgdec);
+        } catch (Exception e) {
+
+        }
+
        if(arrayList.size() > 0) {
            if ((arrayList.get(arrayList.size() - position - 1).getLastMsg() == null)) {
                ChatFragment fragment =new ChatFragment();

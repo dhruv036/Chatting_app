@@ -4,6 +4,9 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/a4a63293c54af266e1e2f32272c5e4b9/transformed/jetified-mediapicker-1.5.1/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a4a63293c54af266e1e2f32272c5e4b9/transformed/jetified-mediapicker-1.5.1/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a4a63293c54af266e1e2f32272c5e4b9/transformed/jetified-mediapicker-1.5.1/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/bf4a918df30ab30009af72753fef169a/transformed/jetified-mediapicker-1.5.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/bf4a918df30ab30009af72753fef169a/transformed/jetified-mediapicker-1.5.1/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/bf4a918df30ab30009af72753fef169a/transformed/jetified-mediapicker-1.5.1/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mesibo.api/mediapicker/1.5.1/fcdefed48974837fdaaf7d57c5d536a8f1df147a/mediapicker-1.5.1-javadoc.jar!/" />

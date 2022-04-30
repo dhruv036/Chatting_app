@@ -2,6 +2,7 @@ package com.example.hello.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.example.hello.FeatureController;
 import com.example.hello.Modal_Class.Group;
 import com.example.hello.R;
 import com.example.hello.databinding.RowConversationBinding;
+import com.scottyab.aescrypt.AESCrypt;
 
 import java.util.ArrayList;
 
@@ -39,7 +41,14 @@ public class AllGroupAdapter extends RecyclerView.Adapter<AllGroupAdapter.Myview
     @Override
     public void onBindViewHolder(@NonNull MyviewHolder holder, int position) {
         holder.binding.userName.setText(arrayList.get(arrayList.size() - position - 1).getgName());
-        holder.binding.lastmsg.setText(arrayList.get(arrayList.size() - position - 1).getgLastmsg());
+        try {
+            String msgdec = AESCrypt.decrypt("123456ASDFGHJKL;",arrayList.get(arrayList.size() - position - 1).getgLastmsg());
+//                    Log.d(" Decrypt", "onClick: "+msgdec);
+            Log.d(" Decrypt", "onClick: " + msgdec);
+            holder.binding.lastmsg.setText(msgdec);
+        } catch (Exception e) {
+
+        }
         Glide.with(context).load(arrayList.get(arrayList.size() - position - 1).getgIcon()).placeholder(R.drawable.placeholderr).into(holder.binding.userImg);
         holder.binding.time.setText(Constants.militohhmm(Long.valueOf(arrayList.get(arrayList.size() - position - 1).getGlstMsgTime())));
         holder.binding.layout.setOnClickListener(new View.OnClickListener() {

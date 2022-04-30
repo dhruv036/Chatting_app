@@ -514,7 +514,6 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
 
     @Override
     public boolean MesiboCall_OnShowUserInterface(MesiboCall.Call call, MesiboCall.CallProperties callProperties) {
-        callProperties.runInBackground = true;
         //call.getCallProperties().user.setImageUrl("https://firebasestorage.googleapis.com/v0/b/hello-55d22.appspot.com/o/Profiles%2FI0xauDekdjMSf7Da1F3xx5cGWEo1?alt=media&token=85fbbed0-4b29-4d5e-b4ee-3e877b65e5cb");
         return false;
     }

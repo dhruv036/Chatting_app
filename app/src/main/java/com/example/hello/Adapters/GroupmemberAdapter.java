@@ -49,22 +49,21 @@ public class GroupmemberAdapter extends RecyclerView.Adapter<GroupmemberAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull MyviewHolder holder, int position) {
-          int size =gMembersnew.size();
+        int size = gMembersnew.size();
 
-        if (gMembersnew.get(size-position-1) != null) {
-            
-            if(gMembersnew.get(size-position-1).getFrduid().equals(FeatureController.getInstance().getAdminuid()))
-            {
+        if (gMembersnew.get(size - position - 1) != null) {
+
+            if (gMembersnew.get(size - position - 1).getFrduid().equals(FeatureController.getInstance().getAdminuid())) {
                 holder.binding.admin.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 holder.binding.admin.setVisibility(View.GONE);
             }
-         
-            holder.binding.userName.setText(gMembersnew.get(size-position-1).getFrdname());
+
+            holder.binding.userName.setText(gMembersnew.get(size - position - 1).getFrdname());
             holder.binding.mylay.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    String uid = gMembersnew.get(size-position-1).getFrduid();
+                    String uid = gMembersnew.get(size - position - 1).getFrduid();
                     if (FeatureController.getInstance().getIsadmin().equals("1")) {
                         View view2 = LayoutInflater.from(context).inflate(R.layout.groupmemberupdate, null);
                         GroupmemberupdateBinding binding2 = GroupmemberupdateBinding.bind(view2);
@@ -76,8 +75,7 @@ public class GroupmemberAdapter extends RecyclerView.Adapter<GroupmemberAdapter.
                         binding2.makegadmin.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                for (Friendinfo info :gMembersnew)
-                                {
+                                for (Friendinfo info : gMembersnew) {
                                     FirebaseDatabase.getInstance().getReference().child("Groups").child(info.getFrduid()).child("MyGroups").child(FeatureController.getInstance().getG_id()).child("adminuid").setValue(uid);
                                 }
                                 FirebaseDatabase.getInstance().getReference().child("Groups").child(uid).child("MyGroups").child(FeatureController.getInstance().getG_id()).child("gIsadmin").setValue("1");
@@ -97,8 +95,7 @@ public class GroupmemberAdapter extends RecyclerView.Adapter<GroupmemberAdapter.
                                             for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                                                 Friendinfo friendinfo = snapshot1.getValue(Friendinfo.class);
                                                 if (friendinfo.getFrduid().equals(uid)) {
-                                                    for (Friendinfo info :gMembersnew)
-                                                    {
+                                                    for (Friendinfo info : gMembersnew) {
                                                         //? set in featurecontroller also
                                                         FirebaseDatabase.getInstance().getReference().child("Groups").child(info.getFrduid()).child("MyGroups").child(FeatureController.getInstance().getG_id()).child("gMembers").child(snapshot1.getKey()).getRef().removeValue();
                                                     }
@@ -125,7 +122,7 @@ public class GroupmemberAdapter extends RecyclerView.Adapter<GroupmemberAdapter.
                 }
             });
             if (context != null) {
-                FirebaseDatabase.getInstance().getReference().child("Users").child(gMembersnew.get(size-position-1).getFrdphn()).addListenerForSingleValueEvent(new ValueEventListener() {
+                FirebaseDatabase.getInstance().getReference().child("Users").child(gMembersnew.get(size - position - 1).getFrdphn()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {

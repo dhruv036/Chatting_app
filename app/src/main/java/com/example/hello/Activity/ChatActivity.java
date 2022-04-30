@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +42,7 @@ import com.google.firebase.storage.UploadTask;
 import com.mesibo.api.Mesibo;
 import com.mesibo.api.MesiboProfile;
 import com.mesibo.calls.api.MesiboCall;
+import com.scottyab.aescrypt.AESCrypt;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,9 +50,9 @@ import java.util.HashMap;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
-public class ChatActivity extends AppCompatActivity implements Mesibo.ConnectionListener, Mesibo.MessageListener, MesiboCall.IncomingListener {
+public class ChatActivity extends AppCompatActivity implements Mesibo.ConnectionListener {
     ActivityChatBinding binding;
-
+    String message;
     String senderuid;
     FirebaseAuth auth;
     FirebaseDatabase database;
@@ -62,7 +64,8 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
     FirebaseStorage storage;
     String currid = "";
     String phone;
-    String block2 ;
+    String block2;
+    String token;
     String block;
     String isblock;
     String SenderRoom, ReceiverRoom;
@@ -73,8 +76,8 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //     setmiso();
 
+        token = FeatureController.getInstance().getMy_mesibo_token();
         receiveruid = getIntent().getStringExtra("Uid");
         FeatureController.getInstance().setReceiveruid(receiveruid);
         username = getIntent().getStringExtra("username");
@@ -104,6 +107,7 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
         SenderRoom = senderuid + receiveruid;
         ReceiverRoom = receiveruid + senderuid;
 
+        setmiso();
 
         binding.back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,10 +126,10 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
                     if (!status.isEmpty()) {
                         if (status.equals("Typing...") || status.equals("Online")) {
                             binding.statuss.setVisibility(View.VISIBLE);
-                            binding.statuss.setText(status);
+//                            binding.statuss.setText(status);
                         } else {
                             binding.statuss.setText(Constants.militotimestap(status));
-                            binding.statuss.setVisibility(View.VISIBLE);
+//                            binding.statuss.setVisibility(View.VISIBLE);
                         }
                     }
                 }
@@ -174,8 +178,18 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
         binding.sendBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String message = binding.msgInput.getText().toString();
+                message = binding.msgInput.getText().toString();
 
+                try {
+                    message = AESCrypt.encrypt("123456ASDFGHJKL;", message);
+//                    Log.d("Encrypt", "onClick: "+msgenc);
+
+//                    String msgdec  = AESCrypt.decrypt("JJKK",msgenc);
+//                    Log.d(" Decrypt", "onClick: "+msgdec);
+
+                } catch (Exception e) {
+
+                }
                 database.getReference().child("Friends").child(currid).child(phone).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -355,7 +369,7 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
 
     }
 
-//    private void setmiso() {
+    //    private void setmiso() {
 //        Mesibo api = Mesibo.getInstance();
 //        api.init(getApplicationContext());
 //        Mesibo.addListener(this);
@@ -376,13 +390,24 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
         switch (item.getItemId()) {
             case R.id.voice:
                 //call to  user
-                Toast.makeText(ChatActivity.this, "Voice Calling", LENGTH_SHORT).show();
-                MesiboCall.getInstance().callUi(ChatActivity.this, phone, false);
+                if (isLoggedIn()) {
+                    Toast.makeText(ChatActivity.this, "Voice Calling", LENGTH_SHORT).show();
+                    Log.e("voice", " " + phone);
+                    MesiboCall.getInstance().callUi(ChatActivity.this, phone, false);
+                } else {
+                    Toast.makeText(ChatActivity.this, "Connecting", LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.vvoice:
                 // Video call to user
-                Toast.makeText(ChatActivity.this, "Video Calling", LENGTH_SHORT).show();
-                MesiboCall.getInstance().callUi(ChatActivity.this, phone, true);
+                if (isLoggedIn()) {
+                    Toast.makeText(ChatActivity.this, "Video Calling", LENGTH_SHORT).show();
+                    Log.e("video", " " + phone);
+                    MesiboCall.getInstance().callUi(ChatActivity.this, phone, true);
+                } else {
+                    Toast.makeText(ChatActivity.this, "Connecting", LENGTH_SHORT).show();
+                }
                 break;
             case R.id.block:
 //                database.getReference().child("")
@@ -488,7 +513,6 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
                                     reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                         @Override
                                         public void onSuccess(Uri uri) {
-
 
 
                                             String urll = uri.toString();
@@ -613,20 +637,11 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
 
     @Override
     public void Mesibo_onConnectionStatus(int i) {
-
-
-    }
-
-    @Override
-    public boolean Mesibo_onMessage(Mesibo.MessageParams messageParams, byte[] bytes) {
-        return false;
-    }
-
-
-    @Override
-    public void Mesibo_onMessageStatus(Mesibo.MessageParams messageParams) {
+        binding.statuss.setVisibility(View.VISIBLE);
+        binding.statuss.setText("Connection: " + i);
 
     }
+
 
     boolean isLoggedIn() {
         if (Mesibo.STATUS_ONLINE == Mesibo.getConnectionStatus()) return true;
@@ -640,77 +655,22 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
         toast.show();
     }
 
-    @Override
-    public void Mesibo_onActivity(Mesibo.MessageParams messageParams, int i) {
 
+    private void setmiso() {
+        Mesibo api = Mesibo.getInstance();
+        api.init(getApplicationContext());
+
+        Mesibo.addListener(this);
+        Mesibo.setAccessToken(token);
+        Mesibo.setDatabase("mydb", 0);
+        Mesibo.start();
+        //Toast.makeText(getApplicationContext(), "ds", Toast.LENGTH_SHORT).show();
+        /* initialize call with custom title */
+        MesiboCall.getInstance().init(this);
+        MesiboCall.CallProperties cp = MesiboCall.getInstance().createCallProperties(true);
+        cp.ui.title = "First App";
+        MesiboCall.getInstance().setDefaultUiProperties(cp.ui);
     }
 
-    @Override
-    public void Mesibo_onLocation(Mesibo.MessageParams messageParams, Mesibo.Location location) {
 
-    }
-
-    @Override
-    public void Mesibo_onFile(Mesibo.MessageParams messageParams, Mesibo.FileInfo fileInfo) {
-
-    }
-
-    @Override
-    public MesiboCall.CallProperties MesiboCall_OnIncoming(MesiboProfile mesiboProfile, boolean b) {
-        MesiboCall.CallProperties cc;
-        cc = MesiboCall.getInstance().createCallProperties(b);
-
-        String name = mesiboProfile.address.toString();
-
-        database.getReference()
-                .child("Friends")
-                .child(currid)
-                .child(name)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            Friends name = snapshot.getValue(Friends.class);
-
-                            Callername = name.getName();
-                        }
-//                        for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-//                            Messages messages1 = snapshot1.getValue(Messages.class);
-//                            messages1.setMessageId(snapshot1.getKey());
-//                            messages.add(messages1);
-//                        }
-//                        adapter.notifyDataSetChanged();
-//                        binding.chatrecycle.smoothScrollToPosition(binding.chatrecycle.getAdapter().getItemCount());
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-        toast(name);
-
-        if (cc.video.enabled) {
-            cc.video.bitrate = 3000; // Set Maximum video bitrate
-            cc.video.codec = MesiboCall.MESIBOCALL_CODEC_H265;
-        }
-
-        return cc;
-    }
-
-    @Override
-    public boolean MesiboCall_OnShowUserInterface(MesiboCall.Call call, MesiboCall.CallProperties callProperties) {
-        callProperties.runInBackground = true;
-        return false;
-    }
-
-    @Override
-    public void MesiboCall_OnError(MesiboCall.CallProperties callProperties, int i) {
-    }
-
-    @Override
-    public boolean MesiboCall_onNotify(int i, MesiboProfile mesiboProfile, boolean b) {
-        return false;
-    }
 }

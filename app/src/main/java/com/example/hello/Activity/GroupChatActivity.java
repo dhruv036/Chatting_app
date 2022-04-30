@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.scottyab.aescrypt.AESCrypt;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,13 +37,15 @@ import java.util.Calendar;
 public class GroupChatActivity extends AppCompatActivity {
     ActivityGroupChatBinding binding;
     String gid;
+
+    String message;
     String senderuid;
     FirebaseDatabase database;
     ArrayList<Friendinfo> friendinfos;
     FirebaseStorage storage;
     GroupMessageAdapter adapter;
-    String gname ="";
-    String gimg ="";
+    String gname = "";
+    String gimg = "";
     ArrayList<Messages> messages;
 
     @Override
@@ -50,7 +53,7 @@ public class GroupChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityGroupChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        gname =  getIntent().getStringExtra("g_name");
+        gname = getIntent().getStringExtra("g_name");
         setSupportActionBar(binding.toolbar);
         // setSupportActionBar(binding.toolbar);
         gid = getIntent().getStringExtra("G_id");
@@ -66,7 +69,7 @@ public class GroupChatActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         senderuid = FeatureController.getInstance().getUid(); // my uid
 
-        messages =  new ArrayList<>();
+        messages = new ArrayList<>();
 
         binding.back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,13 +81,13 @@ public class GroupChatActivity extends AppCompatActivity {
         binding.info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(GroupChatActivity.this,GroupInfoActivity.class);
-                i.putExtra("g_id",gid);
+                Intent i = new Intent(GroupChatActivity.this, GroupInfoActivity.class);
+                i.putExtra("g_id", gid);
                 startActivity(i);
             }
         });
 
-        adapter = new GroupMessageAdapter(this,messages);
+        adapter = new GroupMessageAdapter(this, messages);
         binding.chatrecycle.setLayoutManager(new LinearLayoutManager(this));
         binding.chatrecycle.setAdapter(adapter);
 
@@ -92,15 +95,15 @@ public class GroupChatActivity extends AppCompatActivity {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.exists())
-                        {    messages.clear();
+                        if (snapshot.exists()) {
+                            messages.clear();
                             for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                                 Messages messages1 = snapshot1.getValue(Messages.class);
                                 messages1.setMessageId(snapshot1.getKey());
-                               messages.add(messages1);
+                                messages.add(messages1);
                             }
                             adapter.notifyDataSetChanged();
-                            binding.chatrecycle.smoothScrollToPosition( binding.chatrecycle.getAdapter().getItemCount());
+                            binding.chatrecycle.smoothScrollToPosition(binding.chatrecycle.getAdapter().getItemCount());
                         }
                     }
 
@@ -113,13 +116,21 @@ public class GroupChatActivity extends AppCompatActivity {
         binding.sendImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String message = binding.msgInput.getText().toString();
+                message = binding.msgInput.getText().toString();
+                try {
+                    message = AESCrypt.encrypt("123456ASDFGHJKL;", message);
+//                    Log.d("Encrypt", "onClick: "+msgenc);
+
+                } catch (Exception e) {
+
+                }
+
                 Calendar calendar = Calendar.getInstance();
                 Messages chat = new Messages(message, senderuid, calendar.getTimeInMillis());
                 chat.setPhoneno(FeatureController.getInstance().getUser().getPhoneNo());
                 binding.msgInput.setText("");
                 String key = database.getReference().push().getKey();
-                friendinfos  = FeatureController.getInstance().getGroupFrdList();
+                friendinfos = FeatureController.getInstance().getGroupFrdList();
                 for (Friendinfo friendinfo : friendinfos) {
 
                     FirebaseDatabase.getInstance().getReference()
@@ -177,7 +188,7 @@ public class GroupChatActivity extends AppCompatActivity {
                                 chat.setPhoneno(FeatureController.getInstance().getUser().getPhoneNo());
                                 binding.msgInput.setText("");
                                 String key = database.getReference().push().getKey();
-                                friendinfos  = FeatureController.getInstance().getGroupFrdList();
+                                friendinfos = FeatureController.getInstance().getGroupFrdList();
                                 for (Friendinfo friendinfo : friendinfos) {
                                     FirebaseDatabase.getInstance().getReference()
                                             .child("Groups")

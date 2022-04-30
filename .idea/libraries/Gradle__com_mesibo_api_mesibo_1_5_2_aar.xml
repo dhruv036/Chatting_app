@@ -4,6 +4,9 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/b7809ee6f2071671fb24c052e2c2fda9/transformed/jetified-mesibo-1.5.2/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b7809ee6f2071671fb24c052e2c2fda9/transformed/jetified-mesibo-1.5.2/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b7809ee6f2071671fb24c052e2c2fda9/transformed/jetified-mesibo-1.5.2/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/3f20a9b3bb0a6906c3d47e834422585c/transformed/jetified-mesibo-1.5.2/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/3f20a9b3bb0a6906c3d47e834422585c/transformed/jetified-mesibo-1.5.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/3f20a9b3bb0a6906c3d47e834422585c/transformed/jetified-mesibo-1.5.2/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mesibo.api/mesibo/1.5.2/932d00d0ce6ddcb0253cb0c265caf1b4b119f9c6/mesibo-1.5.2-javadoc.jar!/" />

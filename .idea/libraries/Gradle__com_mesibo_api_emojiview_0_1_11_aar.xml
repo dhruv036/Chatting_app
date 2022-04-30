@@ -4,6 +4,9 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/7a68051c04e777d0e3821e19e217d5f4/transformed/jetified-emojiview-0.1.11/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/7a68051c04e777d0e3821e19e217d5f4/transformed/jetified-emojiview-0.1.11/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/7a68051c04e777d0e3821e19e217d5f4/transformed/jetified-emojiview-0.1.11/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/05db07f5f00c77394daed1ad81714272/transformed/jetified-emojiview-0.1.11/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/05db07f5f00c77394daed1ad81714272/transformed/jetified-emojiview-0.1.11/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/05db07f5f00c77394daed1ad81714272/transformed/jetified-emojiview-0.1.11/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mesibo.api/emojiview/0.1.11/29a15d27cf87cd62ebbc7fe7ed3970997c42e54a/emojiview-0.1.11-javadoc.jar!/" />

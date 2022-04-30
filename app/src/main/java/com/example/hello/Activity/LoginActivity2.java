@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,11 +20,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.scottyab.aescrypt.AESCrypt;
 
 public class LoginActivity2 extends AppCompatActivity {
     ActivityLogin2Binding binding;
     SharedPreferences preferences;
-
+    String pass;
+    String passen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +39,28 @@ public class LoginActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String username = "+91"+binding.edtName.getText().toString();
-                String pass = binding.edtPass.getText().toString();
+
+                pass = binding.edtPass.getText().toString();
+
+
 
                 FirebaseDatabase.getInstance().getReference("Users").child(username).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                         if(snapshot.exists())
                         {
                             Toast.makeText(LoginActivity2.this, "User Exists", Toast.LENGTH_SHORT).show();
                             User user = snapshot.getValue(User.class);
-                            if(user.getPass().equals(pass))
+                            try {
+                                passen = AESCrypt.decrypt("123456ASDFGHJKL;",user.getPass());
+//                             Log.d(" Decrypt", "onClick: "+msgdec);
+                                Log.e(" Decrypt", "onClick: " + pass);
+
+                            } catch (Exception e) {
+
+                            }
+                            if(passen.equals(pass))
                             {
                                 FeatureController.getInstance().setUid(user.getUid());
                                 FeatureController.getInstance().setUser(user);

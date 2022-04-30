@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,6 +40,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.scottyab.aescrypt.AESCrypt;
 
 import java.util.ArrayList;
 
@@ -181,7 +183,15 @@ public class GroupMessageAdapter extends RecyclerView.Adapter {
                 }
             }
 
-            viewHolder.binding.sender.setText(m.getMessage());
+            try {
+                String msgdec = AESCrypt.decrypt("123456ASDFGHJKL;", m.getMessage());
+//                    Log.d(" Decrypt", "onClick: "+msgdec);
+                Log.d(" Decrypt", "onClick: " + msgdec);
+                viewHolder.binding.sender.setText(msgdec);
+            } catch (Exception e) {
+
+            }
+
 
             if (m.getFeeling() >= 0) {
                 viewHolder.binding.imageView2.setImageResource(reactions[m.getFeeling()]);
@@ -346,7 +356,15 @@ public class GroupMessageAdapter extends RecyclerView.Adapter {
 
             }
 
-            viewHolder.binding.receiver.setText(arrayList.get(position).getMessage());
+            try {
+                String msgdec = AESCrypt.decrypt("123456ASDFGHJKL;",arrayList.get(position).getMessage());
+//                    Log.d(" Decrypt", "onClick: "+msgdec);
+                Log.d(" Decrypt", "onClick: " + msgdec);
+                viewHolder.binding.receiver.setText(msgdec);
+            } catch (Exception e) {
+
+            }
+
 
             if (position == 0) {
                 viewHolder.binding.date.setVisibility(View.VISIBLE);

@@ -6,10 +6,13 @@ import com.google.gson.annotations.SerializedName;
 public class User {
     @SerializedName("uid")
     @Expose
-    public Integer uid;
+    private Integer uid;
+    @SerializedName("address")
+    @Expose
+    private String address;
     @SerializedName("token")
     @Expose
-    public String token;
+    private String token;
 
     public Integer getUid() {
         return uid;
@@ -17,6 +20,14 @@ public class User {
 
     public void setUid(Integer uid) {
         this.uid = uid;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getToken() {

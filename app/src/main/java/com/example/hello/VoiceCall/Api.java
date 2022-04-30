@@ -6,7 +6,7 @@ import retrofit2.http.Query;
 
 public interface Api {
 
-    @GET("api.php?")
+    @GET("backend?")
     Call<Result> getUser(
             @Query("token") String token,
             @Query("op") String operation,

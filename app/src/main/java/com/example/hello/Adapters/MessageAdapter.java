@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +33,7 @@ import com.github.pgreze.reactions.ReactionPopup;
 import com.github.pgreze.reactions.ReactionsConfig;
 import com.github.pgreze.reactions.ReactionsConfigBuilder;
 import com.google.firebase.database.FirebaseDatabase;
+import com.scottyab.aescrypt.AESCrypt;
 
 
 import java.util.ArrayList;
@@ -134,10 +136,9 @@ public class MessageAdapter extends RecyclerView.Adapter {
             viewHolder.binding.show.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(m.getMessage().equals("Photos"))
-                    {
-                        Intent i= new Intent(context, ViewImageActivity.class);
-                        i.putExtra("url",m.getImage());
+                    if (m.getMessage().equals("Photos")) {
+                        Intent i = new Intent(context, ViewImageActivity.class);
+                        i.putExtra("url", m.getImage());
                         context.startActivity(i);
                     }
                 }
@@ -171,18 +172,26 @@ public class MessageAdapter extends RecyclerView.Adapter {
             if (position == 0) {
                 viewHolder.binding.date.setVisibility(View.VISIBLE);
                 viewHolder.binding.date.setText(Constants.givedate(String.valueOf(arrayList.get(position).getTimestamp())));
-            }else{
-                if(Constants.checktwodate(String.valueOf(arrayList.get(position-1).getTimestamp()), String.valueOf(arrayList.get(position).getTimestamp())).equals("same"))
-                {
+            } else {
+                if (Constants.checktwodate(String.valueOf(arrayList.get(position - 1).getTimestamp()), String.valueOf(arrayList.get(position).getTimestamp())).equals("same")) {
                     viewHolder.binding.date.setVisibility(View.GONE);
                     viewHolder.binding.date.setText("");
-                }else {
+                } else {
                     viewHolder.binding.date.setText(Constants.givedate(String.valueOf(arrayList.get(position).getTimestamp())));
                     viewHolder.binding.date.setVisibility(View.VISIBLE);
                 }
             }
 
-            viewHolder.binding.sender.setText(arrayList.get(position).getMessage());
+            try {
+                String msgdec = AESCrypt.decrypt("123456ASDFGHJKL;", arrayList.get(position).getMessage());
+
+
+                Log.d(" Decrypt", "onClick: " + msgdec);
+                viewHolder.binding.sender.setText(msgdec);
+            } catch (Exception e) {
+
+            }
+
 
             if (m.getFeeling() >= 0) {
                 viewHolder.binding.imageView2.setImageResource(reactions[m.getFeeling()]);
@@ -298,7 +307,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
                                             .child("lastMsgTime")
                                             .setValue(arrayList.get(arrayList.size() - 2).getTimestamp());
                                     // second last
-                                }else {
+                                } else {
                                     FirebaseDatabase.getInstance().getReference()
                                             .child("Friends")
                                             .child(FeatureController.getInstance().getUid())
@@ -327,10 +336,9 @@ public class MessageAdapter extends RecyclerView.Adapter {
             viewHolder.binding.show.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(m.getMessage().equals("Photos"))
-                    {
-                        Intent i= new Intent(context, ViewImageActivity.class);
-                        i.putExtra("url",m.getImage());
+                    if (m.getMessage().equals("Photos")) {
+                        Intent i = new Intent(context, ViewImageActivity.class);
+                        i.putExtra("url", m.getImage());
                         context.startActivity(i);
                     }
                 }
@@ -350,16 +358,25 @@ public class MessageAdapter extends RecyclerView.Adapter {
             }
 
 //            viewHolder.binding.show.setVisibility(View.GONE);
-            viewHolder.binding.receiver.setText(arrayList.get(position).getMessage());
+
+
+            try {
+                String msgdec = AESCrypt.decrypt("123456ASDFGHJKL;", arrayList.get(position).getMessage());
+//                    Log.d(" Decrypt", "onClick: "+msgdec);
+                Log.d(" Decrypt", "onClick: " + msgdec);
+                viewHolder.binding.receiver.setText(msgdec);
+            } catch (Exception e) {
+
+            }
+
             if (position == 0) {
                 viewHolder.binding.date.setVisibility(View.VISIBLE);
                 viewHolder.binding.date.setText(Constants.givedate(String.valueOf(arrayList.get(position).getTimestamp())));
-            }else{
-                if(Constants.checktwodate(String.valueOf(arrayList.get(position-1).getTimestamp()), String.valueOf(arrayList.get(position).getTimestamp())).equals("same"))
-                {
+            } else {
+                if (Constants.checktwodate(String.valueOf(arrayList.get(position - 1).getTimestamp()), String.valueOf(arrayList.get(position).getTimestamp())).equals("same")) {
                     viewHolder.binding.date.setVisibility(View.GONE);
                     viewHolder.binding.date.setText("");
-                }else {
+                } else {
                     viewHolder.binding.date.setText(Constants.givedate(String.valueOf(arrayList.get(position).getTimestamp())));
                     viewHolder.binding.date.setVisibility(View.VISIBLE);
                 }
