@@ -55,12 +55,12 @@ public class LoginActivity2 extends AppCompatActivity {
                             try {
                                 passen = AESCrypt.decrypt("123456ASDFGHJKL;",user.getPass());
 //                             Log.d(" Decrypt", "onClick: "+msgdec);
-                                Log.e(" Decrypt", "onClick: " + pass);
+                                Log.e(" Decrypt", "onClick: " + passen);
 
                             } catch (Exception e) {
 
                             }
-                            if(passen.equals(pass))
+                            if(passen.equals(pass) && passen!= null)
                             {
                                 FeatureController.getInstance().setUid(user.getUid());
                                 FeatureController.getInstance().setUser(user);

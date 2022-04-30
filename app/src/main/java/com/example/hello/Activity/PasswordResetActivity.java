@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -17,9 +18,11 @@ import com.example.hello.databinding.ActivityPasswordResetBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.FirebaseDatabase;
+import com.scottyab.aescrypt.AESCrypt;
 
 public class PasswordResetActivity extends AppCompatActivity {
 ActivityPasswordResetBinding binding;
+String pass="";
 String phone;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +36,14 @@ String phone;
                 if (binding.edtPass.getText() != null && !binding.edtPass.getText().toString().equals("")) {
                     if (binding.edtPass2.getText() != null && !binding.edtPass2.getText().toString().equals("")) {
                         if (binding.edtPass.getText().toString().equals(binding.edtPass2.getText().toString())) {
-                            FirebaseDatabase.getInstance().getReference().child("Users").child(phone).child("pass").setValue(binding.edtPass.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            try {
+                                pass = AESCrypt.encrypt("123456ASDFGHJKL;", binding.edtPass.getText().toString());
+                                Log.d("Encrypt", "onClick: "+pass);
+
+                            } catch (Exception e) {
+
+                            }
+                            FirebaseDatabase.getInstance().getReference().child("Users").child(phone).child("pass").setValue(pass).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful())
