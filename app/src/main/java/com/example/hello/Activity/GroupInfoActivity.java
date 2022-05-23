@@ -40,7 +40,7 @@ public class GroupInfoActivity extends AppCompatActivity {
     ActivityGroupInfoBinding binding;
     String gid;
     ArrayList<String> list = new ArrayList<>();
-    Group groupp = new Group();
+//    Group groupp = new Group();
     ArrayList<Friends> myfriends = FeatureController.getInstance().getMyfriends();
     GroupmemberAdapter groupmemberAdapter;
 

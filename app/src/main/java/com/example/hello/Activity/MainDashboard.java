@@ -40,6 +40,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 import com.mesibo.api.Mesibo;
 import com.mesibo.api.MesiboProfile;
@@ -58,13 +59,16 @@ import static android.widget.Toast.LENGTH_SHORT;
 import static com.example.hello.R.drawable.ic_baseline_camera_alt_24;
 import static com.example.hello.R.drawable.ic_baseline_person_add_24;
 
+import org.json.JSONObject;
+
 public class MainDashboard extends AppCompatActivity implements MesiboCall.IncomingListener, Mesibo.ConnectionListener, Mesibo.MessageListener {
     ActivityMainDashboardBinding binding;
     private AlarmManager alarmManager;
     private Calendar calendar;
     private PendingIntent pendingIntent;
-    String token = "hh3ef9cu5npwhvvo9b8rsse5n60wcn4rsrjp9b6xm54wqh16amxgdzplfe8fgoyu";
+    String token = "36nwc4ltd71hkgr418oruoviy3c20lbtt46kzsc257ulusbt1ubl53i7yadsihvk";
     String op = "useradd";
+
     Animation aniup;
     FirebaseDatabase database;
     //    ArrayList<User> users = new ArrayList<>();
@@ -122,7 +126,10 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
 
 
         }
-        setuser();
+//        setuser();
+        String j = "1ff0c425a27df3e663ee4b397d2773f1b53063ab7389ebc48eee400534jb89bdbd99";
+        FeatureController.getInstance().setMy_mesibo_token(j);
+
         binding.mydp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -385,11 +392,12 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
     public void setuser() {
         Api api = ApiClient.getClient().create(Api.class);
         Call<Result> call = api.getUser(token, op, "com.example.hello", FeatureController.getInstance().getCurr_user_phone());
-
+//        Log.e("TAG", "Channel List Input : "+new Gson().toJson(call));
         call.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
                 if (response.body().getOp().equals("useradd")) {
+                    Log.e("TAG", "Channel List Response : "+new Gson().toJson(response.body()));
                     if (response.body().getResult() == true) {
                         FeatureController.getInstance().setMy_mesibo_token(response.body().getUser().getToken());
                         Toast.makeText(MainDashboard.this, response.body().getUser().getToken().toString(), Toast.LENGTH_SHORT).show();
@@ -503,7 +511,7 @@ public class MainDashboard extends AppCompatActivity implements MesiboCall.Incom
         api.init(getApplicationContext());
         Mesibo.addListener(this);
         Mesibo.setAccessToken(FeatureController.getInstance().getMy_mesibo_token());
-        Mesibo.setDatabase("ChatApp", 0);
+        Mesibo.setDatabase("HelloApp", 0);
         Mesibo.start();
         MesiboCall.getInstance().init(this);
         MesiboCall.CallProperties cp = MesiboCall.getInstance().createCallProperties(true);

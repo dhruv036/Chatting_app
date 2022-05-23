@@ -61,7 +61,7 @@
         android:backgroundTint="@null"
         android:cursorVisible="true"
         android:fontFamily="@font/poppins"
-        android:inputType="phone"
+        android:inputType="number"
         android:minWidth="@dimen/_50sdp"
         android:minHeight="48dp"
         android:paddingLeft="@dimen/_10sdp"

@@ -1,9 +1,6 @@
 <component name="libraryTable">
   <library name="Gradle: com.mesibo.api:ui:1.5.2@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/0e51f66d7622351e3055cee7c8040246/transformed/jetified-ui-1.5.2/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0e51f66d7622351e3055cee7c8040246/transformed/jetified-ui-1.5.2/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0e51f66d7622351e3055cee7c8040246/transformed/jetified-ui-1.5.2/AndroidManifest.xml" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/30589959d51c2cb986cbbd606c03ffa8/transformed/jetified-ui-1.5.2/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/30589959d51c2cb986cbbd606c03ffa8/transformed/jetified-ui-1.5.2/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/30589959d51c2cb986cbbd606c03ffa8/transformed/jetified-ui-1.5.2/AndroidManifest.xml" />

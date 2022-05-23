@@ -78,11 +78,14 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
 
 
         token = FeatureController.getInstance().getMy_mesibo_token();
+        Log.e("token",token);
         receiveruid = getIntent().getStringExtra("Uid");
+
         FeatureController.getInstance().setReceiveruid(receiveruid);
         username = getIntent().getStringExtra("username");
         String pimg = getIntent().getStringExtra("profileimg");
         phone = getIntent().getStringExtra("phoneno");
+        Log.e("phone",phone);
         isblock = getIntent().getStringExtra("isblock");
         FeatureController.getInstance().setReceiverpho(phone);
         setSupportActionBar(binding.toolbar);
@@ -468,7 +471,6 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
     protected void onPause() {
         super.onPause();
         Calendar calendar = Calendar.getInstance();
-
         database.getReference().child("Presence").child(currid).setValue(String.valueOf(calendar.getTimeInMillis()));
     }
 
@@ -662,14 +664,15 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
 
         Mesibo.addListener(this);
         Mesibo.setAccessToken(token);
-        Mesibo.setDatabase("mydb", 0);
-        Mesibo.start();
+        Mesibo.setDatabase("mesibo.db", 0);
+
         //Toast.makeText(getApplicationContext(), "ds", Toast.LENGTH_SHORT).show();
         /* initialize call with custom title */
         MesiboCall.getInstance().init(this);
         MesiboCall.CallProperties cp = MesiboCall.getInstance().createCallProperties(true);
         cp.ui.title = "First App";
         MesiboCall.getInstance().setDefaultUiProperties(cp.ui);
+        Mesibo.start();
     }
 
 

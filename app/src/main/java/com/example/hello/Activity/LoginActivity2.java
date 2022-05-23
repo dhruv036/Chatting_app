@@ -42,48 +42,50 @@ public class LoginActivity2 extends AppCompatActivity {
 
                 pass = binding.edtPass.getText().toString();
 
+                if (binding.edtName.getText() != null && binding.edtName.getText().toString().length() == 10) {
 
 
-                FirebaseDatabase.getInstance().getReference("Users").child(username).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    FirebaseDatabase.getInstance().getReference("Users").child(username).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        if(snapshot.exists())
-                        {
-                            Toast.makeText(LoginActivity2.this, "User Exists", Toast.LENGTH_SHORT).show();
-                            User user = snapshot.getValue(User.class);
-                            try {
-                                passen = AESCrypt.decrypt("123456ASDFGHJKL;",user.getPass());
+                            if (snapshot.exists()) {
+                                Toast.makeText(LoginActivity2.this, "User Exists", Toast.LENGTH_SHORT).show();
+                                User user = snapshot.getValue(User.class);
+                                try {
+                                    passen = AESCrypt.decrypt("123456ASDFGHJKL;", user.getPass());
 //                             Log.d(" Decrypt", "onClick: "+msgdec);
-                                Log.e(" Decrypt", "onClick: " + passen);
+                                    Log.e(" Decrypt", "onClick: " + passen);
 
-                            } catch (Exception e) {
+                                } catch (Exception e) {
 
+                                }
+                                if (passen.equals(pass) && passen != null) {
+                                    FeatureController.getInstance().setUid(user.getUid());
+                                    FeatureController.getInstance().setUser(user);
+                                    FeatureController.getInstance().setName(user.getName());
+                                    editor.putString("phone", user.getPhoneNo());
+                                    editor.commit();
+                                    Toast.makeText(LoginActivity2.this, "Correct", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(LoginActivity2.this, MainDashboard.class);
+                                    startActivity(intent);
+                                } else {
+                                    Toast.makeText(LoginActivity2.this, "Password incorrect", Toast.LENGTH_SHORT).show();
+                                }
+
+                            } else {
+                                Toast.makeText(LoginActivity2.this, "User not registered", Toast.LENGTH_SHORT).show();
                             }
-                            if(passen.equals(pass) && passen!= null)
-                            {
-                                FeatureController.getInstance().setUid(user.getUid());
-                                FeatureController.getInstance().setUser(user);
-                                FeatureController.getInstance().setName(user.getName());
-                                editor.putString("phone",user.getPhoneNo());
-                                editor.commit();
-                                Toast.makeText(LoginActivity2.this, "Correct", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(LoginActivity2.this,MainDashboard.class);
-                                startActivity(intent);
-                            }else {
-                                Toast.makeText(LoginActivity2.this, "Password incorrect", Toast.LENGTH_SHORT).show();
-                            }
-
-                        }else {
-                            Toast.makeText(LoginActivity2.this, "User not registered", Toast.LENGTH_SHORT).show();
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+                        }
+                    });
+                }else{
+                    Toast.makeText(LoginActivity2.this, "Incorrect Number", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
