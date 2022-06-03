@@ -77,7 +77,6 @@ public class ChatFragment extends Fragment {
                         Friends users = dataSnapshot.getValue(Friends.class);
                         userss.add(users);
                     }
-
                     FeatureController.getInstance().setMyfriends(userss);
                     adapter.notifyDataSetChanged();
                     binding.chats.setAdapter(adapter);

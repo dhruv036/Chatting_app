@@ -312,6 +312,43 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
                                 }
 
                             } else {
+                                database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if (snapshot.exists()) {
+
+                                            block2 = snapshot.child("block").getValue(String.class);
+                                            if (block2.equals("BOTH")) {
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+                                                builder.setCancelable(true);
+                                                builder.setTitle("Unblock");
+                                                builder.setMessage("Would you like to unblock " + username);
+                                                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                        database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).child("block").setValue("ME");
+                                                        Toast.makeText(ChatActivity.this, "Unblocked :)", LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        dialogInterface.dismiss();
+                                                    }
+                                                });
+                                                builder.create().show();
+
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+                                Toast.makeText(ChatActivity.this, "I am blocked :(", LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -333,10 +370,94 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
         binding.attachment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent();
-                i.setAction(Intent.ACTION_GET_CONTENT);
-                i.setType("image/*");
-                startActivityForResult(i, 25);
+                database.getReference().child("Friends").child(currid).child(phone).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            block = snapshot.child("block").getValue(String.class);
+                                if (block.equals("0")) {
+                                    Intent i = new Intent();
+                                    i.setAction(Intent.ACTION_GET_CONTENT);
+                                    i.setType("image/*");
+                                    startActivityForResult(i, 25);
+                                }
+                                if (block.equals("ME") || block.equals("BOTH")){
+                                    Toast.makeText(ChatActivity.this, "You block " + username + " plz unblock", LENGTH_SHORT).show();
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+                                    builder.setCancelable(true);
+                                    builder.setTitle("Unblock");
+                                    builder.setMessage("Would you like to unblock " + username);
+                                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                                            if (block.equals("ME")) {
+                                                database.getReference().child("Friends").child(currid).child(phone).child("block").setValue("0");
+                                                database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).child("block").setValue("0");
+                                                Toast.makeText(ChatActivity.this, "Unblocked", LENGTH_SHORT).show();
+                                            }
+                                            if (block.equals("BOTH")) {
+                                                database.getReference().child("Friends").child(currid).child(phone).child("block").setValue("YOU");
+                                                database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).child("block").setValue("ME");
+                                                Toast.makeText(ChatActivity.this, "You unblocked but receiver has blocked you", LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.dismiss();
+                                        }
+                                    });
+                                    builder.create().show();
+                                }
+                                if (block.equals("YOU")){
+                                    database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if (snapshot.exists()) {
+
+                                                block2 = snapshot.child("block").getValue(String.class);
+                                                if (block2.equals("BOTH")) {
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+                                                    builder.setCancelable(true);
+                                                    builder.setTitle("Unblock");
+                                                    builder.setMessage("Would you like to unblock " + username);
+                                                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                            database.getReference().child("Friends").child(receiveruid).child(FeatureController.getInstance().getUser().getPhoneNo()).child("block").setValue("ME");
+                                                            Toast.makeText(ChatActivity.this, "Unblocked :)", LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            dialogInterface.dismiss();
+                                                        }
+                                                    });
+                                                    builder.create().show();
+                                                }
+                                            }
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+                                    Toast.makeText(ChatActivity.this, "I am blocked :(", LENGTH_SHORT).show();
+                                }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
             }
         });
 
@@ -515,8 +636,6 @@ public class ChatActivity extends AppCompatActivity implements Mesibo.Connection
                                     reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                         @Override
                                         public void onSuccess(Uri uri) {
-
-
                                             String urll = uri.toString();
                                             String message = binding.msgInput.getText().toString();
                                             Calendar calendar = Calendar.getInstance();

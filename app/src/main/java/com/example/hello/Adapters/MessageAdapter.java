@@ -36,6 +36,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.scottyab.aescrypt.AESCrypt;
 
 
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 
 
@@ -184,8 +185,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
 
             try {
                 String msgdec = AESCrypt.decrypt("123456ASDFGHJKL;", arrayList.get(position).getMessage());
-
-
                 Log.d(" Decrypt", "onClick: " + msgdec);
                 viewHolder.binding.sender.setText(msgdec);
             } catch (Exception e) {
@@ -229,7 +228,13 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     binding.everyone.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            m.setMessage("This message is removed.");
+                            String msgdec = null;
+                            try {
+                                msgdec = AESCrypt.decrypt("123456ASDFGHJKL;", arrayList.get(position).getMessage());
+                            } catch (GeneralSecurityException e) {
+                                e.printStackTrace();
+                            }
+                            m.setMessage(msgdec);
                             m.setFeeling(-1);
                             FirebaseDatabase.getInstance().getReference()
                                     .child("Chats")
@@ -249,20 +254,20 @@ public class MessageAdapter extends RecyclerView.Adapter {
                                         .child("Chats")
                                         .child(senderRoom)
                                         .child("lastMsg")
-                                        .setValue("This message is removed.");
+                                        .setValue(msgdec);
 
                                 FirebaseDatabase.getInstance().getReference()
                                         .child("Chats")
                                         .child(receiverRoom)
                                         .child("lastMsg")
-                                        .setValue("This message is removed.");
+                                        .setValue(msgdec);
 
                                 FirebaseDatabase.getInstance().getReference()
                                         .child("Friends")
                                         .child(FeatureController.getInstance().getUid())
                                         .child(FeatureController.getInstance().getReceiverpho())
                                         .child("lastMsg")
-                                        .setValue("This message is removed.");
+                                        .setValue(msgdec);
                                 //   FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                                 FirebaseDatabase.getInstance().getReference()
@@ -270,7 +275,7 @@ public class MessageAdapter extends RecyclerView.Adapter {
                                         .child(FeatureController.getInstance().getReceiveruid())
                                         .child(FeatureController.getInstance().getUser().getPhoneNo())
                                         .child("lastMsg")
-                                        .setValue("This message is removed.");
+                                        .setValue(msgdec);
                             }
                             //     arrayList.remove(position);
                             dialog.dismiss();
@@ -279,14 +284,13 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     binding.delete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-//                            m.setMessage("This message is removed.");
-//                            m.setFeeling(-1);
+
                             FirebaseDatabase.getInstance().getReference()
                                     .child("Chats")
                                     .child(senderRoom)
                                     .child("messages")
                                     .child(m.getMessageId()).setValue(null);
-                            //  arrayList.remove(position);
+
                             if (position == (arrayList.size() - 1)) {
                                 FirebaseDatabase.getInstance().getReference()
                                         .child("Chats")
@@ -294,19 +298,23 @@ public class MessageAdapter extends RecyclerView.Adapter {
                                         .child("lastMsg")
                                         .setValue(null);
                                 if (arrayList.size() > 1) {
+
                                     FirebaseDatabase.getInstance().getReference()
                                             .child("Friends")
                                             .child(FeatureController.getInstance().getUid())
                                             .child(FeatureController.getInstance().getReceiverpho())
                                             .child("lastMsg")
                                             .setValue(arrayList.get(arrayList.size() - 2).getMessage());
+
                                     FirebaseDatabase.getInstance().getReference()
                                             .child("Friends")
                                             .child(FeatureController.getInstance().getUid())
                                             .child(FeatureController.getInstance().getReceiverpho())
                                             .child("lastMsgTime")
                                             .setValue(arrayList.get(arrayList.size() - 2).getTimestamp());
+
                                     // second last
+
                                 } else {
                                     FirebaseDatabase.getInstance().getReference()
                                             .child("Friends")
@@ -343,7 +351,6 @@ public class MessageAdapter extends RecyclerView.Adapter {
                     }
                 }
             });
-
             if (m.getMessage().equals("Photos")) {
                 viewHolder.binding.show.setVisibility(View.VISIBLE);
                 viewHolder.binding.receiverImg.setVisibility(View.VISIBLE);
