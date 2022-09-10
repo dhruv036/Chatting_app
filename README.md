@@ -6,7 +6,7 @@
 
 ## Installation
 
-Download the app from [Here](https://pages.github.com/).
+Download the app from [Here](https://drive.google.com/file/d/1fLd1at4rOy9WR5HcFv1ZaBRTQ2ogy7uZ/view?usp=sharing).
 
 ### Used Tech
 * Java
