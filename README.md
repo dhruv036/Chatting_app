@@ -5,8 +5,9 @@
 
 
 ## Installation
-
+Soon available on playstore (App is under review)
 Download the app from [Here](https://drive.google.com/file/d/1fLd1at4rOy9WR5HcFv1ZaBRTQ2ogy7uZ/view?usp=sharing).
+
 
 ### Used Tech
 * Java
