@@ -5,8 +5,7 @@
 
 
 ## Installation
-Soon available on playstore (App is under review)
-Download the app from [Here](https://drive.google.com/file/d/1fLd1at4rOy9WR5HcFv1ZaBRTQ2ogy7uZ/view?usp=sharing).
+Available on playstore [Here](https://play.google.com/store/apps/details?id=com.dhruv.hello)
 
 
 ### Used Tech
